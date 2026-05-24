@@ -4,13 +4,15 @@ import {
   V3CtaBand,
   V3Hero,
   V3ProductGrid,
+  V3ProductShowcase,
   V3SectionHeading,
   V3Shell,
+  V3UseCasePreview,
 } from "@/components/v3/v3-site";
 
 export const metadata: Metadata = {
   title: "제품 | 대한산업AI v3",
-  description: "ERP 연동, 업무 자동화, 문서 자동화, 대시보드 구현을 포함한 대한산업AI 제품군.",
+  description: "ERP 연동, 업무 자동화, 문서 자동화, 대시보드 구현을 포함한 대한산업AI 제품군입니다.",
 };
 
 const packages = [
@@ -24,7 +26,7 @@ const packages = [
   },
 ];
 
-const steps = ["기존 업무 확인", "데이터 출처 연결", "자동화 규칙 설계", "문서 / 대시보드 생성", "운영 피드백 반영"];
+const steps = ["업무 확인", "데이터 출처 연결", "자동화 규칙 설계", "문서 / 화면 생성", "운영 피드백 반영"];
 
 const outputs = [
   { title: "자동 생성 보고서", text: "사진, 점검 항목, 메모를 기존 보고서 양식에 맞춰 채웁니다." },
@@ -38,33 +40,38 @@ export default function ProductsPage() {
       <main>
         <V3Hero
           eyebrow="Products"
-          title="내부 시스템에 붙는 AI 자동화 제품군"
-          description="새 시스템을 강요하지 않습니다. 이미 쓰고 있는 ERP, 메일, 웹하드, 문서 양식 위에 필요한 자동화 흐름을 설계합니다."
+          title="기존 ERP와 사내 시스템 위에 붙는 AI 자동화 제품군"
+          description="새 시스템을 강요하지 않습니다. 이미 쓰는 ERP, 메일, 웹하드, 문서 양식 위에 필요한 자동화 흐름을 설계합니다."
           primary={{ label: "MVP 상담하기", href: "/v3/mvp" }}
           secondary={{ label: "문의하기", href: "/v3/contact" }}
-          visual="architecture"
+          visual="products"
         />
 
         <section className="v3-section">
+          <V3SectionHeading eyebrow="Product View" title="제품은 기능 목록보다 업무 흐름으로 설명되어야 합니다." />
+          <V3ProductShowcase />
+        </section>
+
+        <section className="v3-section v3-dark">
           <V3SectionHeading
             eyebrow="System Map"
             title="입력부터 산출물까지 하나의 흐름으로 설계합니다."
-            description="데이터 수집, 분류, AI 문서 생성, 규칙 엔진, 승인 알림을 연결해 업무 산출물을 만듭니다."
+            description="자료 수집, 분류, AI 문서 생성, 규칙 검증, 승인 알림이 실제 업무 산출물로 이어집니다."
             split
           />
           <V3AutomationDiagram />
         </section>
 
-        <section className="v3-section v3-soft">
+        <section className="v3-section">
           <V3SectionHeading eyebrow="Modules" title="제품 모듈" />
           <V3ProductGrid />
         </section>
 
-        <section className="v3-section">
+        <section className="v3-section v3-soft">
           <V3SectionHeading
             eyebrow="Outputs"
             title="도입 후 남는 산출물"
-            description="자동화는 화면이 아니라 실제 업무 산출물로 검증되어야 합니다."
+            description="자동화는 화면이 아니라 실제 업무 결과물로 검증되어야 합니다."
             split
           />
           <div className="v3-output-grid">
@@ -82,7 +89,7 @@ export default function ProductsPage() {
           <V3SectionHeading
             eyebrow="Packages"
             title="우선 적용 산업 패키지"
-            description="현재는 건설 안전 / 감리 법인과 제조업을 우선 대상으로 설계합니다."
+            description="현재는 건설 안전 / 감리 법인과 제조업 업무를 우선 대상으로 제품을 정리합니다."
             split
           />
           <div className="v3-package-grid">
@@ -100,6 +107,11 @@ export default function ProductsPage() {
         </section>
 
         <section className="v3-section v3-dark">
+          <V3SectionHeading eyebrow="Use Cases" title="대표 적용 사례" />
+          <V3UseCasePreview />
+        </section>
+
+        <section className="v3-section">
           <V3SectionHeading eyebrow="How It Works" title="작동 방식" />
           <ol className="v3-horizontal-steps">
             {steps.map((step, index) => (
@@ -113,7 +125,7 @@ export default function ProductsPage() {
 
         <V3CtaBand
           title="우리 회사 업무에 어떤 자동화가 가능한지 확인해보세요."
-          description="가장 효과가 큰 반복 업무부터 MVP로 시작할 수 있습니다."
+          description="효과가 큰 반복 업무 하나부터 MVP로 시작할 수 있습니다."
           href="/v3/mvp"
           label="MVP 상담하기"
         />

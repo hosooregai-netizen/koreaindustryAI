@@ -8,6 +8,7 @@ import {
   CheckCircle2,
   ClipboardCheck,
   Database,
+  Factory,
   FileText,
   Gauge,
   Layers3,
@@ -26,13 +27,15 @@ import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 import { useEffect, useState } from "react";
 
-type HeroVisualKind = "ops" | "architecture" | "mvp" | "company" | "contact";
+type HeroVisualKind = "home" | "products" | "company" | "mvp" | "contact";
 
 export const navItems = [
   { label: "제품", href: "/v3/products" },
   { label: "회사소개", href: "/v3/company" },
   { label: "MVP", href: "/v3/mvp" },
 ];
+
+const logoNames = ["Samsung", "SK hynix", "Hyundai", "Hanwha", "POSCO", "HD Hyundai"];
 
 export const productModules: Array<{
   icon: LucideIcon;
@@ -44,23 +47,23 @@ export const productModules: Array<{
   {
     icon: Database,
     title: "ERP / 사내 시스템 연동",
-    description: "ERP, 웹메일, 웹하드, DB, 내부 프로그램을 업무 흐름에 맞춰 연결합니다.",
-    items: ["기존 시스템 유지", "데이터 자동 수집", "ERP 반영 자동화"],
-    example: "예: 웹하드 파일 감시 후 ERP 처리 상태 반영",
+    description: "ERP, 웹메일, 웹하드, 기존 DB와 내부 프로그램을 업무 흐름에 맞춰 연결합니다.",
+    items: ["기존 시스템 유지", "데이터 자동 수집", "처리 결과 반영"],
+    example: "예: 웹하드 파일 감지 후 ERP 처리 상태 자동 업데이트",
   },
   {
     icon: Workflow,
     title: "업무 자동화",
-    description: "반복 입력, 확인, 분류, 알림, 승인 요청처럼 손이 많이 가는 일을 자동 처리합니다.",
-    items: ["담당자별 규칙", "승인/알림 흐름", "누락 업무 체크"],
+    description: "반복 입력, 확인, 분류, 알림, 승인 요청처럼 사람이 자주 처리하는 흐름을 자동화합니다.",
+    items: ["담당자별 규칙", "승인 / 알림 흐름", "누락 업무 체크"],
     example: "예: 담당자별 미처리 항목 자동 알림",
   },
   {
     icon: FileText,
     title: "문서 자동화",
     description: "보고서, 대장, 점검표, 견적서를 기존 양식에 맞춰 자동 생성합니다.",
-    items: ["기존 양식 유지", "사진/데이터 삽입", "문서 이력 관리"],
-    example: "예: 현장 사진 기반 안전지도 보고서 생성",
+    items: ["기존 양식 유지", "사진 / 데이터 삽입", "문서 이력 관리"],
+    example: "예: 현장 사진 기반 안전지도 보고서 자동 생성",
   },
   {
     icon: Gauge,
@@ -76,11 +79,11 @@ export const useCases = [
     title: "건설 안전지도 자동화",
     description: "현장 정보, 사진, 점검 항목을 보고서와 안전보건 대장으로 연결합니다.",
     tag: "Construction",
-    flow: ["현장 사진", "점검표", "AI 정리", "보고서", "대장 반영"],
+    flow: ["현장 사진", "점검 항목", "AI 정리", "보고서", "대장 반영"],
   },
   {
     title: "ERP / 보고서 자동화",
-    description: "메일과 웹하드 자료를 수집해 보고서를 만들고 ERP에 반영합니다.",
+    description: "메일과 웹하드 자료를 수집해 보고서를 만들고 ERP 상태까지 반영합니다.",
     tag: "ERP",
     flow: ["메일", "웹하드", "보고서", "ERP 반영"],
   },
@@ -89,6 +92,56 @@ export const useCases = [
     description: "입출고 데이터, 재고 기준, 부족 알림, 관리자 대시보드를 구축합니다.",
     tag: "Manufacturing",
     flow: ["입출고", "재고 기준", "부족 알림", "대시보드"],
+  },
+];
+
+const industryCards = [
+  {
+    label: "Industries",
+    title: "건설 안전 / 감리",
+    description: "현장 방문, 사진 정리, 안전지도 보고서, 안전보건 대장까지 반복 흐름을 자동화합니다.",
+    className: "is-construction",
+  },
+  {
+    label: "Industries",
+    title: "제조 / 재고",
+    description: "입출고 데이터와 재고 기준을 연결해 현황판, 부족 알림, 보고서를 만듭니다.",
+    className: "is-manufacturing",
+  },
+  {
+    label: "Systems",
+    title: "ERP / 사내 시스템",
+    description: "기존 ERP, 웹메일, 웹하드, 내부 프로그램 위에 필요한 자동화 레이어를 붙입니다.",
+    className: "is-system",
+  },
+  {
+    label: "Documents",
+    title: "문서 / 보고 자동화",
+    description: "대장, 점검표, 보고서, 월간 리포트를 기존 양식과 결재 흐름에 맞춥니다.",
+    className: "is-document",
+  },
+];
+
+const storyCards = [
+  {
+    type: "Case",
+    title: "건설 안전지도 법인의 보고서 작성 시간을 줄이는 방식",
+    text: "현장 사진, 점검표, 방문 이력을 한 번에 정리해 보고서와 대장을 함께 생성합니다.",
+  },
+  {
+    type: "Product",
+    title: "웹메일과 웹하드를 업무 입력원으로 쓰는 자동화 설계",
+    text: "담당자가 쓰던 도구를 유지하면서 누락 체크, 분류, ERP 반영을 자동화합니다.",
+  },
+  {
+    type: "MVP",
+    title: "처음부터 전체 시스템을 바꾸지 않는 도입 방식",
+    text: "효과가 큰 반복 업무 하나를 골라 MVP로 검증한 뒤 본 구현 범위를 확정합니다.",
+  },
+  {
+    type: "Insight",
+    title: "제조 현장에서 재고 데이터가 흩어질 때 생기는 비용",
+    text: "입출고 기준, 부족 알림, 월간 리포트를 하나의 운영 화면으로 연결합니다.",
   },
 ];
 
@@ -127,7 +180,7 @@ export const companyCapabilities = [
   {
     icon: FileText,
     title: "문서 자동화",
-    text: "보고서, 대장, 점검표를 기존 양식에 맞춰 자동 생성합니다.",
+    text: "보고서와 대장 양식을 기존 방식에 맞춰 자동 생성합니다.",
     example: "양식 채움, 사진 삽입",
   },
   {
@@ -166,7 +219,7 @@ function V3Header() {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 16);
+    const onScroll = () => setScrolled(window.scrollY > 12);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -180,7 +233,9 @@ function V3Header() {
   return (
     <header className={`v3-header ${scrolled ? "is-scrolled" : ""}`}>
       <Link className="v3-brand" href="/v3" onClick={() => setOpen(false)}>
-        <span className="v3-brand-mark" />
+        <span className="v3-brand-mark" aria-hidden="true">
+          <span />
+        </span>
         <span>대한산업AI</span>
       </Link>
       <button
@@ -192,10 +247,10 @@ function V3Header() {
       >
         {open ? <X size={20} /> : <Menu size={20} />}
       </button>
-      <nav className={`v3-nav ${open ? "is-open" : ""}`}>
+      <nav className={`v3-nav ${open ? "is-open" : ""}`} aria-label="주요 메뉴">
         <div className="v3-nav-links">
           {navItems.map((item) => {
-            const active = pathname === item.href;
+            const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
             return (
               <Link
                 className={active ? "is-active" : ""}
@@ -223,9 +278,12 @@ function V3Header() {
 export function V3Footer() {
   return (
     <footer className="v3-footer">
-      <div>
+      <div className="v3-footer-brand">
+        <span className="v3-brand-mark" aria-hidden="true">
+          <span />
+        </span>
         <strong>대한산업AI 주식회사</strong>
-        <span>AI Automation for Industrial Operations</span>
+        <p>AI Automation for Industrial Operations</p>
       </div>
       <nav aria-label="푸터 메뉴">
         <Link href="/v3/products">제품</Link>
@@ -233,7 +291,7 @@ export function V3Footer() {
         <Link href="/v3/mvp">MVP</Link>
         <Link href="/v3/contact">문의하기</Link>
       </nav>
-      <div>
+      <div className="v3-footer-info">
         <span>법인 정보 업데이트 예정</span>
         <span>방문 진단 및 원격 상담 가능</span>
         <span>contact@koreaindustry.ai</span>
@@ -248,7 +306,7 @@ export function V3Hero({
   description,
   primary,
   secondary,
-  visual = "ops",
+  visual = "home",
 }: {
   eyebrow: string;
   title: string;
@@ -257,11 +315,11 @@ export function V3Hero({
   secondary?: { label: string; href: string };
   visual?: HeroVisualKind;
 }) {
-  const isHome = visual === "ops";
+  const isHome = visual === "home";
 
   return (
     <section className={`v3-hero v3-hero-${visual} ${isHome ? "is-home" : "is-subpage"}`}>
-      <div className="v3-hero-bg" aria-hidden="true" />
+      <div className="v3-hero-overlay" aria-hidden="true" />
       <div className="v3-hero-inner">
         <div className="v3-hero-copy">
           <p className="v3-eyebrow">{eyebrow}</p>
@@ -278,162 +336,74 @@ export function V3Hero({
               </Link>
             ) : null}
           </div>
+          {isHome ? (
+            <div className="v3-hero-progress" aria-label="대표 메시지 1번">
+              <span>01</span>
+              <strong />
+              <span>02</span>
+            </div>
+          ) : null}
         </div>
-        <V3HeroVisual kind={visual} />
+        {isHome ? null : <V3HeroVisual kind={visual} />}
       </div>
     </section>
   );
 }
 
-function V3HeroVisual({ kind }: { kind: HeroVisualKind }) {
+function V3HeroVisual({ kind }: { kind: Exclude<HeroVisualKind, "home"> }) {
+  const visualTitle =
+    kind === "products"
+      ? "Automation map"
+      : kind === "company"
+        ? "Implementation flow"
+        : kind === "mvp"
+          ? "MVP scope"
+          : "Contact brief";
+
+  const visualItems =
+    kind === "products"
+      ? ["ERP", "메일", "웹하드", "보고서", "대장", "대시보드"]
+      : kind === "company"
+        ? ["방문 진단", "업무 분석", "연동 설계", "구현"]
+        : kind === "mvp"
+          ? ["반복 업무", "샘플 데이터", "프로토타입", "검증"]
+          : ["회사명", "업무 영역", "사용 시스템", "도입 목표"];
+
   return (
-    <div className={`v3-visual v3-visual-${kind}`} aria-label="페이지별 자동화 도식">
-      <div className="v3-window-top">
+    <div className={`v3-hero-visual v3-visual-${kind}`} aria-label={`${visualTitle} 시각화`}>
+      <div className="v3-visual-top">
         <span />
         <span />
         <span />
-        <strong>DAEHAN AI SYSTEM</strong>
+        <strong>{visualTitle}</strong>
       </div>
-      {kind === "ops" ? <OpsVisual /> : null}
-      {kind === "architecture" ? <ArchitectureVisual /> : null}
-      {kind === "company" ? <CompanyVisual /> : null}
-      {kind === "mvp" ? <MvpVisual /> : null}
-      {kind === "contact" ? <ContactVisual /> : null}
-    </div>
-  );
-}
-
-function OpsVisual() {
-  const inputs = ["ERP", "메일", "웹하드", "엑셀"];
-  const outputs = ["보고서", "대장", "대시보드", "알림"];
-
-  return (
-    <>
-      <div className="v3-hero-map">
-        <div className="v3-map-column">
-          <small>Input</small>
-          {inputs.map((item) => (
-            <strong key={item}>{item}</strong>
-          ))}
+      <div className="v3-visual-body">
+        <div className="v3-visual-sidebar">
+          <span />
+          <span />
+          <span />
+          <span />
         </div>
-        <div className="v3-map-core">
-          <Layers3 size={24} />
-          <strong>AI 자동화 레이어</strong>
-          <span>업무 규칙 분석 · 문서 생성 · 시스템 반영</span>
-        </div>
-        <div className="v3-map-column is-output">
-          <small>Output</small>
-          {outputs.map((item) => (
-            <strong key={item}>{item}</strong>
-          ))}
-        </div>
-      </div>
-      <div className="v3-visual-metrics">
-        <div>
-          <small>반복 업무 후보</small>
-          <strong>12개</strong>
-        </div>
-        <div>
-          <small>자동 처리 예시</small>
-          <strong>87건</strong>
-        </div>
-        <div>
-          <small>누락 체크</small>
-          <strong>실시간</strong>
-        </div>
-      </div>
-    </>
-  );
-}
-
-function ArchitectureVisual() {
-  const modules = ["ERP 연동", "문서 생성", "대시보드", "알림 / 승인"];
-
-  return (
-    <>
-      <div className="v3-module-stack">
-        <div className="v3-stack-rail">
-          <span>데이터 수집</span>
-          <span>업무 규칙</span>
-          <span>자동 산출</span>
-        </div>
-        <div className="v3-module-grid">
-          {modules.map((module) => (
-            <strong key={module}>{module}</strong>
-          ))}
-        </div>
-      </div>
-      <div className="v3-visual-note">
-        <Database size={18} />
-        기존 시스템을 유지한 채 필요한 자동화만 붙입니다.
-      </div>
-    </>
-  );
-}
-
-function CompanyVisual() {
-  const steps = ["방문 진단", "업무 분석", "연동 설계", "구현"];
-
-  return (
-    <>
-      <ol className="v3-visual-timeline">
-        {steps.map((step, index) => (
-          <li key={step}>
-            <span>{String(index + 1).padStart(2, "0")}</span>
-            <strong>{step}</strong>
-            <small>{index === 0 ? "화면·문서 확인" : index === 1 ? "반복 업무 추출" : index === 2 ? "권한·데이터 설계" : "MVP 또는 본 구현"}</small>
-          </li>
-        ))}
-      </ol>
-      <div className="v3-visual-note">
-        <Building2 size={18} />
-        법인 고객의 실제 업무 흐름을 기준으로 설계합니다.
-      </div>
-    </>
-  );
-}
-
-function MvpVisual() {
-  const stages = [
-    { label: "후보 업무", value: "1개" },
-    { label: "데모 구현", value: "MVP" },
-    { label: "효과 검증", value: "본 구현" },
-  ];
-
-  return (
-    <>
-      <div className="v3-funnel">
-        {stages.map((stage) => (
-          <div key={stage.label}>
-            <span>{stage.label}</span>
-            <strong>{stage.value}</strong>
+        <div className="v3-visual-main">
+          <div className="v3-visual-title-row">
+            <strong>Daehan Industry AI</strong>
+            <small>live preview</small>
           </div>
-        ))}
+          <div className="v3-visual-flow">
+            {visualItems.map((item, index) => (
+              <span key={item} className={index % 2 === 0 ? "is-strong" : ""}>
+                {item}
+              </span>
+            ))}
+          </div>
+          <div className="v3-visual-chart">
+            <i />
+            <i />
+            <i />
+          </div>
+        </div>
       </div>
-      <div className="v3-visual-note">
-        <ClipboardCheck size={18} />
-        작게 검증하고 효과가 보이면 확장합니다.
-      </div>
-    </>
-  );
-}
-
-function ContactVisual() {
-  return (
-    <>
-      <div className="v3-mini-form">
-        <span>회사명</span>
-        <strong>건설 안전 / 제조</strong>
-        <span>자동화 후보</span>
-        <strong>보고서 · ERP · 재고</strong>
-        <span>상담 방식</span>
-        <strong>방문 또는 원격</strong>
-      </div>
-      <div className="v3-visual-note">
-        <Mail size={18} />
-        문의 내용을 기준으로 가능 범위를 먼저 검토합니다.
-      </div>
-    </>
+    </div>
   );
 }
 
@@ -461,13 +431,80 @@ export function V3SectionHeading({
 
 export function V3TrustStrip() {
   return (
-    <section className="v3-trust-strip" aria-label="초기 적용 산업 영역">
-      <span>우선 적용 영역</span>
-      <strong>건설 안전 / 감리</strong>
-      <strong>제조 / 재고 관리</strong>
-      <strong>ERP / 문서 자동화</strong>
-      <strong>방문 진단 가능</strong>
+    <section className="v3-trust-strip" aria-label="초기 적용 가능 기업 예시">
+      <span>Trusted by industry teams</span>
+      <div>
+        {logoNames.map((name) => (
+          <strong key={name}>{name}</strong>
+        ))}
+      </div>
     </section>
+  );
+}
+
+export function V3ProductShowcase() {
+  return (
+    <div className="v3-product-showcase">
+      <div className="v3-product-showcase-copy">
+        <span>Our Products</span>
+        <h3>기존 시스템을 바꾸지 않고, 필요한 자동화 레이어를 얹습니다.</h3>
+        <p>
+          ERP, 웹메일, 웹하드, 보고서 양식, 내부 대시보드처럼 이미 쓰는 도구를 기준으로 업무 자동화 제품군을
+          조립합니다.
+        </p>
+        <Link className="v3-text-link" href="/v3/products">
+          제품 구조 보기
+          <ArrowRight size={17} />
+        </Link>
+      </div>
+      <div className="v3-product-media" aria-label="제품 화면 예시">
+        <div className="v3-product-screen">
+          <div className="v3-screen-sidebar" />
+          <div className="v3-screen-content">
+            <div className="v3-screen-row">
+              <span />
+              <span />
+              <span />
+            </div>
+            <div className="v3-screen-canvas">
+              <i />
+              <i />
+              <i />
+              <i />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function V3IndustryCards() {
+  return (
+    <div className="v3-industry-grid">
+      {industryCards.map((item) => (
+        <article className={`v3-industry-card ${item.className}`} key={item.title}>
+          <span>{item.label}</span>
+          <h3>{item.title}</h3>
+          <p>{item.description}</p>
+        </article>
+      ))}
+    </div>
+  );
+}
+
+export function V3StoryCards() {
+  return (
+    <div className="v3-story-grid">
+      {storyCards.map((item) => (
+        <article className="v3-story-card" key={item.title}>
+          <div className="v3-story-thumb" />
+          <span>{item.type}</span>
+          <h3>{item.title}</h3>
+          <p>{item.text}</p>
+        </article>
+      ))}
+    </div>
   );
 }
 
@@ -478,18 +515,18 @@ export function V3AutomationDiagram() {
   return (
     <div className="v3-architecture-board">
       <div className="v3-arch-group">
-        <span>입력</span>
+        <span>Input</span>
         {inputs.map((item) => (
           <strong key={item}>{item}</strong>
         ))}
       </div>
       <div className="v3-arch-core">
-        <Layers3 size={28} />
+        <Layers3 size={30} />
         <strong>대한산업AI</strong>
-        <span>업무 규칙 분석 · AI 문서 생성 · 시스템 연동</span>
+        <span>업무 규칙 분석 · AI 문서 생성 · 시스템 연동 · 운영 대시보드</span>
       </div>
       <div className="v3-arch-group is-output">
-        <span>출력</span>
+        <span>Output</span>
         {outputs.map((item) => (
           <strong key={item}>{item}</strong>
         ))}
@@ -605,11 +642,11 @@ export function V3ContactForm({ mvp = false }: { mvp?: boolean }) {
       </label>
       <label>
         관심 영역
-        <select name="interest" defaultValue={mvp ? "MVP 자동화 검토" : ""} required>
+        <select name="interest" defaultValue={mvp ? "MVP 자동화 검증" : ""} required>
           <option value="" disabled>
             선택해주세요
           </option>
-          <option>MVP 자동화 검토</option>
+          <option>MVP 자동화 검증</option>
           <option>건설 안전지도 자동화</option>
           <option>안전보건 대장 자동화</option>
           <option>ERP / 사내 시스템 연동</option>
@@ -704,3 +741,28 @@ export function V3CapabilityGrid() {
     </div>
   );
 }
+
+export function V3MetricStrip() {
+  return (
+    <div className="v3-metric-strip">
+      <div>
+        <span>Primary</span>
+        <strong>건설 안전 / 감리</strong>
+      </div>
+      <div>
+        <span>Expansion</span>
+        <strong>제조 / 재고 관리</strong>
+      </div>
+      <div>
+        <span>Core</span>
+        <strong>ERP · 문서 · 대시보드</strong>
+      </div>
+    </div>
+  );
+}
+
+export const v3Icons = {
+  ClipboardCheck,
+  Factory,
+  Mail,
+};

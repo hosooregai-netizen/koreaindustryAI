@@ -3,7 +3,7 @@ import { V3ContactForm, V3Hero, V3SectionHeading, V3Shell } from "@/components/v
 
 export const metadata: Metadata = {
   title: "문의하기 | 대한산업AI v3",
-  description: "대한산업AI 자동화 상담 문의.",
+  description: "대한산업AI 자동화 상담 문의 페이지입니다.",
 };
 
 export default function ContactPage() {
@@ -24,19 +24,18 @@ export default function ContactPage() {
             <p className="v3-eyebrow">Contact Form</p>
             <h2>현재 업무가 정리되어 있지 않아도 괜찮습니다.</h2>
             <p>
-              사용하는 프로그램과 반복 업무만 알려주시면 방문 또는 원격 미팅으로 자동화 가능 범위를 함께
-              확인합니다.
+              사용하는 프로그램과 반복 업무만 알려주셔도 방문 또는 원격 미팅으로 자동화 가능 범위를 함께 확인합니다.
             </p>
           </div>
           <V3ContactForm />
         </section>
 
         <section className="v3-section v3-soft">
-          <V3SectionHeading eyebrow="Before Contact" title="문의 전 알아두면 좋은 것" />
+          <V3SectionHeading eyebrow="Before Contact" title="문의 때 알려주면 좋은 것" />
           <div className="v3-reason-grid">
-            <article>현재 업무 흐름이 완벽히 정리되어 있지 않아도 됩니다.</article>
-            <article>반복 문서, 사용 프로그램, 담당자 흐름만 알려주셔도 검토할 수 있습니다.</article>
-            <article>필요 시 방문 또는 원격 미팅으로 업무를 함께 확인합니다.</article>
+            <article>현재 사용하는 ERP, 웹메일, 웹하드, 엑셀, 내부 프로그램</article>
+            <article>반복 작성하는 보고서, 대장, 점검표, 월간 리포트</article>
+            <article>자동화하고 싶은 업무와 사람이 자주 확인하는 기준</article>
           </div>
         </section>
       </main>

@@ -10,7 +10,7 @@ import {
 
 export const metadata: Metadata = {
   title: "MVP | 대한산업AI v3",
-  description: "반복 업무 하나부터 시작하는 대한산업AI MVP 자동화 방식.",
+  description: "반복 업무 하나부터 시작하는 대한산업AI MVP 자동화 방식입니다.",
 };
 
 const reasons = [
