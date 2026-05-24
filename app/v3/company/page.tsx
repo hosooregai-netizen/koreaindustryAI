@@ -20,13 +20,15 @@ const workStyle = [
   "MVP 또는 본 구현 진행",
 ];
 
+const trustFacts = ["법인 고객 대응", "방문 진단 가능", "기존 시스템 유지", "권한/보안 설계"];
+
 export default function CompanyPage() {
   return (
     <V3Shell>
       <main>
         <V3Hero
           eyebrow="Company"
-          title="대한산업AI는 기업 업무 자동화를 구현하는 법인 기술 파트너입니다."
+          title="기업 업무 자동화를 구현하는 기술 파트너"
           description="건설 안전지도와 감리 법인의 반복 행정부터 제조 현장의 재고·보고 업무까지, 실제 업무에 맞는 자동화 시스템을 설계하고 구현합니다."
           primary={{ label: "문의하기", href: "/v3/contact" }}
           secondary={{ label: "제품 보기", href: "/v3/products" }}
@@ -54,6 +56,11 @@ export default function CompanyPage() {
               <strong>방문 진단 기반 맞춤 구현</strong>
             </div>
           </div>
+          <div className="v3-fact-strip">
+            {trustFacts.map((fact) => (
+              <strong key={fact}>{fact}</strong>
+            ))}
+          </div>
         </section>
 
         <section className="v3-section v3-soft">
@@ -77,8 +84,9 @@ export default function CompanyPage() {
         </section>
 
         <V3CtaBand
-          title="현재 업무 흐름부터 함께 확인하겠습니다."
+          title="방문 진단으로 현재 업무 흐름부터 확인하겠습니다."
           description="자동화가 필요한 업무가 있다면 방문 또는 원격 미팅으로 먼저 가능 범위를 검토합니다."
+          label="방문 진단 요청"
         />
       </main>
     </V3Shell>

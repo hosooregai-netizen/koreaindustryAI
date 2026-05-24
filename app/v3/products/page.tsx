@@ -26,13 +26,19 @@ const packages = [
 
 const steps = ["기존 업무 확인", "데이터 출처 연결", "자동화 규칙 설계", "문서 / 대시보드 생성", "운영 피드백 반영"];
 
+const outputs = [
+  { title: "자동 생성 보고서", text: "사진, 점검 항목, 메모를 기존 보고서 양식에 맞춰 채웁니다." },
+  { title: "관리자 대시보드", text: "처리 현황, 누락 항목, 월별 추이를 한 화면에 모읍니다." },
+  { title: "ERP 반영 로그", text: "자동 처리된 항목과 실패 항목을 추적할 수 있게 남깁니다." },
+];
+
 export default function ProductsPage() {
   return (
     <V3Shell>
       <main>
         <V3Hero
           eyebrow="Products"
-          title="기업 내부 시스템에 바로 붙는 AI 자동화 제품군"
+          title="내부 시스템에 붙는 AI 자동화 제품군"
           description="새 시스템을 강요하지 않습니다. 이미 쓰고 있는 ERP, 메일, 웹하드, 문서 양식 위에 필요한 자동화 흐름을 설계합니다."
           primary={{ label: "MVP 상담하기", href: "/v3/mvp" }}
           secondary={{ label: "문의하기", href: "/v3/contact" }}
@@ -52,6 +58,24 @@ export default function ProductsPage() {
         <section className="v3-section v3-soft">
           <V3SectionHeading eyebrow="Modules" title="제품 모듈" />
           <V3ProductGrid />
+        </section>
+
+        <section className="v3-section">
+          <V3SectionHeading
+            eyebrow="Outputs"
+            title="도입 후 남는 산출물"
+            description="자동화는 화면이 아니라 실제 업무 산출물로 검증되어야 합니다."
+            split
+          />
+          <div className="v3-output-grid">
+            {outputs.map((item) => (
+              <article key={item.title}>
+                <span />
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </article>
+            ))}
+          </div>
         </section>
 
         <section className="v3-section">

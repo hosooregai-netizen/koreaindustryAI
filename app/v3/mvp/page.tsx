@@ -35,7 +35,7 @@ export default function MvpPage() {
       <main>
         <V3Hero
           eyebrow="MVP"
-          title="반복 업무 하나부터 MVP로 자동화를 시작합니다."
+          title="반복 업무 하나부터 MVP로 검증합니다."
           description="처음부터 전체 시스템을 바꾸지 않습니다. 가장 반복적이고 효과가 큰 업무 하나를 골라 빠르게 자동화 가능성을 검증합니다."
           primary={{ label: "MVP 문의하기", href: "/v3/contact" }}
           secondary={{ label: "제품 보기", href: "/v3/products" }}
@@ -80,6 +80,12 @@ export default function MvpPage() {
             <p className="v3-eyebrow">MVP Contact</p>
             <h2>자동화하고 싶은 반복 업무 하나를 알려주세요.</h2>
             <p>MVP로 가능한 범위를 먼저 확인하고, 효과가 명확하면 본 구현으로 확장합니다.</p>
+            <div className="v3-mvp-scope">
+              <strong>1개 업무</strong>
+              <strong>샘플 데이터 기준</strong>
+              <strong>데모 / 프로토타입</strong>
+              <strong>본 구현 제안</strong>
+            </div>
           </div>
           <V3ContactForm mvp />
         </section>
