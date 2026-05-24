@@ -26,7 +26,13 @@ const packages = [
   },
 ];
 
-const steps = ["업무 확인", "데이터 출처 연결", "자동화 규칙 설계", "문서 / 화면 생성", "운영 피드백 반영"];
+const steps = [
+  { title: "업무 확인", text: "반복되는 입력, 확인, 보고 흐름을 먼저 고릅니다." },
+  { title: "데이터 출처 연결", text: "ERP, 메일, 웹하드, 엑셀 등 실제 입력원을 연결합니다." },
+  { title: "자동화 규칙 설계", text: "담당자, 승인, 예외 처리 기준을 업무 규칙으로 정리합니다." },
+  { title: "문서 / 화면 생성", text: "보고서, 대장, 대시보드, 처리 로그를 만듭니다." },
+  { title: "운영 피드백 반영", text: "현장 사용 결과를 보고 본 구현 범위를 확정합니다." },
+];
 
 const outputs = [
   { title: "자동 생성 보고서", text: "사진, 점검 항목, 메모를 기존 보고서 양식에 맞춰 채웁니다." },
@@ -115,9 +121,10 @@ export default function ProductsPage() {
           <V3SectionHeading eyebrow="How It Works" title="작동 방식" />
           <ol className="v3-horizontal-steps">
             {steps.map((step, index) => (
-              <li key={step}>
+              <li key={step.title}>
                 <span>{String(index + 1).padStart(2, "0")}</span>
-                <strong>{step}</strong>
+                <strong>{step.title}</strong>
+                <small>{step.text}</small>
               </li>
             ))}
           </ol>

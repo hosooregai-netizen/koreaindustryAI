@@ -35,7 +35,7 @@ export const navItems = [
   { label: "MVP", href: "/v3/mvp" },
 ];
 
-const logoNames = ["Samsung", "SK hynix", "Hyundai", "Hanwha", "POSCO", "HD Hyundai"];
+const logoNames = ["건설 안전", "감리 법인", "제조 / 재고", "ERP 연동", "문서 자동화", "방문 진단"];
 
 export const productModules: Array<{
   icon: LucideIcon;
@@ -125,21 +125,25 @@ const industryCards = [
 const storyCards = [
   {
     type: "Case",
+    visual: "case",
     title: "건설 안전지도 법인의 보고서 작성 시간을 줄이는 방식",
     text: "현장 사진, 점검표, 방문 이력을 한 번에 정리해 보고서와 대장을 함께 생성합니다.",
   },
   {
     type: "Product",
+    visual: "product",
     title: "웹메일과 웹하드를 업무 입력원으로 쓰는 자동화 설계",
     text: "담당자가 쓰던 도구를 유지하면서 누락 체크, 분류, ERP 반영을 자동화합니다.",
   },
   {
     type: "MVP",
+    visual: "mvp",
     title: "처음부터 전체 시스템을 바꾸지 않는 도입 방식",
     text: "효과가 큰 반복 업무 하나를 골라 MVP로 검증한 뒤 본 구현 범위를 확정합니다.",
   },
   {
     type: "Insight",
+    visual: "insight",
     title: "제조 현장에서 재고 데이터가 흩어질 때 생기는 비용",
     text: "입출고 기준, 부족 알림, 월간 리포트를 하나의 운영 화면으로 연결합니다.",
   },
@@ -353,12 +357,12 @@ export function V3Hero({
 function V3HeroVisual({ kind }: { kind: Exclude<HeroVisualKind, "home"> }) {
   const visualTitle =
     kind === "products"
-      ? "Automation map"
+      ? "자동화 맵"
       : kind === "company"
-        ? "Implementation flow"
+        ? "도입 흐름"
         : kind === "mvp"
-          ? "MVP scope"
-          : "Contact brief";
+          ? "MVP 범위"
+          : "문의 요약";
 
   const visualItems =
     kind === "products"
@@ -367,7 +371,16 @@ function V3HeroVisual({ kind }: { kind: Exclude<HeroVisualKind, "home"> }) {
         ? ["방문 진단", "업무 분석", "연동 설계", "구현"]
         : kind === "mvp"
           ? ["반복 업무", "샘플 데이터", "프로토타입", "검증"]
-          : ["회사명", "업무 영역", "사용 시스템", "도입 목표"];
+        : ["회사명", "업무 영역", "사용 시스템", "도입 목표"];
+
+  const metricItems =
+    kind === "products"
+      ? ["입력원 6개", "산출물 4종", "운영 로그"]
+      : kind === "company"
+        ? ["방문 진단", "권한 설계", "본 구현"]
+        : kind === "mvp"
+          ? ["1개 업무", "샘플 데이터", "검증 결과"]
+          : ["회사명", "반복 업무", "상담 방식"];
 
   return (
     <div className={`v3-hero-visual v3-visual-${kind}`} aria-label={`${visualTitle} 시각화`}>
@@ -386,8 +399,8 @@ function V3HeroVisual({ kind }: { kind: Exclude<HeroVisualKind, "home"> }) {
         </div>
         <div className="v3-visual-main">
           <div className="v3-visual-title-row">
-            <strong>Daehan Industry AI</strong>
-            <small>live preview</small>
+            <strong>대한산업AI 운영 화면</strong>
+            <small>미리보기</small>
           </div>
           <div className="v3-visual-flow">
             {visualItems.map((item, index) => (
@@ -397,9 +410,11 @@ function V3HeroVisual({ kind }: { kind: Exclude<HeroVisualKind, "home"> }) {
             ))}
           </div>
           <div className="v3-visual-chart">
-            <i />
-            <i />
-            <i />
+            {metricItems.map((item) => (
+              <i key={item}>
+                <span>{item}</span>
+              </i>
+            ))}
           </div>
         </div>
       </div>
@@ -431,8 +446,8 @@ export function V3SectionHeading({
 
 export function V3TrustStrip() {
   return (
-    <section className="v3-trust-strip" aria-label="초기 적용 가능 기업 예시">
-      <span>Trusted by industry teams</span>
+    <section className="v3-trust-strip" aria-label="적용 가능 영역">
+      <span>적용 가능 영역</span>
       <div>
         {logoNames.map((name) => (
           <strong key={name}>{name}</strong>
@@ -498,7 +513,7 @@ export function V3StoryCards() {
     <div className="v3-story-grid">
       {storyCards.map((item) => (
         <article className="v3-story-card" key={item.title}>
-          <div className="v3-story-thumb" />
+          <div className={`v3-story-thumb is-${item.visual}`} />
           <span>{item.type}</span>
           <h3>{item.title}</h3>
           <p>{item.text}</p>
@@ -515,18 +530,25 @@ export function V3AutomationDiagram() {
   return (
     <div className="v3-architecture-board">
       <div className="v3-arch-group">
-        <span>Input</span>
+        <span>01 Input</span>
         {inputs.map((item) => (
           <strong key={item}>{item}</strong>
         ))}
       </div>
+      <div className="v3-arch-connector is-left" aria-hidden="true">
+        <span />
+      </div>
       <div className="v3-arch-core">
+        <small>02 Process</small>
         <Layers3 size={30} />
         <strong>대한산업AI</strong>
         <span>업무 규칙 분석 · AI 문서 생성 · 시스템 연동 · 운영 대시보드</span>
       </div>
+      <div className="v3-arch-connector is-right" aria-hidden="true">
+        <span />
+      </div>
       <div className="v3-arch-group is-output">
-        <span>Output</span>
+        <span>03 Output</span>
         {outputs.map((item) => (
           <strong key={item}>{item}</strong>
         ))}

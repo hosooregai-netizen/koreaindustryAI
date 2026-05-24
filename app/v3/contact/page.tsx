@@ -6,6 +6,8 @@ export const metadata: Metadata = {
   description: "대한산업AI 자동화 상담 문의 페이지입니다.",
 };
 
+const contactHints = ["현재 사용하는 시스템", "반복 작성 문서", "방문 / 원격 상담", "MVP 가능 범위"];
+
 export default function ContactPage() {
   return (
     <V3Shell>
@@ -26,6 +28,11 @@ export default function ContactPage() {
             <p>
               사용하는 프로그램과 반복 업무만 알려주셔도 방문 또는 원격 미팅으로 자동화 가능 범위를 함께 확인합니다.
             </p>
+            <div className="v3-contact-assist">
+              {contactHints.map((item) => (
+                <span key={item}>{item}</span>
+              ))}
+            </div>
           </div>
           <V3ContactForm />
         </section>
