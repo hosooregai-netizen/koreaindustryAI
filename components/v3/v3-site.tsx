@@ -8,7 +8,6 @@ import {
   CheckCircle2,
   ClipboardCheck,
   Database,
-  Factory,
   FileText,
   Gauge,
   Layers3,
@@ -24,186 +23,232 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import { useEffect, useState } from "react";
 
-type HeroVisualKind = "home" | "products" | "company" | "mvp" | "contact";
+type NavChild = {
+  label: string;
+  href?: string;
+  description: string;
+  modal?: true;
+};
 
-export const navItems = [
-  { label: "제품", href: "/v3/products" },
-  { label: "회사소개", href: "/v3/company" },
-  { label: "MVP", href: "/v3/mvp" },
+type NavGroup = {
+  label: string;
+  href?: string;
+  children: NavChild[];
+};
+
+type HeroVisualKind = "home" | "products" | "company" | "contact" | "community";
+
+const mobileDropdownStyle: CSSProperties = {
+  position: "static",
+  width: "100%",
+  opacity: 1,
+  pointerEvents: "auto",
+  transform: "none",
+  visibility: "visible",
+  boxShadow: "none",
+};
+
+export const navItems: NavGroup[] = [
+  {
+    label: "Products",
+    href: "/v3/products",
+    children: [
+      {
+        label: "AI-Core",
+        href: "/v3/products/ai-core",
+        description: "3000개 위젯을 조립해 ERP형 업무 시스템을 5일 안에 시현",
+      },
+    ],
+  },
+  {
+    label: "Community",
+    children: [
+      {
+        label: "Newsletter",
+        href: "/v3/community/newsletter",
+        description: "블로그와 스레드 인사이트를 한 번에 받아보기",
+      },
+      {
+        label: "Blog",
+        href: "/v3/community/blog",
+        description: "AI-Core, 업무 자동화, 산업별 적용 사례 글",
+      },
+      {
+        label: "Threads",
+        href: "/v3/community/threads",
+        description: "짧은 실무 메모와 제품 제작 기록",
+      },
+      {
+        label: "YouTube",
+        description: "제품 데모 영상은 준비 중입니다",
+        modal: true,
+      },
+    ],
+  },
+  {
+    label: "Company",
+    href: "/v3/company",
+    children: [
+      {
+        label: "회사 소개",
+        href: "/v3/company",
+        description: "슬로건, 목표, 5일 도입 방식",
+      },
+      {
+        label: "고객 문의",
+        href: "/v3/contact",
+        description: "자주 묻는 질문과 문의하기 폼",
+      },
+    ],
+  },
 ];
 
-const logoNames = ["건설 안전", "감리 법인", "제조 / 재고", "ERP 연동", "문서 자동화", "방문 진단"];
+export const industryWordmarks = [
+  {
+    industry: "제조",
+    name: "볼넛",
+    note: "생산, 재고, 견적 업무 자동화",
+  },
+  {
+    industry: "금융",
+    name: "K-Finance",
+    note: "심사, 문서, 리포트 흐름 검토",
+  },
+  {
+    industry: "건설",
+    name: "한국종합안전 ANC",
+    note: "안전 문서와 현장 기록 자동화",
+  },
+  {
+    industry: "물류 유통",
+    name: "마켓컬리",
+    note: "입출고, 검수, 운영 데이터 정리",
+  },
+];
 
-export const productModules: Array<{
-  icon: LucideIcon;
-  title: string;
-  description: string;
-  items: string[];
-  example: string;
-}> = [
+export const productGroups = [
+  {
+    icon: Layers3,
+    title: "AI-Core",
+    href: "/v3/products/ai-core",
+    description:
+      "ERP, 문서, 승인, 대시보드에 필요한 모듈을 레고처럼 조립해 고객 맞춤 업무 시스템을 빠르게 시현합니다.",
+    points: ["3000개 위젯", "ERP 모듈 조립", "5일 시현"],
+  },
+];
+
+export const aiCoreFeatures = [
+  {
+    icon: Boxes,
+    title: "3000개 위젯 기반",
+    text: "입력 폼, 카드, 표, 승인, 리포트, 대시보드 같은 업무 단위를 모듈화해 빠르게 조합합니다.",
+    example: "폼 / 카드 / 테이블 / 알림 / 승인 / 리포트",
+  },
   {
     icon: Database,
-    title: "ERP / 사내 시스템 연동",
-    description: "ERP, 웹메일, 웹하드, 기존 DB와 내부 프로그램을 업무 흐름에 맞춰 연결합니다.",
-    items: ["기존 시스템 유지", "데이터 자동 수집", "처리 결과 반영"],
-    example: "예: 웹하드 파일 감지 후 ERP 처리 상태 자동 업데이트",
+    title: "ERP처럼 구성 가능",
+    text: "고객사의 기존 업무 흐름에 맞춰 필요한 화면과 데이터 구조를 ERP처럼 묶습니다.",
+    example: "고객, 현장, 문서, 재고, 결재, 운영 로그",
+  },
+  {
+    icon: ClipboardCheck,
+    title: "핵심 아이템 선정",
+    text: "처음부터 전체 시스템을 만들지 않고 5일 안에 효과를 확인할 수 있는 업무 하나를 먼저 고릅니다.",
+    example: "현장 보고서 / 견적 검토 / 문서 정리",
   },
   {
     icon: Workflow,
-    title: "업무 자동화",
-    description: "반복 입력, 확인, 분류, 알림, 승인 요청처럼 사람이 자주 처리하는 흐름을 자동화합니다.",
-    items: ["담당자별 규칙", "승인 / 알림 흐름", "누락 업무 체크"],
-    example: "예: 담당자별 미처리 항목 자동 알림",
+    title: "고객 맞춤 SI",
+    text: "산업별 언어, 문서 양식, 승인 기준, 담당자 역할에 맞춰 AI-Core를 조립합니다.",
+    example: "제조 / 금융 / 건설 / 물류 유통",
+  },
+];
+
+export const toolModules = [
+  {
+    icon: ClipboardCheck,
+    title: "전자서명 / TBM 서명",
+    text: "현장 참여자 서명, TBM 확인, 참석 기록을 AI-Core 안에 붙일 수 있는 모듈로 보여줍니다.",
   },
   {
     icon: FileText,
-    title: "문서 자동화",
-    description: "보고서, 대장, 점검표, 견적서를 기존 양식에 맞춰 자동 생성합니다.",
-    items: ["기존 양식 유지", "사진 / 데이터 삽입", "문서 이력 관리"],
-    example: "예: 현장 사진 기반 안전지도 보고서 자동 생성",
+    title: "사진대지",
+    text: "사진 업로드, 현장명, 날짜, 설명을 정리해 보고서형 결과물로 조립합니다.",
   },
   {
-    icon: Gauge,
-    title: "대시보드 / 운영 관리",
-    description: "처리 현황, 누락, 일정, 재고, 보고서 상태를 한 화면에서 확인합니다.",
-    items: ["현황 시각화", "월간 리포트", "관리자 화면"],
-    example: "예: 월별 누락 건수와 처리 현황 집계",
-  },
-];
-
-export const useCases = [
-  {
-    title: "건설 안전지도 자동화",
-    description: "현장 정보, 사진, 점검 항목을 보고서와 안전보건 대장으로 연결합니다.",
-    tag: "Construction",
-    flow: ["현장 사진", "점검 항목", "AI 정리", "보고서", "대장 반영"],
-  },
-  {
-    title: "ERP / 보고서 자동화",
-    description: "메일과 웹하드 자료를 수집해 보고서를 만들고 ERP 상태까지 반영합니다.",
-    tag: "ERP",
-    flow: ["메일", "웹하드", "보고서", "ERP 반영"],
-  },
-  {
-    title: "제조 재고 관리",
-    description: "입출고 데이터, 재고 기준, 부족 알림, 관리자 대시보드를 구축합니다.",
-    tag: "Manufacturing",
-    flow: ["입출고", "재고 기준", "부족 알림", "대시보드"],
-  },
-];
-
-const industryCards = [
-  {
-    label: "Industries",
-    title: "건설 안전 / 감리",
-    description: "현장 방문, 사진 정리, 안전지도 보고서, 안전보건 대장까지 반복 흐름을 자동화합니다.",
-    className: "is-construction",
-  },
-  {
-    label: "Industries",
-    title: "제조 / 재고",
-    description: "입출고 데이터와 재고 기준을 연결해 현황판, 부족 알림, 보고서를 만듭니다.",
-    className: "is-manufacturing",
-  },
-  {
-    label: "Systems",
-    title: "ERP / 사내 시스템",
-    description: "기존 ERP, 웹메일, 웹하드, 내부 프로그램 위에 필요한 자동화 레이어를 붙입니다.",
-    className: "is-system",
-  },
-  {
-    label: "Documents",
-    title: "문서 / 보고 자동화",
-    description: "대장, 점검표, 보고서, 월간 리포트를 기존 양식과 결재 흐름에 맞춥니다.",
-    className: "is-document",
-  },
-];
-
-const storyCards = [
-  {
-    type: "Case",
-    visual: "case",
-    title: "건설 안전지도 법인의 보고서 작성 시간을 줄이는 방식",
-    text: "현장 사진, 점검표, 방문 이력을 한 번에 정리해 보고서와 대장을 함께 생성합니다.",
-  },
-  {
-    type: "Product",
-    visual: "product",
-    title: "웹메일과 웹하드를 업무 입력원으로 쓰는 자동화 설계",
-    text: "담당자가 쓰던 도구를 유지하면서 누락 체크, 분류, ERP 반영을 자동화합니다.",
-  },
-  {
-    type: "MVP",
-    visual: "mvp",
-    title: "처음부터 전체 시스템을 바꾸지 않는 도입 방식",
-    text: "효과가 큰 반복 업무 하나를 골라 MVP로 검증한 뒤 본 구현 범위를 확정합니다.",
-  },
-  {
-    type: "Insight",
-    visual: "insight",
-    title: "제조 현장에서 재고 데이터가 흩어질 때 생기는 비용",
-    text: "입출고 기준, 부족 알림, 월간 리포트를 하나의 운영 화면으로 연결합니다.",
-  },
-];
-
-export const mvpTargets = [
-  "안전지도 보고서 자동 생성",
-  "안전보건 대장 자동 업데이트",
-  "메일 첨부파일 자동 분류",
-  "웹하드 자료 정리",
-  "양식 기반 보고서 자동 생성",
-  "재고 부족 알림",
-  "관리자 대시보드 프로토타입",
-];
-
-export const workProcess = [
-  "업무 후보 선정",
-  "샘플 데이터 확인",
-  "자동화 흐름 설계",
-  "MVP 구현",
-  "실제 업무 검증",
-  "본 구현 범위 결정",
-];
-
-export const companyCapabilities = [
-  {
-    icon: Building2,
-    title: "현장 기반 분석",
-    text: "실제 화면과 문서 양식을 보고 자동화 후보를 찾습니다.",
-    example: "방문 진단, 업무 화면 확인",
-  },
-  {
-    icon: MonitorCog,
-    title: "기존 시스템 연동",
-    text: "ERP, 웹메일, 웹하드, DB를 필요한 범위만 연결합니다.",
-    example: "파일 감시, API, DB 연동",
-  },
-  {
-    icon: FileText,
-    title: "문서 자동화",
-    text: "보고서와 대장 양식을 기존 방식에 맞춰 자동 생성합니다.",
-    example: "양식 채움, 사진 삽입",
+    icon: Sparkles,
+    title: "문서 정리",
+    text: "회의록, 점검표, 견적서, 안전 문서를 지정한 양식에 맞춰 정리합니다.",
   },
   {
     icon: BarChart3,
-    title: "운영 대시보드",
-    text: "관리자가 처리 현황과 누락 항목을 바로 확인하게 합니다.",
-    example: "처리율, 누락 건수, 월별 집계",
+    title: "데이터 변환",
+    text: "엑셀, CSV, 복사한 데이터를 업무 화면이나 리포트에 넣기 좋은 형태로 바꿉니다.",
+  },
+];
+
+export const blogPosts = [
+  {
+    category: "AI-Core",
+    title: "3000개 위젯을 조립해 5일 안에 업무 시스템을 시현하는 방식",
+    excerpt: "모든 기능을 새로 개발하기보다 검증된 화면 단위와 데이터 흐름을 조합해 첫 시연 속도를 높입니다.",
+    date: "2026.05.26",
   },
   {
-    icon: Boxes,
-    title: "제조 / 재고 관리",
-    text: "입출고, 부족 알림, 품목별 현황을 자동화합니다.",
-    example: "재고 기준, 부족 알림",
+    category: "산업 적용",
+    title: "건설 안전 문서 자동화를 AI-Core로 접근하는 방법",
+    excerpt: "현장 사진, 점검 기록, 서명, 보고서를 하나의 흐름으로 묶어 담당자의 반복 입력을 줄입니다.",
+    date: "2026.05.24",
   },
   {
-    icon: ShieldCheck,
-    title: "건설 안전 업무 이해",
-    text: "안전지도, 안전보건 대장, 현장 이력을 업무 흐름으로 봅니다.",
-    example: "현장 사진, 점검 항목",
+    category: "제품 기록",
+    title: "범 산업 Tool은 무료 공개 기능이 아니라 조립 가능한 쇼케이스 모듈입니다",
+    excerpt: "전자서명, 사진대지, 문서 정리 같은 작은 도구를 고객 맞춤 시스템에 붙는 모듈로 설명합니다.",
+    date: "2026.05.22",
+  },
+];
+
+export const threadPosts = [
+  {
+    title: "5일 도입의 핵심은 완성품이 아니라 실제 시현입니다",
+    text: "고객이 매일 보는 화면, 문서, 승인 기준 중 하나를 고르고 AI-Core 모듈로 작동 흐름을 먼저 보여줍니다.",
+    tag: "5일 시현",
+  },
+  {
+    title: "툴을 랜딩에서 바로 쓰게 하는 것보다 쇼케이스로 보여주는 편이 더 선명합니다",
+    text: "사이트의 목표가 온보딩이라면 '이런 모듈을 조립할 수 있습니다'라는 메시지가 더 잘 맞습니다.",
+    tag: "Tool CTA",
+  },
+  {
+    title: "산업별 로고는 v1에서 워드마크 카드로 시작합니다",
+    text: "제조, 금융, 건설, 물류 유통을 한 화면에서 보여주되 공식 로고 자산은 추후 교체합니다.",
+    tag: "Industry",
+  },
+];
+
+export const faqItems = [
+  {
+    question: "5일 만에 실제 시스템을 완성하나요?",
+    answer:
+      "전체 시스템을 완제품으로 끝낸다는 뜻은 아닙니다. 핵심 업무 하나를 고르고 AI-Core 모듈을 조립해 실제 작동 흐름을 시현합니다.",
+  },
+  {
+    question: "기존 ERP나 사내 시스템을 교체해야 하나요?",
+    answer:
+      "아닙니다. 기존 시스템은 유지하고, 필요한 화면과 데이터 흐름을 AI-Core로 먼저 시현한 뒤 연동 범위를 정합니다.",
+  },
+  {
+    question: "전자서명이나 사진대지 같은 툴을 바로 사용할 수 있나요?",
+    answer:
+      "이번 사이트에서는 무료 공개 툴이 아니라 조립 가능한 모듈 쇼케이스로 소개합니다. 실제 사용은 도입 문의 후 업무에 맞춰 구성합니다.",
+  },
+  {
+    question: "어떤 산업부터 적용할 수 있나요?",
+    answer:
+      "제조, 금융, 건설, 물류 유통처럼 문서, 승인, 리포트, 운영 데이터가 반복되는 산업부터 적용하기 좋습니다.",
   },
 ];
 
@@ -221,6 +266,7 @@ function V3Header() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [modal, setModal] = useState<string | null>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -234,48 +280,138 @@ function V3Header() {
     return () => document.body.classList.remove("nav-open");
   }, [open]);
 
+  const closeMenu = () => setOpen(false);
+
   return (
-    <header className={`v3-header ${scrolled ? "is-scrolled" : ""}`}>
-      <Link className="v3-brand" href="/v3" onClick={() => setOpen(false)}>
-        <span className="v3-brand-mark" aria-hidden="true">
-          <span />
-        </span>
-        <span>대한산업AI</span>
-      </Link>
-      <button
-        className="v3-menu-button"
-        type="button"
-        aria-label={open ? "메뉴 닫기" : "메뉴 열기"}
-        aria-expanded={open}
-        onClick={() => setOpen((value) => !value)}
-      >
-        {open ? <X size={20} /> : <Menu size={20} />}
-      </button>
-      <nav className={`v3-nav ${open ? "is-open" : ""}`} aria-label="주요 메뉴">
-        <div className="v3-nav-links">
-          {navItems.map((item) => {
-            const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
-            return (
-              <Link
-                className={active ? "is-active" : ""}
-                key={item.href}
-                href={item.href}
-                onClick={() => setOpen(false)}
-              >
-                {item.label}
-              </Link>
-            );
-          })}
-        </div>
-        <Link
-          className={`v3-nav-cta ${pathname === "/v3/contact" ? "is-active" : ""}`}
-          href="/v3/contact"
-          onClick={() => setOpen(false)}
-        >
-          문의하기
+    <>
+      <header className={`v3-header ${scrolled ? "is-scrolled" : ""} ${open ? "is-open" : ""}`}>
+        <Link className="v3-brand" href="/v3" onClick={closeMenu}>
+          <span className="v3-brand-mark" aria-hidden="true">
+            <span />
+          </span>
+          <span>대한산업AI</span>
         </Link>
-      </nav>
-    </header>
+        <button
+          className="v3-menu-button"
+          type="button"
+          aria-label={open ? "메뉴 닫기" : "메뉴 열기"}
+          aria-expanded={open}
+          onClick={() => setOpen((value) => !value)}
+        >
+          {open ? <X size={20} /> : <Menu size={20} />}
+        </button>
+        <nav className={`v3-nav ${open ? "is-open" : ""}`} aria-label="주요 메뉴">
+          <div className="v3-nav-links">
+            {navItems.map((group) => {
+              const active =
+                (group.href && (pathname === group.href || pathname.startsWith(`${group.href}/`))) ||
+                group.children.some((child) => child.href && pathname.startsWith(child.href));
+
+              return (
+                <div className={`v3-nav-group ${active ? "is-active" : ""}`} key={group.label}>
+                  {group.href ? (
+                    <Link href={group.href} onClick={closeMenu}>
+                      {group.label}
+                    </Link>
+                  ) : (
+                    <button type="button">{group.label}</button>
+                  )}
+                  <div className="v3-dropdown" role="menu" style={open ? mobileDropdownStyle : undefined}>
+                    {group.children.map((child) =>
+                      child.modal ? (
+                        <button
+                          key={child.label}
+                          type="button"
+                          role="menuitem"
+                          onClick={() => {
+                            closeMenu();
+                            setModal(child.label);
+                          }}
+                        >
+                          <strong>{child.label}</strong>
+                          <span>{child.description}</span>
+                        </button>
+                      ) : (
+                        <Link key={child.label} href={child.href ?? "/v3"} role="menuitem" onClick={closeMenu}>
+                          <strong>{child.label}</strong>
+                          <span>{child.description}</span>
+                        </Link>
+                      ),
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          <button
+            className="v3-nav-cta"
+            type="button"
+            onClick={() => {
+              closeMenu();
+              setModal("시작하기");
+            }}
+          >
+            시작하기
+          </button>
+        </nav>
+      </header>
+      <V3ComingSoonModal
+        open={modal !== null}
+        title={modal === "YouTube" ? "YouTube 콘텐츠를 준비하고 있어요" : "MVP 시작하기 페이지를 준비하고 있어요"}
+        description={
+          modal === "YouTube"
+            ? "AI-Core 제작 과정과 제품 데모 영상은 곧 공개할 예정입니다."
+            : "MVP 페이지는 AI-Core 빌더와 툴 모듈 구성이 정리되면 연결합니다. 지금은 5일 도입 문의로 바로 상담할 수 있습니다."
+        }
+        onClose={() => setModal(null)}
+      />
+    </>
+  );
+}
+
+export function V3ComingSoonModal({
+  open,
+  title,
+  description,
+  onClose,
+}: {
+  open: boolean;
+  title: string;
+  description: string;
+  onClose: () => void;
+}) {
+  useEffect(() => {
+    if (!open) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [onClose, open]);
+
+  if (!open) return null;
+
+  return (
+    <div className="v3-modal-backdrop" role="presentation" onMouseDown={onClose}>
+      <section
+        className="v3-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="v3-modal-title"
+        onMouseDown={(event) => event.stopPropagation()}
+      >
+        <button className="v3-modal-close" type="button" aria-label="모달 닫기" onClick={onClose}>
+          <X size={18} />
+        </button>
+        <p className="v3-eyebrow">Coming Soon</p>
+        <h2 id="v3-modal-title">{title}</h2>
+        <p>{description}</p>
+        <Link className="v3-button v3-button-primary" href="/v3/contact" onClick={onClose}>
+          5일 도입 문의하기
+          <ArrowRight size={18} />
+        </Link>
+      </section>
+    </div>
   );
 }
 
@@ -287,17 +423,17 @@ export function V3Footer() {
           <span />
         </span>
         <strong>대한산업AI 주식회사</strong>
-        <p>AI Automation for Industrial Operations</p>
+        <p>AI-Core for Industrial Operations</p>
       </div>
       <nav aria-label="푸터 메뉴">
-        <Link href="/v3/products">제품</Link>
-        <Link href="/v3/company">회사소개</Link>
-        <Link href="/v3/mvp">MVP</Link>
-        <Link href="/v3/contact">문의하기</Link>
+        <Link href="/v3/products">Products</Link>
+        <Link href="/v3/community/newsletter">Community</Link>
+        <Link href="/v3/company">Company</Link>
+        <Link href="/v3/contact">고객 문의</Link>
       </nav>
       <div className="v3-footer-info">
-        <span>법인 정보 업데이트 예정</span>
-        <span>방문 진단 및 원격 상담 가능</span>
+        <span>AI-Core 기반 업무 시스템 조립</span>
+        <span>5일 시현 및 도입 범위 검토</span>
         <span>contact@koreaindustry.ai</span>
       </div>
     </footer>
@@ -310,7 +446,8 @@ export function V3Hero({
   description,
   primary,
   secondary,
-  visual = "home",
+  visual = "products",
+  video = false,
 }: {
   eyebrow: string;
   title: string;
@@ -318,11 +455,37 @@ export function V3Hero({
   primary: { label: string; href: string };
   secondary?: { label: string; href: string };
   visual?: HeroVisualKind;
+  video?: boolean;
 }) {
   const isHome = visual === "home";
+  const [videoReady, setVideoReady] = useState(false);
+  const [videoFailed, setVideoFailed] = useState(false);
 
   return (
-    <section className={`v3-hero v3-hero-${visual} ${isHome ? "is-home" : "is-subpage"}`}>
+    <section
+      className={`v3-hero v3-hero-${visual} ${isHome ? "is-home" : "is-subpage"} ${
+        videoReady ? "has-video" : "has-image-fallback"
+      }`}
+      data-video-state={videoReady ? "loaded" : "image-fallback"}
+    >
+      {video ? (
+        <video
+          className="v3-hero-video"
+          aria-hidden="true"
+          autoPlay
+          muted
+          loop
+          playsInline
+          poster="/v3/industrial-ai-hero.png"
+          onCanPlay={() => setVideoReady(true)}
+          onError={() => {
+            setVideoFailed(true);
+            setVideoReady(false);
+          }}
+        >
+          {!videoFailed ? <source src="/v3/hero-video.mp4" type="video/mp4" /> : null}
+        </video>
+      ) : null}
       <div className="v3-hero-overlay" aria-hidden="true" />
       <div className="v3-hero-inner">
         <div className="v3-hero-copy">
@@ -341,7 +504,7 @@ export function V3Hero({
             ) : null}
           </div>
           {isHome ? (
-            <div className="v3-hero-progress" aria-label="대표 메시지 1번">
+            <div className="v3-hero-progress" aria-label="대표 메시지 진행 상태">
               <span>01</span>
               <strong />
               <span>02</span>
@@ -357,30 +520,21 @@ export function V3Hero({
 function V3HeroVisual({ kind }: { kind: Exclude<HeroVisualKind, "home"> }) {
   const visualTitle =
     kind === "products"
-      ? "자동화 맵"
+      ? "AI-Core 구조"
       : kind === "company"
-        ? "도입 흐름"
-        : kind === "mvp"
-          ? "MVP 범위"
-          : "문의 요약";
+        ? "5일 도입"
+        : kind === "community"
+          ? "콘텐츠 피드"
+          : "문의 흐름";
 
   const visualItems =
     kind === "products"
-      ? ["ERP", "메일", "웹하드", "보고서", "대장", "대시보드"]
+      ? ["Widget", "ERP", "AI", "Dashboard"]
       : kind === "company"
-        ? ["방문 진단", "업무 분석", "연동 설계", "구현"]
-        : kind === "mvp"
-          ? ["반복 업무", "샘플 데이터", "프로토타입", "검증"]
-        : ["회사명", "업무 영역", "사용 시스템", "도입 목표"];
-
-  const metricItems =
-    kind === "products"
-      ? ["입력원 6개", "산출물 4종", "운영 로그"]
-      : kind === "company"
-        ? ["방문 진단", "권한 설계", "본 구현"]
-        : kind === "mvp"
-          ? ["1개 업무", "샘플 데이터", "검증 결과"]
-          : ["회사명", "반복 업무", "상담 방식"];
+        ? ["진단", "조립", "시현", "확장"]
+        : kind === "community"
+          ? ["Newsletter", "Blog", "Threads", "YouTube"]
+          : ["회사 정보", "업무 문제", "희망 일정", "상담 요청"];
 
   return (
     <div className={`v3-hero-visual v3-visual-${kind}`} aria-label={`${visualTitle} 시각화`}>
@@ -399,8 +553,8 @@ function V3HeroVisual({ kind }: { kind: Exclude<HeroVisualKind, "home"> }) {
         </div>
         <div className="v3-visual-main">
           <div className="v3-visual-title-row">
-            <strong>대한산업AI 운영 화면</strong>
-            <small>미리보기</small>
+            <strong>AI-Core Console</strong>
+            <small>Preview</small>
           </div>
           <div className="v3-visual-flow">
             {visualItems.map((item, index) => (
@@ -410,7 +564,7 @@ function V3HeroVisual({ kind }: { kind: Exclude<HeroVisualKind, "home"> }) {
             ))}
           </div>
           <div className="v3-visual-chart">
-            {metricItems.map((item) => (
+            {["모듈", "조립", "시현"].map((item) => (
               <i key={item}>
                 <span>{item}</span>
               </i>
@@ -444,88 +598,323 @@ export function V3SectionHeading({
   );
 }
 
-export function V3TrustStrip() {
+export function V3IndustryWordmarks() {
   return (
-    <section className="v3-trust-strip" aria-label="적용 가능 영역">
-      <span>적용 가능 영역</span>
-      <div>
-        {logoNames.map((name) => (
-          <strong key={name}>{name}</strong>
+    <section className="v3-section v3-industry-section" aria-label="산업별 워드마크 신뢰 영역">
+      <V3SectionHeading
+        eyebrow="Industry"
+        title="제조, 금융, 건설, 물류 유통까지 같은 AI-Core로 다르게 조립합니다."
+        description="공식 로고 자산이 없는 v1에서는 실명 워드마크 카드로 산업 적용 범위를 먼저 보여줍니다."
+        split
+      />
+      <div className="v3-industry-wordmarks">
+        {industryWordmarks.map((item) => (
+          <article key={item.name}>
+            <span>{item.industry}</span>
+            <strong>{item.name}</strong>
+            <p>{item.note}</p>
+          </article>
         ))}
       </div>
     </section>
   );
 }
 
-export function V3ProductShowcase() {
+export function V3TrustStrip() {
   return (
-    <div className="v3-product-showcase">
-      <div className="v3-product-showcase-copy">
-        <span>Our Products</span>
-        <h3>기존 시스템을 바꾸지 않고, 필요한 자동화 레이어를 얹습니다.</h3>
+    <section className="v3-trust-strip" aria-label="신뢰 워드마크">
+      <span>Industry Wordmarks</span>
+      <div>
+        {industryWordmarks.map((item) => (
+          <strong key={item.name}>{item.name}</strong>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+export function V3AiCoreShowcase() {
+  return (
+    <div className="v3-ai-core-panel">
+      <div className="v3-ai-core-copy">
+        <span>AI-Core</span>
+        <h3>3000개 위젯을 조립해 고객 맞춤 ERP형 시스템을 빠르게 시현합니다.</h3>
         <p>
-          ERP, 웹메일, 웹하드, 보고서 양식, 내부 대시보드처럼 이미 쓰는 도구를 기준으로 업무 자동화 제품군을
-          조립합니다.
+          AI-Core는 단일 SaaS가 아니라 업무 화면, 데이터, 승인, 리포트, 대시보드 모듈을 조합하는 시작
+          방식입니다. 핵심 아이템을 먼저 고르고 5일 안에 눈으로 확인할 수 있는 흐름을 만듭니다.
         </p>
-        <Link className="v3-text-link" href="/v3/products">
-          제품 구조 보기
+        <Link className="v3-text-link" href="/v3/products/ai-core">
+          AI-Core 자세히 보기
           <ArrowRight size={17} />
         </Link>
       </div>
-      <div className="v3-product-media" aria-label="제품 화면 예시">
-        <div className="v3-product-screen">
-          <div className="v3-screen-sidebar" />
-          <div className="v3-screen-content">
-            <div className="v3-screen-row">
-              <span />
-              <span />
-              <span />
-            </div>
-            <div className="v3-screen-canvas">
-              <i />
-              <i />
-              <i />
-              <i />
-            </div>
-          </div>
-        </div>
+      <div className="v3-ai-core-stats" aria-label="AI-Core 핵심 수치">
+        <strong>3000</strong>
+        <span>Widget Library</span>
+        <small>ERP 모듈, 문서, 승인, 리포트, 대시보드를 조립 가능한 단위로 구성합니다.</small>
       </div>
     </div>
   );
 }
 
-export function V3IndustryCards() {
+export function V3ProductCards() {
   return (
-    <div className="v3-industry-grid">
-      {industryCards.map((item) => (
-        <article className={`v3-industry-card ${item.className}`} key={item.title}>
-          <span>{item.label}</span>
-          <h3>{item.title}</h3>
-          <p>{item.description}</p>
+    <div className="v3-product-grid">
+      {productGroups.map((product) => {
+        const Icon = product.icon;
+        return (
+          <article className="v3-product-card" key={product.title}>
+            <Icon size={24} />
+            <h3>{product.title}</h3>
+            <p>{product.description}</p>
+            <ul>
+              {product.points.map((item) => (
+                <li key={item}>
+                  <CheckCircle2 size={15} />
+                  {item}
+                </li>
+              ))}
+            </ul>
+            <Link className="v3-text-link" href={product.href}>
+              자세히 보기
+              <ArrowRight size={16} />
+            </Link>
+          </article>
+        );
+      })}
+    </div>
+  );
+}
+
+export function V3ToolCta() {
+  return (
+    <section className="v3-section v3-tool-cta">
+      <div>
+        <p className="v3-eyebrow">Cross-Industry Tools</p>
+        <h2>범 산업 툴은 무료 공개 기능이 아니라 AI-Core에 붙는 쇼케이스 모듈입니다.</h2>
+        <p>
+          전자서명, TBM 서명, 사진대지, 문서 정리, 데이터 변환은 각각 작은 툴처럼 보이지만 실제 목표는
+          고객사의 업무 시스템에 빠르게 조립 가능한 모듈을 보여주는 것입니다.
+        </p>
+        <Link className="v3-button v3-button-primary" href="/v3/contact">
+          툴 모듈 도입 문의
+          <ArrowRight size={18} />
+        </Link>
+      </div>
+      <div className="v3-tool-grid">
+        {toolModules.map((item) => {
+          const Icon = item.icon;
+          return (
+            <article key={item.title}>
+              <Icon size={22} />
+              <h3>{item.title}</h3>
+              <p>{item.text}</p>
+            </article>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
+export function V3DetailFeatureGrid({
+  items,
+}: {
+  items: Array<{ icon?: LucideIcon; title: string; text: string; example?: string }>;
+}) {
+  return (
+    <div className="v3-capability-grid">
+      {items.map((item) => {
+        const Icon = item.icon ?? Sparkles;
+        return (
+          <article key={item.title}>
+            <Icon size={22} />
+            <h3>{item.title}</h3>
+            <p>{item.text}</p>
+            {item.example ? <span className="v3-card-example">{item.example}</span> : null}
+          </article>
+        );
+      })}
+    </div>
+  );
+}
+
+export function V3Process({ steps }: { steps: string[] }) {
+  return (
+    <ol className="v3-process-list">
+      {steps.map((step, index) => (
+        <li key={step}>
+          <span>{String(index + 1).padStart(2, "0")}</span>
+          <strong>{step}</strong>
+        </li>
+      ))}
+    </ol>
+  );
+}
+
+export function V3CtaBand({
+  title,
+  description,
+  href = "/v3/contact",
+  label = "5일 도입 문의하기",
+}: {
+  title: string;
+  description: string;
+  href?: string;
+  label?: string;
+}) {
+  return (
+    <section className="v3-cta-band">
+      <div>
+        <p className="v3-eyebrow">5-Day Demo</p>
+        <h2>{title}</h2>
+        <p>{description}</p>
+      </div>
+      <Link className="v3-button v3-button-primary" href={href}>
+        {label}
+        <ArrowRight size={18} />
+      </Link>
+    </section>
+  );
+}
+
+export function V3NewsletterForm() {
+  const [submitted, setSubmitted] = useState(false);
+
+  return (
+    <form
+      className="v3-newsletter-form"
+      onSubmit={(event) => {
+        event.preventDefault();
+        setSubmitted(true);
+      }}
+    >
+      <label>
+        이메일
+        <input name="email" type="email" placeholder="name@company.com" required />
+      </label>
+      <label>
+        관심 주제
+        <select name="topic" defaultValue="">
+          <option value="" disabled>
+            선택해주세요
+          </option>
+          <option>AI-Core</option>
+          <option>5일 시현</option>
+          <option>산업별 적용</option>
+          <option>Tool 모듈</option>
+        </select>
+      </label>
+      <button className="v3-button v3-button-primary" type="submit">
+        연락받기
+        <Mail size={17} />
+      </button>
+      <p className={`v3-form-note ${submitted ? "is-success" : ""}`}>
+        {submitted ? "뉴스레터 신청이 접수되었습니다." : "블로그와 스레드 업데이트를 정리해 보내드립니다."}
+      </p>
+    </form>
+  );
+}
+
+export function V3ContactForm() {
+  const [submitted, setSubmitted] = useState(false);
+
+  return (
+    <form
+      className="v3-contact-form"
+      onSubmit={(event) => {
+        event.preventDefault();
+        setSubmitted(true);
+      }}
+    >
+      <label>
+        회사명
+        <input name="company" placeholder="대한산업AI 도입 검토 기업" required />
+      </label>
+      <label>
+        담당자명
+        <input name="name" placeholder="홍길동" required />
+      </label>
+      <label>
+        연락처
+        <input name="contact" placeholder="이메일 또는 전화번호" required />
+      </label>
+      <label>
+        관심 영역
+        <select name="interest" defaultValue="" required>
+          <option value="" disabled>
+            선택해주세요
+          </option>
+          <option>AI-Core</option>
+          <option>5일 시현</option>
+          <option>Tool 모듈</option>
+          <option>산업별 적용</option>
+        </select>
+      </label>
+      <label className="is-wide">
+        시현해보고 싶은 업무
+        <textarea
+          name="message"
+          rows={5}
+          placeholder="예: 현장 사진과 서명 기록을 기반으로 안전 보고서를 자동 작성하고 싶습니다."
+        />
+      </label>
+      <button className="v3-button v3-button-primary is-wide" type="submit">
+        <Send size={17} />
+        문의 접수하기
+      </button>
+      <p className={`v3-form-note ${submitted ? "is-success" : ""}`}>
+        {submitted ? "문의가 접수되었습니다. 담당자가 확인 후 연락드리겠습니다." : "입력하신 내용은 5일 시현 범위 검토에 사용합니다."}
+      </p>
+    </form>
+  );
+}
+
+export function V3BlogList() {
+  return (
+    <div className="v3-resource-list">
+      {blogPosts.map((post) => (
+        <article key={post.title}>
+          <span>{post.category}</span>
+          <h3>{post.title}</h3>
+          <p>{post.excerpt}</p>
+          <small>{post.date}</small>
         </article>
       ))}
     </div>
   );
 }
 
-export function V3StoryCards() {
+export function V3ThreadList() {
   return (
-    <div className="v3-story-grid">
-      {storyCards.map((item) => (
-        <article className="v3-story-card" key={item.title}>
-          <div className={`v3-story-thumb is-${item.visual}`} />
-          <span>{item.type}</span>
-          <h3>{item.title}</h3>
-          <p>{item.text}</p>
+    <div className="v3-thread-list">
+      {threadPosts.map((post) => (
+        <article key={post.title}>
+          <span>{post.tag}</span>
+          <h3>{post.title}</h3>
+          <p>{post.text}</p>
         </article>
+      ))}
+    </div>
+  );
+}
+
+export function V3FaqList() {
+  return (
+    <div className="v3-faq-list">
+      {faqItems.map((item) => (
+        <details key={item.question}>
+          <summary>{item.question}</summary>
+          <p>{item.answer}</p>
+        </details>
       ))}
     </div>
   );
 }
 
 export function V3AutomationDiagram() {
-  const inputs = ["ERP", "웹메일", "웹하드", "엑셀", "현장 사진", "기존 문서"];
-  const outputs = ["보고서", "안전보건 대장", "대시보드", "ERP 반영", "재고 알림", "승인 요청"];
+  const inputs = ["ERP", "문서", "엑셀", "현장 사진", "서명", "운영 로그"];
+  const outputs = ["업무 화면", "보고서", "대시보드", "승인 요청", "알림", "연동 범위"];
 
   return (
     <div className="v3-architecture-board">
@@ -539,16 +928,16 @@ export function V3AutomationDiagram() {
         <span />
       </div>
       <div className="v3-arch-core">
-        <small>02 Process</small>
+        <small>02 Assemble</small>
         <Layers3 size={30} />
-        <strong>대한산업AI</strong>
-        <span>업무 규칙 분석 · AI 문서 생성 · 시스템 연동 · 운영 대시보드</span>
+        <strong>AI-Core</strong>
+        <span>위젯 선택 / ERP형 데이터 구조 / AI 처리 / 승인 흐름 / 대시보드 조립</span>
       </div>
       <div className="v3-arch-connector is-right" aria-hidden="true">
         <span />
       </div>
       <div className="v3-arch-group is-output">
-        <span>03 Output</span>
+        <span>03 Demo</span>
         {outputs.map((item) => (
           <strong key={item}>{item}</strong>
         ))}
@@ -557,234 +946,14 @@ export function V3AutomationDiagram() {
   );
 }
 
-export function V3ProductGrid() {
-  return (
-    <div className="v3-product-grid">
-      {productModules.map((product) => {
-        const Icon = product.icon;
-        return (
-          <article className="v3-product-card" key={product.title}>
-            <Icon size={24} />
-            <h3>{product.title}</h3>
-            <p>{product.description}</p>
-            <ul>
-              {product.items.map((item) => (
-                <li key={item}>
-                  <CheckCircle2 size={15} />
-                  {item}
-                </li>
-              ))}
-            </ul>
-            <span className="v3-card-example">{product.example}</span>
-          </article>
-        );
-      })}
-    </div>
-  );
-}
-
-export function V3UseCasePreview() {
-  return (
-    <div className="v3-usecase-grid">
-      {useCases.map((item, index) => (
-        <article className={`v3-usecase-card ${index === 0 ? "is-featured" : ""}`} key={item.title}>
-          <span>{item.tag}</span>
-          <h3>{item.title}</h3>
-          <p>{item.description}</p>
-          <div className="v3-usecase-flow">
-            {item.flow.map((step) => (
-              <strong key={step}>{step}</strong>
-            ))}
-          </div>
-        </article>
-      ))}
-    </div>
-  );
-}
-
-export function V3MvpTargets() {
-  return (
-    <div className="v3-target-grid">
-      {mvpTargets.map((target) => (
-        <span key={target}>
-          <Sparkles size={16} />
-          {target}
-        </span>
-      ))}
-    </div>
-  );
-}
-
-export function V3Process({ steps = workProcess }: { steps?: string[] }) {
-  return (
-    <ol className="v3-process-list">
-      {steps.map((step, index) => (
-        <li key={step}>
-          <span>{String(index + 1).padStart(2, "0")}</span>
-          <strong>{step}</strong>
-        </li>
-      ))}
-    </ol>
-  );
-}
-
-export function V3ContactForm({ mvp = false }: { mvp?: boolean }) {
-  const [submitted, setSubmitted] = useState(false);
-
-  return (
-    <form
-      className="v3-contact-form"
-      onSubmit={(event) => {
-        event.preventDefault();
-        setSubmitted(true);
-      }}
-    >
-      <label>
-        회사명
-        <input name="company" placeholder="대한건설안전 주식회사" required />
-      </label>
-      <label>
-        담당자명
-        <input name="name" placeholder="홍길동" required />
-      </label>
-      <label>
-        연락처
-        <input name="contact" placeholder="이메일 또는 전화번호" required />
-      </label>
-      <label>
-        산업 분야
-        <select name="industry" defaultValue="" required>
-          <option value="" disabled>
-            선택해주세요
-          </option>
-          <option>건설 안전 / 감리</option>
-          <option>제조</option>
-          <option>기타 기업 업무</option>
-        </select>
-      </label>
-      <label>
-        관심 영역
-        <select name="interest" defaultValue={mvp ? "MVP 자동화 검증" : ""} required>
-          <option value="" disabled>
-            선택해주세요
-          </option>
-          <option>MVP 자동화 검증</option>
-          <option>건설 안전지도 자동화</option>
-          <option>안전보건 대장 자동화</option>
-          <option>ERP / 사내 시스템 연동</option>
-          <option>문서 / 보고서 자동화</option>
-          <option>제조 / 재고 관리</option>
-          <option>기타 업무 자동화</option>
-        </select>
-      </label>
-      <label>
-        현재 사용하는 시스템
-        <input name="system" placeholder="ERP, 웹메일, 웹하드, 엑셀 등" />
-      </label>
-      <label className="is-wide">
-        자동화하고 싶은 업무
-        <textarea
-          name="message"
-          rows={5}
-          placeholder="예: 현장 사진과 점검 내용을 기반으로 안전지도 보고서를 자동 생성하고 싶습니다."
-        />
-      </label>
-      <label>
-        MVP 희망 여부
-        <select name="mvp" defaultValue={mvp ? "희망" : ""}>
-          <option value="">선택해주세요</option>
-          <option>희망</option>
-          <option>미정</option>
-          <option>본 구현 검토</option>
-        </select>
-      </label>
-      <label>
-        방문 상담 희망 여부
-        <select name="visit" defaultValue="">
-          <option value="">선택해주세요</option>
-          <option>희망</option>
-          <option>원격 미팅 희망</option>
-          <option>추후 결정</option>
-        </select>
-      </label>
-      <button className="v3-button v3-button-primary is-wide" type="submit">
-        <Send size={17} />
-        문의 접수하기
-      </button>
-      <p className={`v3-form-note ${submitted ? "is-success" : ""}`}>
-        {submitted
-          ? "문의가 접수되었습니다. 담당자가 확인 후 연락드리겠습니다."
-          : "입력하신 내용은 자동화 가능 범위 검토에 사용됩니다."}
-      </p>
-    </form>
-  );
-}
-
-export function V3CtaBand({
-  title,
-  description,
-  href = "/v3/contact",
-  label = "문의하기",
-}: {
-  title: string;
-  description: string;
-  href?: string;
-  label?: string;
-}) {
-  return (
-    <section className="v3-cta-band">
-      <div>
-        <p className="v3-eyebrow">Next Step</p>
-        <h2>{title}</h2>
-        <p>{description}</p>
-      </div>
-      <Link className="v3-button v3-button-primary" href={href}>
-        {label}
-        <ArrowRight size={18} />
-      </Link>
-    </section>
-  );
-}
-
-export function V3CapabilityGrid() {
-  return (
-    <div className="v3-capability-grid">
-      {companyCapabilities.map((item) => {
-        const Icon = item.icon;
-        return (
-          <article key={item.title}>
-            <Icon size={22} />
-            <h3>{item.title}</h3>
-            <p>{item.text}</p>
-            <span className="v3-card-example">{item.example}</span>
-          </article>
-        );
-      })}
-    </div>
-  );
-}
-
-export function V3MetricStrip() {
-  return (
-    <div className="v3-metric-strip">
-      <div>
-        <span>Primary</span>
-        <strong>건설 안전 / 감리</strong>
-      </div>
-      <div>
-        <span>Expansion</span>
-        <strong>제조 / 재고 관리</strong>
-      </div>
-      <div>
-        <span>Core</span>
-        <strong>ERP · 문서 · 대시보드</strong>
-      </div>
-    </div>
-  );
-}
-
 export const v3Icons = {
+  BarChart3,
+  Building2,
   ClipboardCheck,
-  Factory,
-  Mail,
+  Database,
+  FileText,
+  Gauge,
+  MonitorCog,
+  ShieldCheck,
+  Workflow,
 };

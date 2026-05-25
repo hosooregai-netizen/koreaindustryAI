@@ -1,44 +1,39 @@
 import type { Metadata } from "next";
 import {
+  V3AiCoreShowcase,
   V3AutomationDiagram,
   V3CtaBand,
+  V3DetailFeatureGrid,
   V3Hero,
-  V3ProductGrid,
-  V3ProductShowcase,
+  V3Process,
   V3SectionHeading,
   V3Shell,
-  V3UseCasePreview,
 } from "@/components/v3/v3-site";
 
 export const metadata: Metadata = {
-  title: "제품 | 대한산업AI v3",
-  description: "ERP 연동, 업무 자동화, 문서 자동화, 대시보드 구현을 포함한 대한산업AI 제품군입니다.",
+  title: "Products | 대한산업AI",
+  description: "대한산업AI의 제품군은 우선 AI-Core 하나에 집중합니다.",
 };
 
-const packages = [
+const overviewItems = [
   {
-    title: "건설 안전 / 감리 법인",
-    items: ["현장 방문 일정", "사진 / 점검 데이터 정리", "안전지도 보고서 생성", "안전보건 대장 반영", "관리자 대시보드"],
+    title: "하나의 제품 메시지",
+    text: "드롭다운과 제품 상세는 AI-Core를 중심으로 정리하고, 앱과 툴은 AI-Core 안의 조립 가능한 모듈로 설명합니다.",
+    example: "AI-Core 단일 노출",
   },
   {
-    title: "제조업",
-    items: ["입출고 데이터 정리", "재고 현황 대시보드", "부족 재고 알림", "보고서 자동 생성", "ERP 반영"],
+    title: "업무 시스템 조립",
+    text: "고객사의 문서, 승인, 데이터, 대시보드를 위젯 단위로 묶어 ERP처럼 작동하는 화면을 만듭니다.",
+    example: "ERP 모듈 / 문서 / 승인 / 리포트",
+  },
+  {
+    title: "5일 시현",
+    text: "전체 구축보다 핵심 업무 하나를 먼저 고르고 작동 가능한 흐름을 빠르게 보여줍니다.",
+    example: "진단 → 조립 → 시현",
   },
 ];
 
-const steps = [
-  { title: "업무 확인", text: "반복되는 입력, 확인, 보고 흐름을 먼저 고릅니다." },
-  { title: "데이터 출처 연결", text: "ERP, 메일, 웹하드, 엑셀 등 실제 입력원을 연결합니다." },
-  { title: "자동화 규칙 설계", text: "담당자, 승인, 예외 처리 기준을 업무 규칙으로 정리합니다." },
-  { title: "문서 / 화면 생성", text: "보고서, 대장, 대시보드, 처리 로그를 만듭니다." },
-  { title: "운영 피드백 반영", text: "현장 사용 결과를 보고 본 구현 범위를 확정합니다." },
-];
-
-const outputs = [
-  { title: "자동 생성 보고서", text: "사진, 점검 항목, 메모를 기존 보고서 양식에 맞춰 채웁니다." },
-  { title: "관리자 대시보드", text: "처리 현황, 누락 항목, 월별 추이를 한 화면에 모읍니다." },
-  { title: "ERP 반영 로그", text: "자동 처리된 항목과 실패 항목을 추적할 수 있게 남깁니다." },
-];
+const steps = ["핵심 업무 선정", "데이터와 문서 샘플 정리", "AI-Core 위젯 조립", "5일 시현", "도입 범위 확정"];
 
 export default function ProductsPage() {
   return (
@@ -46,95 +41,46 @@ export default function ProductsPage() {
       <main>
         <V3Hero
           eyebrow="Products"
-          title="기존 ERP와 사내 시스템 위에 붙는 AI 자동화 제품군"
-          description="새 시스템을 강요하지 않습니다. 이미 쓰는 ERP, 메일, 웹하드, 문서 양식 위에 필요한 자동화 흐름을 설계합니다."
-          primary={{ label: "MVP 상담하기", href: "/v3/mvp" }}
-          secondary={{ label: "문의하기", href: "/v3/contact" }}
+          title="AI-Core 하나로 산업별 업무 시스템을 조립합니다."
+          description="대한산업AI의 v1 제품 페이지는 AI-Core를 중심으로 구성합니다. 3000개 위젯, ERP 모듈 조립, 고객 맞춤 SI, 5일 시현을 한 흐름으로 설명합니다."
+          primary={{ label: "AI-Core 자세히 보기", href: "/v3/products/ai-core" }}
+          secondary={{ label: "5일 도입 문의", href: "/v3/contact" }}
           visual="products"
         />
 
         <section className="v3-section">
-          <V3SectionHeading eyebrow="Product View" title="제품은 기능 목록보다 업무 흐름으로 설명되어야 합니다." />
-          <V3ProductShowcase />
+          <V3SectionHeading
+            eyebrow="Overview"
+            title="제품을 넓게 펼치기보다, 첫 메시지는 AI-Core로 선명하게 갑니다."
+            description="AI Apps와 Tools는 추후 확장 가능하지만 현재 상단 메뉴에서는 제외하고 AI-Core 안의 모듈로 다룹니다."
+            split
+          />
+          <V3DetailFeatureGrid items={overviewItems} />
+        </section>
+
+        <section className="v3-section v3-soft">
+          <V3SectionHeading eyebrow="AI-Core Preview" title="업무 화면과 데이터 흐름을 조립하는 방식" />
+          <V3AiCoreShowcase />
         </section>
 
         <section className="v3-section v3-dark">
           <V3SectionHeading
-            eyebrow="System Map"
-            title="입력부터 산출물까지 하나의 흐름으로 설계합니다."
-            description="자료 수집, 분류, AI 문서 생성, 규칙 검증, 승인 알림이 실제 업무 산출물로 이어집니다."
+            eyebrow="Architecture"
+            title="입력부터 결과물까지 하나의 업무 흐름으로 연결합니다."
+            description="ERP, 문서, 엑셀, 현장 사진, 서명 같은 입력을 AI-Core에서 묶고 실제 사용 가능한 화면과 보고서로 시현합니다."
             split
           />
           <V3AutomationDiagram />
         </section>
 
         <section className="v3-section">
-          <V3SectionHeading eyebrow="Modules" title="제품 모듈" />
-          <V3ProductGrid />
-        </section>
-
-        <section className="v3-section v3-soft">
-          <V3SectionHeading
-            eyebrow="Outputs"
-            title="도입 후 남는 산출물"
-            description="자동화는 화면이 아니라 실제 업무 결과물로 검증되어야 합니다."
-            split
-          />
-          <div className="v3-output-grid">
-            {outputs.map((item) => (
-              <article key={item.title}>
-                <span />
-                <h3>{item.title}</h3>
-                <p>{item.text}</p>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section className="v3-section">
-          <V3SectionHeading
-            eyebrow="Packages"
-            title="우선 적용 산업 패키지"
-            description="현재는 건설 안전 / 감리 법인과 제조업 업무를 우선 대상으로 제품을 정리합니다."
-            split
-          />
-          <div className="v3-package-grid">
-            {packages.map((item) => (
-              <article key={item.title}>
-                <h3>{item.title}</h3>
-                <ul>
-                  {item.items.map((text) => (
-                    <li key={text}>{text}</li>
-                  ))}
-                </ul>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section className="v3-section v3-dark">
-          <V3SectionHeading eyebrow="Use Cases" title="대표 적용 사례" />
-          <V3UseCasePreview />
-        </section>
-
-        <section className="v3-section">
-          <V3SectionHeading eyebrow="How It Works" title="작동 방식" />
-          <ol className="v3-horizontal-steps">
-            {steps.map((step, index) => (
-              <li key={step.title}>
-                <span>{String(index + 1).padStart(2, "0")}</span>
-                <strong>{step.title}</strong>
-                <small>{step.text}</small>
-              </li>
-            ))}
-          </ol>
+          <V3SectionHeading eyebrow="Adoption" title="도입 흐름은 단순하게 유지합니다." />
+          <V3Process steps={steps} />
         </section>
 
         <V3CtaBand
-          title="우리 회사 업무에 어떤 자동화가 가능한지 확인해보세요."
-          description="효과가 큰 반복 업무 하나부터 MVP로 시작할 수 있습니다."
-          href="/v3/mvp"
-          label="MVP 상담하기"
+          title="AI-Core로 먼저 보여줄 업무 하나를 함께 고르겠습니다."
+          description="반복 빈도, 입력 데이터, 결과물을 기준으로 첫 시현 범위를 정하고 5일 안에 눈으로 확인할 수 있게 만듭니다."
         />
       </main>
     </V3Shell>
