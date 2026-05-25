@@ -7485,3 +7485,34 @@ textarea {
     min-height: 220px;
   }
 }
+
+/* Keep the primary v3 topbar menu centered on desktop. */
+@media (min-width: 761px) {
+  .v3-header,
+  .v3-header.is-scrolled {
+    display: grid;
+    grid-template-columns: minmax(220px, 1fr) auto minmax(220px, 1fr);
+    align-items: center;
+  }
+
+  .v3-brand {
+    grid-column: 1;
+    justify-self: start;
+  }
+
+  .v3-nav {
+    display: contents;
+  }
+
+  .v3-nav-links {
+    grid-column: 2;
+    justify-self: center;
+  }
+
+  .v3-nav-cta,
+  .v3-nav .v3-nav-cta,
+  .v3-header.is-scrolled .v3-nav .v3-nav-cta {
+    grid-column: 3;
+    justify-self: end;
+  }
+}
