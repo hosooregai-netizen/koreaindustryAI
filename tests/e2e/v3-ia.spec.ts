@@ -36,10 +36,11 @@ async function getTopbarMetrics(page: import("@playwright/test").Page) {
   return page.evaluate(() => {
     const header = document.querySelector<HTMLElement>(".v3-header");
     const brand = document.querySelector<HTMLElement>(".v3-brand");
+    const brandMark = document.querySelector<HTMLElement>(".v3-brand-mark");
     const menuButton = document.querySelector<HTMLElement>(".v3-menu-button");
     const navControls = [...document.querySelectorAll<HTMLElement>(".v3-nav-group > a, .v3-nav-group > button")];
 
-    if (!header || !brand || !menuButton) {
+    if (!header || !brand || !brandMark || !menuButton) {
       throw new Error("Could not find v3 topbar elements");
     }
 
@@ -55,6 +56,10 @@ async function getTopbarMetrics(page: import("@playwright/test").Page) {
 
     return {
       className: header.className,
+      color: getComputedStyle(header).color,
+      background: getComputedStyle(header).backgroundColor,
+      brandColor: getComputedStyle(brand).color,
+      brandMarkBackground: getComputedStyle(brandMark).backgroundColor,
       header: rect(header),
       brand: rect(brand),
       menuButton: rect(menuButton),
@@ -68,7 +73,7 @@ async function getTopbarMetrics(page: import("@playwright/test").Page) {
   });
 }
 
-async function expectTopbarKeepsTopPositionSize(page: import("@playwright/test").Page) {
+async function expectTopbarChangesBackgroundWithoutResizing(page: import("@playwright/test").Page) {
   await page.evaluate(() => window.scrollTo(0, 0));
   await page.waitForTimeout(100);
   const top = await getTopbarMetrics(page);
@@ -77,7 +82,11 @@ async function expectTopbarKeepsTopPositionSize(page: import("@playwright/test")
   await page.waitForTimeout(100);
   const scrolled = await getTopbarMetrics(page);
 
-  expect(scrolled.className).not.toContain("is-scrolled");
+  expect(top.className).toContain("is-transparent");
+  expect(scrolled.className).toContain("is-scrolled");
+  expect(top.background).not.toEqual(scrolled.background);
+  expect(top.brandColor).not.toEqual(scrolled.brandColor);
+  expect(top.brandMarkBackground).not.toEqual(scrolled.brandMarkBackground);
   expect(scrolled.header).toEqual(top.header);
   expect(scrolled.brand).toEqual(top.brand);
   expect(scrolled.menuButton).toEqual(top.menuButton);
@@ -95,14 +104,14 @@ test("home hero fills the initial viewport on desktop and mobile", async ({ page
   }
 });
 
-test("topbar keeps the top-of-page size while scrolling", async ({ page }) => {
+test("topbar becomes white on scroll without resizing", async ({ page }) => {
   for (const viewport of [
     { width: 1440, height: 900 },
     { width: 390, height: 844 },
   ]) {
     await page.setViewportSize(viewport);
     await page.goto("/v3");
-    await expectTopbarKeepsTopPositionSize(page);
+    await expectTopbarChangesBackgroundWithoutResizing(page);
   }
 });
 
@@ -114,10 +123,22 @@ test("desktop Product navigation exposes AI Core and routes correctly", async ({
   await expect(page.locator(".v3-hero")).toHaveAttribute("data-video-state", "image-fallback");
 
   const mainNav = page.getByLabel("주요 메뉴");
-  await mainNav.getByRole("button", { name: "Product" }).hover();
   const productGroup = mainNav.locator(".v3-nav-group").filter({ hasText: "Product" }).first();
+  await mainNav.getByRole("button", { name: "Product" }).focus();
+  await expect(productGroup.locator(".v3-dropdown")).toBeHidden();
+
+  await mainNav.getByRole("button", { name: "Product" }).hover();
   await expect(productGroup.locator(".v3-dropdown-media img")).toBeVisible();
   await expect(productGroup.locator(".v3-dropdown-summary")).toContainText("AI-Core와 MVP");
+
+  const triggerBox = await mainNav.getByRole("button", { name: "Product" }).boundingBox();
+  const dropdownBox = await productGroup.locator(".v3-dropdown").boundingBox();
+  if (!triggerBox || !dropdownBox) throw new Error("Could not measure Product trigger or dropdown");
+  await page.mouse.move(triggerBox.x + triggerBox.width / 2, (triggerBox.y + triggerBox.height + dropdownBox.y) / 2);
+  await expect(productGroup.locator(".v3-dropdown-media img")).toBeVisible();
+  await page.mouse.move(dropdownBox.x + dropdownBox.width - 80, dropdownBox.y + 48);
+  await expect(mainNav.getByRole("menuitem", { name: /AI Core/ })).toBeVisible();
+
   await expect(mainNav.getByRole("menuitem", { name: /AI Core/ })).toBeVisible();
   await expect(mainNav.getByRole("menuitem", { name: /^MVP/ })).toBeVisible();
   await expect(mainNav.getByRole("menuitem", { name: /AI Apps/ })).toHaveCount(0);
