@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Noto+Sans+KR:wght@400;500;700;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Lato:wght@400;500;700;900&family=Noto+Sans+KR:wght@400;500;700;900&display=swap");
 
 :root {
   --navy-950: #07111f;
@@ -31,7 +31,7 @@
 .v3-header.is-scrolled {
   height: 76px;
   padding: 0 56px;
-  background: rgba(255, 255, 255, 0.94);
+  background: #ffffff;
   border-bottom: 1px solid rgba(5, 5, 5, 0.08);
   backdrop-filter: blur(18px);
   pointer-events: none;
@@ -3059,7 +3059,7 @@ textarea {
 .v3-header.is-scrolled {
   color: var(--v3-ink);
   border-color: rgba(15, 39, 69, 0.1);
-  background: rgba(255, 255, 255, 0.92);
+  background: #ffffff;
   box-shadow: 0 12px 34px rgba(5, 17, 33, 0.1);
 }
 
@@ -4876,7 +4876,7 @@ textarea {
   padding: 0 72px;
   color: var(--v3-black);
   border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-  background: #fff;
+  background: #ffffff;
   box-shadow: none;
 }
 
@@ -4901,7 +4901,7 @@ textarea {
   gap: 12px;
   color: var(--v3-black);
   font-size: 25px;
-  font-weight: 900;
+  font-weight: 700;
   line-height: 1;
 }
 
@@ -6949,7 +6949,7 @@ textarea {
   height: 76px;
   padding: 0 56px;
   color: var(--v3-black);
-  background: rgba(255, 255, 255, 0.94);
+  background: #ffffff;
   border-bottom: 1px solid rgba(5, 5, 5, 0.08);
   box-shadow: none;
   backdrop-filter: blur(18px);
@@ -7542,7 +7542,7 @@ textarea {
 .v3-brand,
 .v3-header.is-scrolled .v3-brand {
   gap: 9px;
-  font-size: 17px;
+  font-size: 16px;
 }
 
 .v3-brand-mark,
@@ -7796,16 +7796,16 @@ textarea {
     width: min(728px, calc(100vw - 48px));
     grid-template-columns: minmax(300px, 1.1fr) minmax(220px, 0.8fr);
     grid-template-areas:
-      "summary items"
-      "media items";
-    gap: 18px 40px;
+      "media items"
+      "summary items";
+    gap: 14px 40px;
     padding: 28px 32px 32px;
     border-radius: 18px;
   }
 
   .v3-dropdown-summary {
     grid-area: summary;
-    align-self: end;
+    align-self: start;
     max-width: 360px;
     font-size: 13px;
   }
@@ -7840,7 +7840,7 @@ textarea {
 
   .v3-dropdown-items strong {
     font-size: 15px;
-    font-weight: 750;
+    font-weight: 400;
   }
 }
 
@@ -7854,7 +7854,7 @@ textarea {
 }
 
 .v3-header.is-transparent.is-home-route {
-  color: #fff;
+  color: #ffffff;
 }
 
 .v3-header.is-transparent .v3-nav-group > a,
@@ -7888,13 +7888,13 @@ textarea {
 .v3-header.is-transparent .v3-nav-cta:hover,
 .v3-header.is-transparent .v3-nav .v3-nav-cta:hover {
   color: var(--v3-black);
-  border-color: #fff;
-  background: #fff;
+  border-color: #ffffff;
+  background: #ffffff;
 }
 
 .v3-header.is-transparent:not(.is-home-route) .v3-nav-cta:hover,
 .v3-header.is-transparent:not(.is-home-route) .v3-nav .v3-nav-cta:hover {
-  color: #fff;
+  color: #ffffff;
   border-color: var(--v3-black);
   background: var(--v3-black);
 }
@@ -7902,7 +7902,7 @@ textarea {
 .v3-header.is-scrolled {
   color: var(--v3-black);
   border-bottom-color: rgba(5, 5, 5, 0.08);
-  background: rgba(255, 255, 255, 0.94);
+  background: #ffffff;
   backdrop-filter: blur(18px);
 }
 
@@ -7919,8 +7919,8 @@ textarea {
   min-height: 36px;
   padding: 0 12px;
   border-radius: 6px;
-  font-size: 13px;
-  font-weight: 800;
+  font-size: 14px;
+  font-weight: 400;
 }
 
 .v3-header.is-transparent .v3-nav .v3-nav-cta,
@@ -7930,7 +7930,7 @@ textarea {
   padding: 0 12px;
   border-radius: 6px;
   font-size: 13px;
-  font-weight: 800;
+  font-weight: 400;
 }
 
 @media (max-width: 760px) {
@@ -8001,7 +8001,7 @@ textarea {
   .v3-header.is-transparent.is-home-route .v3-nav-group > button:hover,
   .v3-header.is-transparent.is-home-route .v3-nav-group.is-active > a,
   .v3-header.is-transparent.is-home-route .v3-nav-group.is-active > button {
-    color: #fff;
+    color: #ffffff;
     opacity: 0.78;
   }
 }
@@ -8021,15 +8021,15 @@ textarea {
 }
 
 .v3-header .v3-brand-mark span {
-  background: #fff;
+  background: #ffffff;
 }
 
 .v3-header.is-transparent.is-home-route .v3-brand {
-  color: #fff;
+  color: #ffffff;
 }
 
 .v3-header.is-transparent.is-home-route .v3-brand-mark {
-  color: #fff;
+  color: #ffffff;
   box-shadow: 0 10px 28px rgba(255, 255, 255, 0.18);
 }
 
@@ -8046,5 +8046,5 @@ textarea {
 .v3-header.is-transparent:not(.is-home-route) .v3-brand-mark span,
 .v3-header.is-scrolled .v3-brand-mark span,
 .v3-header.is-open .v3-brand-mark span {
-  background: #fff;
+  background: #ffffff;
 }
