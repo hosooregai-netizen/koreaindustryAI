@@ -259,17 +259,30 @@ export function V3Shell({ children }: { children: ReactNode }) {
 function V3Header() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     document.body.classList.toggle("nav-open", open);
     return () => document.body.classList.remove("nav-open");
   }, [open]);
 
+  useEffect(() => {
+    const updateScrolled = () => setScrolled(window.scrollY > 8);
+    updateScrolled();
+    window.addEventListener("scroll", updateScrolled, { passive: true });
+    return () => window.removeEventListener("scroll", updateScrolled);
+  }, []);
+
   const closeMenu = () => setOpen(false);
+  const isHomeRoute = pathname === "/v3";
 
   return (
     <>
-      <header className={`v3-header${open ? " is-open" : ""}`}>
+      <header
+        className={`v3-header${open ? " is-open" : ""}${scrolled ? " is-scrolled" : " is-transparent"}${
+          isHomeRoute ? " is-home-route" : ""
+        }`}
+      >
         <Link className="v3-brand" href="/v3" onClick={closeMenu}>
           <span className="v3-brand-mark" aria-hidden="true">
             <span />
