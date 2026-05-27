@@ -23,11 +23,10 @@ export default function V3HomePage() {
         <V3Hero
           eyebrow="AI-Core for Industrial Operations"
           title="산업별 업무 시스템을 5일 안에 시현합니다."
-          description="대한산업AI는 ERP, 문서, 승인, 대시보드에 필요한 3000개 위젯을 조립해 고객사의 핵심 업무를 빠르게 보여주는 AI-Core를 만듭니다."
+          description="대한산업AI는 업무 화면, 문서, 승인, 리포트 모듈을 조립해 첫 자동화 가능성을 빠르게 확인하는 AI-Core를 만듭니다."
           primary={{ label: "5일 도입 문의하기", href: "/v3/contact" }}
           secondary={{ label: "AI-Core 보기", href: "/v3/products/ai-core" }}
           visual="home"
-          video
         />
         <V3TrustStrip />
         <V3IndustryWordmarks />
@@ -36,7 +35,7 @@ export default function V3HomePage() {
           <V3SectionHeading
             eyebrow="Products"
             title="우선 제품은 AI-Core 하나에 집중합니다."
-            description="AI Apps와 Tools는 별도 제품군으로 나누기보다, 지금은 AI-Core 안에서 조립 가능한 화면과 모듈로 설명합니다."
+            description="MVP와 산업별 페이지는 준비중으로 두고, 현재 첫 메시지는 AI-Core의 조립 방식에 맞춥니다."
             split
           />
           <V3ProductCards />
@@ -46,7 +45,7 @@ export default function V3HomePage() {
           <V3SectionHeading
             eyebrow="AI-Core"
             title="핵심 아이템을 고르고, ERP형 모듈을 조립하고, 5일 안에 시현합니다."
-            description="회의에서 합의한 방향처럼 v1은 AI-Core를 명확히 보여주는 데 집중합니다."
+            description="큰 구축을 약속하기보다 반복 업무 하나를 실제 화면과 흐름으로 먼저 보여줍니다."
             split
           />
           <V3AiCoreShowcase />

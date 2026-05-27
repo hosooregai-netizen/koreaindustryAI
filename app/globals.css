@@ -7516,3 +7516,240 @@ textarea {
     justify-self: end;
   }
 }
+
+/* Keep the v3 home hero as the complete first viewport beneath the fixed topbar. */
+.v3-hero.is-home {
+  min-height: 100vh;
+  min-height: 100svh;
+  min-height: 100dvh;
+}
+
+.v3-hero.is-home .v3-hero-inner {
+  max-width: none;
+  margin: 0;
+  align-items: end;
+  padding: clamp(72px, 14vh, 180px) clamp(24px, 4vw, 80px) clamp(38px, 7vh, 84px);
+}
+
+/* Compact shared v3 topbar to roughly two-thirds of the previous scale. */
+.v3-header,
+.v3-header.is-scrolled {
+  height: 62px;
+  padding: 0 46px;
+}
+
+.v3-brand,
+.v3-header.is-scrolled .v3-brand {
+  gap: 9px;
+  font-size: 17px;
+}
+
+.v3-brand-mark,
+.v3-header.is-scrolled .v3-brand-mark {
+  width: 24px;
+  height: 21px;
+}
+
+.v3-brand-mark span {
+  width: 12px;
+  height: 2px;
+}
+
+.v3-nav {
+  flex: 1;
+  justify-content: flex-end;
+  gap: 15px;
+}
+
+.v3-nav-links {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  gap: 7px;
+  transform: translate(-50%, -50%);
+}
+
+.v3-nav-group > a,
+.v3-nav-group > button,
+.v3-nav .v3-nav-cta {
+  min-height: 36px;
+  padding: 0 12px;
+  border-radius: 6px;
+  font-size: 13px;
+}
+
+.v3-nav-cta,
+.v3-nav .v3-nav-cta,
+.v3-header.is-scrolled .v3-nav .v3-nav-cta {
+  min-width: 96px;
+  border-radius: 6px;
+}
+
+.v3-dropdown {
+  top: calc(100% + 8px);
+  width: min(300px, 82vw);
+  gap: 4px;
+  padding: 7px;
+  border-radius: 6px;
+}
+
+.v3-dropdown a,
+.v3-dropdown button {
+  gap: 3px;
+  padding: 9px 10px;
+  border-radius: 6px;
+}
+
+.v3-dropdown strong {
+  font-size: 12px;
+}
+
+.v3-dropdown span {
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+@media (max-width: 760px) {
+  .v3-header,
+  .v3-header.is-scrolled {
+    height: 53px;
+    padding: 0 14px;
+  }
+
+  .v3-brand,
+  .v3-header.is-scrolled .v3-brand {
+    gap: 8px;
+    font-size: 15px;
+  }
+
+  .v3-brand-mark,
+  .v3-header.is-scrolled .v3-brand-mark {
+    width: 21px;
+    height: 18px;
+  }
+
+  .v3-brand-mark span {
+    width: 10px;
+  }
+
+  .v3-menu-button {
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
+  }
+
+  .v3-menu-button svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .v3-nav,
+  .v3-nav.is-open {
+    top: 53px !important;
+    left: 8px !important;
+    right: 8px !important;
+    max-height: calc(100svh - 65px) !important;
+    padding: 8px !important;
+  }
+
+  .v3-nav-links {
+    position: static;
+    gap: 5px !important;
+    transform: none;
+  }
+
+  .v3-nav-group > a,
+  .v3-nav-group > button,
+  .v3-nav .v3-nav-cta {
+    min-height: 38px;
+    padding: 0 10px;
+    font-size: 13px;
+  }
+
+  .v3-nav.is-open .v3-dropdown {
+    margin-top: 4px;
+    padding: 6px;
+  }
+}
+
+/* v3 dropdown IA update */
+.v3-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+.v3-nav-cta,
+.v3-nav .v3-nav-cta,
+.v3-header.is-scrolled .v3-nav .v3-nav-cta {
+  color: var(--v3-black);
+  border: 1px solid currentColor;
+  background: transparent;
+}
+
+.v3-nav-cta:hover,
+.v3-nav .v3-nav-cta:hover,
+.v3-header.is-scrolled .v3-nav .v3-nav-cta:hover {
+  color: #fff;
+  background: var(--v3-black);
+}
+
+.v3-dropdown {
+  width: min(560px, calc(100vw - 48px));
+  gap: 10px;
+  padding: 12px;
+}
+
+.v3-dropdown-media {
+  overflow: hidden;
+  border-radius: 6px;
+  background: #f3f6fb;
+}
+
+.v3-dropdown-media img {
+  display: block;
+  width: 100%;
+  height: 126px;
+  object-fit: cover;
+}
+
+.v3-dropdown-summary {
+  margin: 0;
+  color: var(--v3-muted);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.v3-dropdown-items {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.v3-dropdown-items a {
+  min-height: 42px;
+  align-content: center;
+}
+
+.v3-dropdown-items strong {
+  font-size: 13px;
+}
+
+@media (max-width: 760px) {
+  .v3-dropdown {
+    width: 100%;
+    gap: 8px;
+  }
+
+  .v3-dropdown-media img {
+    height: 96px;
+  }
+
+  .v3-dropdown-items {
+    grid-template-columns: 1fr;
+  }
+}

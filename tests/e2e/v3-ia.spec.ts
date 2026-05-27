@@ -5,7 +5,108 @@ async function expectNoHorizontalOverflow(page: import("@playwright/test").Page)
   expect(hasOverflow).toBe(false);
 }
 
-test("desktop navigation exposes only AI-Core in Products and routes correctly", async ({ page }) => {
+async function expectHomeHeroFillsInitialViewport(page: import("@playwright/test").Page) {
+  const metrics = await page.evaluate(() => {
+    window.scrollTo(0, 0);
+    const hero = document.querySelector(".v3-hero");
+    const nextSection = document.querySelector(".v3-trust-strip");
+
+    if (!hero || !nextSection) {
+      throw new Error("Could not find v3 home hero or following section");
+    }
+
+    const heroRect = hero.getBoundingClientRect();
+    const nextRect = nextSection.getBoundingClientRect();
+
+    return {
+      heroTop: heroRect.top,
+      heroBottom: heroRect.bottom,
+      nextTop: nextRect.top,
+      viewportHeight: window.innerHeight,
+    };
+  });
+
+  expect(metrics.heroTop).toBeGreaterThanOrEqual(-1);
+  expect(metrics.heroTop).toBeLessThanOrEqual(1);
+  expect(metrics.heroBottom).toBeGreaterThanOrEqual(metrics.viewportHeight - 1);
+  expect(metrics.nextTop).toBeGreaterThanOrEqual(metrics.viewportHeight - 1);
+}
+
+async function getTopbarMetrics(page: import("@playwright/test").Page) {
+  return page.evaluate(() => {
+    const header = document.querySelector<HTMLElement>(".v3-header");
+    const brand = document.querySelector<HTMLElement>(".v3-brand");
+    const menuButton = document.querySelector<HTMLElement>(".v3-menu-button");
+    const navControls = [...document.querySelectorAll<HTMLElement>(".v3-nav-group > a, .v3-nav-group > button")];
+
+    if (!header || !brand || !menuButton) {
+      throw new Error("Could not find v3 topbar elements");
+    }
+
+    const rect = (element: HTMLElement) => {
+      const box = element.getBoundingClientRect();
+      return {
+        top: Math.round(box.top * 100) / 100,
+        left: Math.round(box.left * 100) / 100,
+        width: Math.round(box.width * 100) / 100,
+        height: Math.round(box.height * 100) / 100,
+      };
+    };
+
+    return {
+      className: header.className,
+      header: rect(header),
+      brand: rect(brand),
+      menuButton: rect(menuButton),
+      navControls: navControls.map((element) => ({
+        text: element.textContent?.trim(),
+        rect: rect(element),
+        fontSize: getComputedStyle(element).fontSize,
+        minHeight: getComputedStyle(element).minHeight,
+      })),
+    };
+  });
+}
+
+async function expectTopbarKeepsTopPositionSize(page: import("@playwright/test").Page) {
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.waitForTimeout(100);
+  const top = await getTopbarMetrics(page);
+
+  await page.evaluate(() => window.scrollTo(0, 180));
+  await page.waitForTimeout(100);
+  const scrolled = await getTopbarMetrics(page);
+
+  expect(scrolled.className).not.toContain("is-scrolled");
+  expect(scrolled.header).toEqual(top.header);
+  expect(scrolled.brand).toEqual(top.brand);
+  expect(scrolled.menuButton).toEqual(top.menuButton);
+  expect(scrolled.navControls).toEqual(top.navControls);
+}
+
+test("home hero fills the initial viewport on desktop and mobile", async ({ page }) => {
+  for (const viewport of [
+    { width: 1440, height: 900 },
+    { width: 390, height: 844 },
+  ]) {
+    await page.setViewportSize(viewport);
+    await page.goto("/v3");
+    await expectHomeHeroFillsInitialViewport(page);
+  }
+});
+
+test("topbar keeps the top-of-page size while scrolling", async ({ page }) => {
+  for (const viewport of [
+    { width: 1440, height: 900 },
+    { width: 390, height: 844 },
+  ]) {
+    await page.setViewportSize(viewport);
+    await page.goto("/v3");
+    await expectTopbarKeepsTopPositionSize(page);
+  }
+});
+
+test("desktop Product navigation exposes AI Core and routes correctly", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/v3");
 
@@ -13,24 +114,41 @@ test("desktop navigation exposes only AI-Core in Products and routes correctly",
   await expect(page.locator(".v3-hero")).toHaveAttribute("data-video-state", "image-fallback");
 
   const mainNav = page.getByLabel("주요 메뉴");
-  await mainNav.getByRole("link", { name: "Products" }).hover();
-  await expect(mainNav.getByRole("menuitem", { name: /AI-Core/ })).toBeVisible();
+  await mainNav.getByRole("button", { name: "Product" }).hover();
+  const productGroup = mainNav.locator(".v3-nav-group").filter({ hasText: "Product" }).first();
+  await expect(productGroup.locator(".v3-dropdown-media img")).toBeVisible();
+  await expect(productGroup.locator(".v3-dropdown-summary")).toContainText("AI-Core와 MVP");
+  await expect(mainNav.getByRole("menuitem", { name: /AI Core/ })).toBeVisible();
+  await expect(mainNav.getByRole("menuitem", { name: /^MVP/ })).toBeVisible();
   await expect(mainNav.getByRole("menuitem", { name: /AI Apps/ })).toHaveCount(0);
   await expect(mainNav.getByRole("menuitem", { name: /Tools/ })).toHaveCount(0);
 
-  await mainNav.getByRole("menuitem", { name: /AI-Core/ }).click();
+  await mainNav.getByRole("menuitem", { name: /AI Core/ }).click();
   await expect(page).toHaveURL(/\/v3\/products\/ai-core$/);
   await expect(page.getByRole("heading", { name: /모듈을 조립해 고객 맞춤/ })).toBeVisible();
   await expectNoHorizontalOverflow(page);
 });
 
-test("mobile menu exposes AI-Core and routes without horizontal overflow", async ({ page }) => {
+test("Product MVP item routes to the coming soon page", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/v3");
+
+  const mainNav = page.getByLabel("주요 메뉴");
+  await mainNav.getByRole("button", { name: "Product" }).hover();
+  await mainNav.getByRole("menuitem", { name: /^MVP/ }).click();
+
+  await expect(page).toHaveURL(/\/v3\/mvp$/);
+  await expect(page.getByRole("heading", { name: /MVP 시작 패키지는 준비 중입니다/ })).toBeVisible();
+  await expectNoHorizontalOverflow(page);
+});
+
+test("mobile menu exposes AI Core and routes without horizontal overflow", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/v3");
 
   await page.getByRole("button", { name: "메뉴 열기" }).click();
   const mainNav = page.getByLabel("주요 메뉴");
-  const aiCoreMenuItem = mainNav.getByRole("menuitem", { name: /^AI-Core\b/ });
+  const aiCoreMenuItem = mainNav.getByRole("menuitem", { name: /^AI Core\b/ });
   await expect(aiCoreMenuItem).toBeVisible();
   await aiCoreMenuItem.click();
 
@@ -43,7 +161,7 @@ test("home shows industry wordmarks and cross-industry tool CTA", async ({ page 
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/v3");
 
-  for (const wordmark of ["볼넛", "K-Finance", "한국종합안전 ANC", "마켓컬리"]) {
+  for (const wordmark of ["제조 운영팀", "금융 심사팀", "건설 안전팀", "물류 운영팀"]) {
     await expect(page.getByText(wordmark).first()).toBeVisible();
   }
 
@@ -53,29 +171,39 @@ test("home shows industry wordmarks and cross-industry tool CTA", async ({ page 
   await expectNoHorizontalOverflow(page);
 });
 
-test("start and YouTube actions open and close coming soon modals", async ({ page }) => {
+test("Resources and Industries route to coming soon pages", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/v3");
 
-  await page.getByRole("button", { name: "시작하기" }).click();
-  await expect(page.getByRole("dialog")).toContainText("MVP 시작하기 페이지를 준비하고 있어요");
-  await page.getByRole("button", { name: "모달 닫기" }).click();
-  await expect(page.getByRole("dialog")).toBeHidden();
-
   const mainNav = page.getByLabel("주요 메뉴");
-  await mainNav.getByRole("button", { name: "Community" }).hover();
-  await mainNav.getByRole("menuitem", { name: /YouTube/ }).click();
-  await expect(page.getByRole("dialog")).toContainText("YouTube 콘텐츠를 준비하고 있어요");
-  await page.keyboard.press("Escape");
-  await expect(page.getByRole("dialog")).toBeHidden();
+  await mainNav.getByRole("button", { name: "Resources" }).hover();
+  await expect(mainNav.getByRole("menuitem", { name: /News Letter/ })).toBeVisible();
+  await expect(mainNav.getByRole("menuitem", { name: /Blog/ })).toBeVisible();
+  await mainNav.getByRole("menuitem", { name: /Technology/ }).click();
+  await expect(page).toHaveURL(/\/v3\/community\/technology$/);
+  await expect(page.getByRole("heading", { name: /기술 콘텐츠 페이지는 준비 중입니다/ })).toBeVisible();
+
+  await page.goto("/v3");
+  await mainNav.getByRole("button", { name: "Industries" }).hover();
+  await mainNav.getByRole("menuitem", { name: /건설/ }).click();
+  await expect(page).toHaveURL(/\/v3\/industries\/construction$/);
+  await expect(page.getByRole("heading", { name: /건설 산업 페이지는 준비 중입니다/ })).toBeVisible();
+  await expectNoHorizontalOverflow(page);
 });
 
-test("newsletter form shows a success state", async ({ page }) => {
+test("desktop contact CTA routes to contact page", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/v3");
+
+  await page.getByLabel("주요 메뉴").getByRole("link", { name: "문의하기" }).click();
+  await expect(page).toHaveURL(/\/v3\/contact$/);
+  await expect(page.getByRole("heading", { name: /자동화하고 싶은 업무/ })).toBeVisible();
+  await expectNoHorizontalOverflow(page);
+});
+
+test("newsletter route is a coming soon page", async ({ page }) => {
   await page.goto("/v3/community/newsletter");
-  await page.getByLabel("이메일").fill("hello@example.com");
-  await page.getByLabel("관심 주제").selectOption("AI-Core");
-  await page.getByRole("button", { name: /연락받기/ }).click();
-  await expect(page.getByText("뉴스레터 신청이 접수되었습니다.")).toBeVisible();
+  await expect(page.getByRole("heading", { name: /뉴스레터 페이지는 준비 중입니다/ })).toBeVisible();
   await expectNoHorizontalOverflow(page);
 });
 

@@ -5,16 +5,30 @@ import { test } from "node:test";
 
 const root = process.cwd();
 const v3Site = readFileSync(join(root, "components/v3/v3-site.tsx"), "utf8");
+const v3Home = readFileSync(join(root, "app/v3/page.tsx"), "utf8");
 
 const plannedRoutes = [
   "app/v3/page.tsx",
-  "app/v3/products/page.tsx",
   "app/v3/products/ai-core/page.tsx",
+  "app/v3/mvp/page.tsx",
+  "app/v3/industries/construction/page.tsx",
+  "app/v3/industries/manufacturing/page.tsx",
+  "app/v3/industries/logistics/page.tsx",
+  "app/v3/industries/finance/page.tsx",
   "app/v3/community/newsletter/page.tsx",
   "app/v3/community/blog/page.tsx",
-  "app/v3/community/threads/page.tsx",
+  "app/v3/community/technology/page.tsx",
+  "app/v3/community/news/page.tsx",
   "app/v3/company/page.tsx",
   "app/v3/contact/page.tsx",
+];
+
+const removedRoutes = [
+  "app/v3/products/page.tsx",
+  "app/v3/products/ai-apps/page.tsx",
+  "app/v3/products/tools/page.tsx",
+  "app/v3/products/si-ai/page.tsx",
+  "app/v3/community/threads/page.tsx",
 ];
 
 function collectTsxFiles(directory) {
@@ -34,56 +48,62 @@ function collectTsxFiles(directory) {
   return files;
 }
 
-test("all planned v3 routes have page files", () => {
+test("planned v3 routes have page files and removed routes are gone", () => {
   for (const route of plannedRoutes) {
     assert.equal(existsSync(join(root, route)), true, `${route} should exist`);
   }
+
+  for (const route of removedRoutes) {
+    assert.equal(existsSync(join(root, route)), false, `${route} should not exist`);
+  }
 });
 
-test("header navigation exposes the AI-Core centered IA", () => {
-  for (const label of ["Products", "Community", "Company", "시작하기"]) {
-    assert.match(v3Site, new RegExp(label), `${label} should be present`);
-  }
-
+test("header navigation exposes the v3 IA", () => {
   const navBlock = v3Site.match(/export const navItems[\s\S]*?export const industryWordmarks/)?.[0] ?? "";
 
-  assert.match(navBlock, /label: "AI-Core"/);
-  assert.match(navBlock, /href: "\/v3\/products\/ai-core"/);
-  assert.doesNotMatch(navBlock, /label: "AI Apps"/);
-  assert.doesNotMatch(navBlock, /label: "Tools"/);
-  assert.doesNotMatch(navBlock, /href: "\/v3\/products\/ai-apps"/);
-  assert.doesNotMatch(navBlock, /href: "\/v3\/products\/tools"/);
+  for (const label of ["Product", "Industries", "Resources", "Company"]) {
+    assert.match(navBlock, new RegExp(`label: "${label}"`), `${label} should be present`);
+  }
 
-  for (const href of [
-    "/v3/community/newsletter",
-    "/v3/community/blog",
-    "/v3/community/threads",
-    "/v3/company",
-    "/v3/contact",
-  ]) {
-    assert.match(navBlock, new RegExp(href.replaceAll("/", "\\/")), `${href} should be linked`);
+  assert.match(v3Site, /<Link className="v3-nav-cta" href="\/v3\/contact"/);
+  assert.match(navBlock, /label: "AI Core"/);
+  assert.match(navBlock, /href: "\/v3\/products\/ai-core"/);
+  assert.match(navBlock, /label: "MVP"/);
+  assert.match(navBlock, /href: "\/v3\/mvp"/);
+  assert.match(navBlock, /label: "건설"/);
+  assert.match(navBlock, /href: "\/v3\/industries\/construction"/);
+  assert.match(navBlock, /label: "Technology"/);
+  assert.match(navBlock, /href: "\/v3\/community\/technology"/);
+  assert.match(navBlock, /label: "문의하기"/);
+  assert.match(navBlock, /href: "\/v3\/contact"/);
+
+  for (const removed of ["AI Apps", "Tools", "Threads", "/v3/products/ai-apps", "/v3/products/tools", "/v3/community/threads"]) {
+    assert.doesNotMatch(navBlock, new RegExp(removed.replaceAll("/", "\\/")));
   }
 });
 
-test("industry wordmark contract is present", () => {
-  for (const wordmark of ["볼넛", "K-Finance", "한국종합안전 ANC", "마켓컬리"]) {
+test("dropdowns include shared image and group summary, not modal flags", () => {
+  assert.match(v3Site, /v3-dropdown-media/);
+  assert.match(v3Site, /v3-dropdown-summary/);
+  assert.match(v3Site, /\/v3\/industrial-ai-hero\.png/);
+  assert.doesNotMatch(v3Site, /modal: true/);
+  assert.doesNotMatch(v3Site, /V3ComingSoonModal/);
+});
+
+test("industry cards avoid unverified customer names", () => {
+  for (const wordmark of ["제조 운영팀", "금융 심사팀", "건설 안전팀", "물류 운영팀"]) {
     assert.match(v3Site, new RegExp(wordmark), `${wordmark} should be present`);
   }
+
+  for (const customerName of ["볼넛", "K-Finance", "한국종합안전 ANC", "마켓컬리"]) {
+    assert.doesNotMatch(v3Site, new RegExp(customerName), `${customerName} should not be used as a verified customer`);
+  }
 });
 
-test("start and YouTube actions use the coming soon modal", () => {
-  assert.match(v3Site, /setModal\("시작하기"\)/);
-  assert.match(v3Site, /label: "YouTube"/);
-  assert.match(v3Site, /modal: true/);
-  assert.match(v3Site, /MVP 시작하기 페이지를 준비하고 있어요/);
-  assert.match(v3Site, /YouTube 콘텐츠를 준비하고 있어요/);
-});
-
-test("hero includes video source and image fallback", () => {
-  assert.match(v3Site, /\/v3\/hero-video\.mp4/);
+test("home hero does not request the future video asset yet", () => {
   assert.match(v3Site, /\/v3\/industrial-ai-hero\.png/);
   assert.match(v3Site, /data-video-state/);
-  assert.match(v3Site, /image-fallback/);
+  assert.doesNotMatch(v3Home, /\n\s+video\n/);
 });
 
 test("v3 source does not include mojibake markers", () => {
