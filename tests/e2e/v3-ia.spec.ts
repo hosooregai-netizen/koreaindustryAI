@@ -120,7 +120,15 @@ test("desktop Product navigation exposes AI Core and routes correctly", async ({
   await page.goto("/v3");
 
   await expect(page.getByRole("heading", { name: /산업별 업무 시스템/ })).toBeVisible();
-  await expect(page.locator(".v3-hero")).toHaveAttribute("data-video-state", "image-fallback");
+  await expect(page.locator(".v3-hero")).toHaveAttribute("data-video-state", /image-fallback|loaded/);
+  await expect(page.locator(".v3-hero")).toHaveAttribute("data-video-index", "0");
+  await expect(page.locator(".v3-hero-video")).toHaveAttribute("src", /hero-enterprise-erp-ai\.mp4$/);
+  await page.locator(".v3-hero-video").dispatchEvent("ended");
+  await expect(page.locator(".v3-hero")).toHaveAttribute("data-video-index", "1");
+  await expect(page.locator(".v3-hero-video")).toHaveAttribute("src", /hero-industrial-manufacturing-ai\.mp4$/);
+  await expect(page.locator(".v3-client-logo img")).toHaveCount(10);
+  await expect(page.locator('.v3-client-logo img[alt="한국종합안전(주)"]')).toHaveCount(1);
+  await expect(page.locator('.v3-client-logo img[alt="INSIDERS"]')).toHaveCount(1);
 
   const mainNav = page.getByLabel("주요 메뉴");
   const productGroup = mainNav.locator(".v3-nav-group").filter({ hasText: "Product" }).first();

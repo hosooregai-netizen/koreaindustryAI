@@ -42,6 +42,11 @@ type NavGroup = {
 
 type HeroVisualKind = "home" | "products" | "company" | "contact" | "community";
 
+const heroVideoSources = [
+  "/v3/hero-enterprise-erp-ai.mp4",
+  "/v3/hero-industrial-manufacturing-ai.mp4",
+];
+
 const mobileDropdownStyle: CSSProperties = {
   position: "static",
   width: "100%",
@@ -160,6 +165,29 @@ export const industryWordmarks = [
     industry: "물류 유통",
     name: "물류 운영팀",
     note: "입출고, 검수, 운영 데이터 정리",
+  },
+];
+
+export const clientLogos = [
+  {
+    name: "한국종합안전(주)",
+    src: "/v3/logos/hts.svg",
+  },
+  {
+    name: "(주)볼트앤너트",
+    src: "/v3/logos/bolt-nut.svg",
+  },
+  {
+    name: "AnC 기술사 사무소",
+    src: "/v3/logos/anc.svg",
+  },
+  {
+    name: "INSIDERS",
+    src: "/v3/logos/insiders.svg",
+  },
+  {
+    name: "마켓컬리",
+    src: "/v3/logos/market-kurly.svg",
   },
 ];
 
@@ -388,33 +416,55 @@ export function V3Hero({
   video?: boolean;
 }) {
   const isHome = visual === "home";
+  const [activeVideoIndex, setActiveVideoIndex] = useState(0);
   const [videoReady, setVideoReady] = useState(false);
   const [videoFailed, setVideoFailed] = useState(false);
+  const activeVideoSrc = video ? heroVideoSources[activeVideoIndex] : undefined;
+
+  useEffect(() => {
+    setActiveVideoIndex(0);
+    setVideoReady(false);
+    setVideoFailed(false);
+  }, [video, visual]);
+
+  const advanceHeroVideo = () => {
+    if (heroVideoSources.length < 2) return;
+    setVideoReady(false);
+    setActiveVideoIndex((index) => (index + 1) % heroVideoSources.length);
+  };
+
+  const handleHeroVideoError = () => {
+    setVideoReady(false);
+    if (activeVideoIndex < heroVideoSources.length - 1) {
+      setActiveVideoIndex((index) => index + 1);
+      return;
+    }
+    setVideoFailed(true);
+  };
 
   return (
     <section
       className={`v3-hero v3-hero-${visual} ${isHome ? "is-home" : "is-subpage"} ${
         videoReady ? "has-video" : "has-image-fallback"
       }`}
-      data-video-state={videoReady ? "loaded" : "image-fallback"}
+      data-video-state={videoFailed ? "failed" : videoReady ? "loaded" : "image-fallback"}
+      data-video-index={video ? String(activeVideoIndex) : undefined}
     >
-      {video ? (
+      {video && activeVideoSrc && !videoFailed ? (
         <video
+          key={activeVideoSrc}
           className="v3-hero-video"
           aria-hidden="true"
           autoPlay
           muted
-          loop
           playsInline
-          poster="/v3/industrial-ai-hero.png"
+          preload="auto"
+          poster="/v3/hero-video-poster.jpg"
+          src={activeVideoSrc}
           onCanPlay={() => setVideoReady(true)}
-          onError={() => {
-            setVideoFailed(true);
-            setVideoReady(false);
-          }}
-        >
-          {!videoFailed ? <source src="/v3/hero-video.mp4" type="video/mp4" /> : null}
-        </video>
+          onEnded={advanceHeroVideo}
+          onError={handleHeroVideoError}
+        />
       ) : null}
       <div className="v3-hero-overlay" aria-hidden="true" />
       <div className="v3-hero-inner">
@@ -551,12 +601,23 @@ export function V3IndustryWordmarks() {
 }
 
 export function V3TrustStrip() {
+  const repeatedLogos = [...clientLogos, ...clientLogos];
+
   return (
-    <section className="v3-trust-strip" aria-label="신뢰 워드마크">
-      <span>Industry Wordmarks</span>
-      <div>
-        {industryWordmarks.map((item) => (
-          <strong key={item.name}>{item.name}</strong>
+    <section className="v3-trust-strip" aria-label="고객사 및 프로젝트 로고">
+      <span>Project Partners</span>
+      <div className="v3-trust-marquee">
+        <div className="v3-trust-track">
+          {repeatedLogos.map((logo, index) => (
+            <div className="v3-client-logo" key={`${logo.name}-${index}`} aria-hidden={index >= clientLogos.length}>
+              <img src={logo.src} alt={index < clientLogos.length ? logo.name : ""} loading="lazy" />
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="v3-sr-only" aria-hidden="true">
+        {clientLogos.map((logo) => (
+          <span key={logo.name}>{logo.name}</span>
         ))}
       </div>
     </section>

@@ -1,7 +1,10 @@
 # 공통 UI 구성
 
-## 글씨체 
--  'Lato', 'Noto Sans KR'
+## 글씨체
+
+- `Noto Sans KR`, `Lato`
+- 한글 문장 안에 영어가 섞이는 본문, 설명, 메뉴는 `Noto Sans KR`을 우선 사용한다.
+- 순수 영문 로고나 짧은 영문 강조가 필요할 때만 `Lato`를 보조로 사용한다.
 
 ## Top bar
 
@@ -73,25 +76,26 @@
 
 ## 글씨 크기 및 두께 정책
 
-- 기준 폰트: `Lato`, `Noto Sans KR`
+- 기준 폰트: `Noto Sans KR`, `Lato`
 - 기본 본문: 16px / line-height 1.6 / font-weight 400
 - 보조 설명: 14px / line-height 1.55 / font-weight 400
 - 탑바 업체명: 16px / line-height 1 / font-weight 700
-- 탑바 메뉴: 15px / line-height 1 / font-weight 400
-- 탑바 CTA: 15px / line-height 1 / font-weight 400
+- 탑바 메뉴: 16px / line-height 32px / font-weight 400
+- 탑바 CTA: 16px / line-height 1.6 / font-weight 400
 - 드롭다운 설명: 14px / line-height 1.55 / font-weight 400
 - 드롭다운 항목 제목: 15px / line-height 1.35 / font-weight 400
 - 카드 제목: 22px / line-height 1.3 / font-weight 700
 - 카드 설명: 15px / line-height 1.6 / font-weight 400
-- 섹션 제목: 40px / line-height 1.15 / font-weight 700
-- 히어로 제목: 64px / line-height 1.05 / font-weight 700
-- 모바일 히어로 제목: 42px / line-height 1.1 / font-weight 700
+- 섹션 제목: 40px / line-height 1.4 / font-weight 500
+- 히어로 제목: 64px / line-height 1.3 / font-weight 700
+- 히어로 설명문: 20px / line-height 1.5 / font-weight 400
+- 모바일 히어로 제목: 42px / line-height 1.3 / font-weight 700
 
 ### 볼드체 사용 기준
 
 - `font-weight 400`: 기본값. 탑바 메뉴, CTA, 설명, 본문, 드롭다운 항목에 사용한다.
-- `font-weight 500`: 숫자, 짧은 라벨, 작은 강조가 필요할 때만 제한적으로 사용한다.
-- `font-weight 700`: 업체명, 카드 제목, 섹션 제목, 히어로 제목처럼 구조를 구분하는 제목에만 사용한다.
+- `font-weight 500`: 섹션 제목, 숫자, 짧은 라벨, 작은 강조가 필요할 때만 제한적으로 사용한다.
+- `font-weight 700`: 업체명, 카드 제목, 히어로 제목처럼 구조를 강하게 구분하는 제목에만 사용한다.
 - `font-weight 800 이상`: 기본 UI에는 사용하지 않는다. 아주 짧은 캠페인성 키워드나 특수 강조가 필요할 때만 예외적으로 사용한다.
 - 같은 컴포넌트 안에서는 2개 이상의 두께를 섞지 않는다.
 - hover, focus, active 상태에서 글씨 두께를 바꾸지 않는다. 상태 변화는 색상, 밑줄, 배경, 투명도로 처리한다.

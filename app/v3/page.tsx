@@ -27,6 +27,7 @@ export default function V3HomePage() {
           primary={{ label: "5일 도입 문의하기", href: "/v3/contact" }}
           secondary={{ label: "AI-Core 보기", href: "/v3/products/ai-core" }}
           visual="home"
+          video
         />
         <V3TrustStrip />
         <V3IndustryWordmarks />
