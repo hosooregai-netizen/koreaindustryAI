@@ -117,13 +117,17 @@ test("home hero uses the ordered landing video assets", () => {
   assert.match(v3Site, /is-active/);
   assert.match(v3Site, /is-buffering/);
   assert.match(v3Site, /is-retiring/);
-  assert.match(v3Site, /AI-Core Build Flow/);
-  assert.match(v3Site, /Modular Automation/);
+  assert.match(v3Site, /현장의 데이터로 만드는 AI 시스템/);
+  assert.match(v3Site, /반복 업무를 자동으로 처리하는 AI 시스템/);
+  assert.doesNotMatch(v3Site, /AI-Core Build Flow/);
+  assert.doesNotMatch(v3Site, /Modular Automation/);
   assert.match(v3Site, /data-video-group/);
   assert.match(v3Site, /v3-hero-group-wipe/);
   assert.match(v3Site, /layer\.sourceIndex === 0 && !videoReady/);
   assert.match(v3Site, /padStart\(2, "0"\)/);
   assert.match(v3Home, /\n\s+video\r?\n/);
+  assert.match(v3Home, /primary=\{\{ label: "AI-Core", href: "\/v3\/products\/ai-core" \}\}/);
+  assert.doesNotMatch(v3Home, /secondary=\{\{ label: "AI-Core 보기"/);
 });
 
 test("v3 source does not include mojibake markers", () => {

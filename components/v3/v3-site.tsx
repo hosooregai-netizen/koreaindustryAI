@@ -47,6 +47,8 @@ const heroVideoSources = [
   "/v3/hero-landing.mp4",
 ];
 
+const heroGroupChangeEventName = "v3HeroGroupChange";
+
 const heroVideoDurations = [13.167, 12];
 
 type HeroVideoLayer = {
@@ -55,24 +57,27 @@ type HeroVideoLayer = {
   version: number;
 };
 
+type HeroRetiringFrame = {
+  src: string;
+  version: number;
+};
+
 type HeroCopy = {
-  eyebrow: string;
+  eyebrow?: string;
   title: string;
   description: string;
 };
 
 const heroVideoCopyGroups: HeroCopy[] = [
   {
-    eyebrow: "AI-Core Build Flow",
-    title: "업무 흐름을 읽고, 5일 안에 시현합니다.",
+    title: "현장의 데이터로 만드는 AI 시스템",
     description:
-      "현장 업무와 데이터를 먼저 정리한 뒤 화면, 승인, 리포트 모듈을 조립해 자동화 가능성을 빠르게 보여드립니다.",
+      "회사별 문서 양식, 승인 흐름, 운영 데이터를 반영해 실제 업무 방식에 맞는 시스템을 구성합니다.",
   },
   {
-    eyebrow: "Modular Automation",
-    title: "작은 자동화가 운영 시스템으로 확장됩니다.",
+    title: "반복 업무를 자동으로 처리하는 AI 시스템",
     description:
-      "반복 업무 하나에서 시작해 ERP형 데이터 구조와 AI 처리 흐름까지, 필요한 만큼 단계적으로 연결합니다.",
+      "확인, 분류, 정리, 보고, 결재처럼 매일 반복되는 업무를 AI로 전환합니다.",
   },
 ];
 
@@ -344,6 +349,7 @@ function V3Header() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [heroTopbarGroup, setHeroTopbarGroup] = useState("0");
 
   useEffect(() => {
     document.body.classList.toggle("nav-open", open);
@@ -359,6 +365,31 @@ function V3Header() {
 
   const closeMenu = () => setOpen(false);
   const isHomeRoute = pathname === "/v3";
+  const transparentHomeTopbarColor = heroTopbarGroup === "1" ? "#000000" : "#ffffff";
+  const transparentHomeTopbarStyle =
+    isHomeRoute && !scrolled
+      ? ({
+          "--v3-home-topbar-color": transparentHomeTopbarColor,
+          "--v3-home-topbar-mark-line": transparentHomeTopbarColor,
+          color: transparentHomeTopbarColor,
+        } as CSSProperties)
+      : undefined;
+
+  useEffect(() => {
+    if (!isHomeRoute) {
+      setHeroTopbarGroup("0");
+      return;
+    }
+
+    const updateHeroTopbarGroup = (event?: Event) => {
+      const eventGroup = (event as CustomEvent<{ group?: string }> | undefined)?.detail?.group;
+      setHeroTopbarGroup(eventGroup ?? document.documentElement.dataset.v3HeroGroup ?? "0");
+    };
+
+    updateHeroTopbarGroup();
+    window.addEventListener(heroGroupChangeEventName, updateHeroTopbarGroup);
+    return () => window.removeEventListener(heroGroupChangeEventName, updateHeroTopbarGroup);
+  }, [isHomeRoute]);
 
   return (
     <>
@@ -366,6 +397,8 @@ function V3Header() {
         className={`v3-header${open ? " is-open" : ""}${scrolled ? " is-scrolled" : " is-transparent"}${
           isHomeRoute ? " is-home-route" : ""
         }`}
+        data-v3-hero-group={isHomeRoute ? heroTopbarGroup : undefined}
+        style={transparentHomeTopbarStyle}
       >
         <Link className="v3-brand" href="/v3" onClick={closeMenu}>
           <span className="v3-brand-mark" aria-hidden="true">
@@ -476,6 +509,7 @@ export function V3Hero({
   const [activeVideoLayer, setActiveVideoLayer] = useState<0 | 1>(0);
   const [bufferingVideoLayer, setBufferingVideoLayer] = useState<0 | 1 | null>(null);
   const [retiringVideoLayer, setRetiringVideoLayer] = useState<0 | 1 | null>(null);
+  const [retiringHeroFrame, setRetiringHeroFrame] = useState<HeroRetiringFrame | null>(null);
   const [heroGroupTransition, setHeroGroupTransition] = useState(false);
   const [videoReady, setVideoReady] = useState(false);
   const [videoFailed, setVideoFailed] = useState(false);
@@ -488,6 +522,7 @@ export function V3Hero({
   const previousHeroCopyGroup = useRef(activeHeroCopyGroup);
   const heroVideoRefs = useRef<[HTMLVideoElement | null, HTMLVideoElement | null]>([null, null]);
   const heroProgressRef = useRef<HTMLElement | null>(null);
+  const retiringFrameVersion = useRef(0);
 
   const updateHeroGroupProgress = (sourceIndex: number, currentTime: number) => {
     heroProgressRef.current?.style.setProperty(
@@ -501,6 +536,7 @@ export function V3Hero({
     setActiveVideoLayer(0);
     setBufferingVideoLayer(null);
     setRetiringVideoLayer(null);
+    setRetiringHeroFrame(null);
     setHeroGroupTransition(false);
     setVideoReady(false);
     setVideoFailed(false);
@@ -511,6 +547,12 @@ export function V3Hero({
     const timeout = window.setTimeout(() => setRetiringVideoLayer(null), 1460);
     return () => window.clearTimeout(timeout);
   }, [retiringVideoLayer]);
+
+  useEffect(() => {
+    if (!retiringHeroFrame || retiringVideoLayer === null) return;
+    const timeout = window.setTimeout(() => setRetiringHeroFrame(null), 1460);
+    return () => window.clearTimeout(timeout);
+  }, [retiringHeroFrame, retiringVideoLayer]);
 
   useEffect(() => {
     if (!video || !isHome || !videoReady) {
@@ -529,10 +571,13 @@ export function V3Hero({
   useLayoutEffect(() => {
     if (!video || !isHome) {
       document.documentElement.removeAttribute("data-v3-hero-group");
+      window.dispatchEvent(new CustomEvent(heroGroupChangeEventName, { detail: { group: "0" } }));
       return;
     }
 
-    document.documentElement.dataset.v3HeroGroup = String(activeHeroCopyGroup);
+    const heroGroup = String(activeHeroCopyGroup);
+    document.documentElement.dataset.v3HeroGroup = heroGroup;
+    window.dispatchEvent(new CustomEvent(heroGroupChangeEventName, { detail: { group: heroGroup } }));
     return () => document.documentElement.removeAttribute("data-v3-hero-group");
   }, [activeHeroCopyGroup, isHome, video]);
 
@@ -567,10 +612,38 @@ export function V3Hero({
     });
   };
 
-  const advanceHeroVideo = () => {
+  const captureHeroVideoFrame = (videoElement: HTMLVideoElement) => {
+    if (!videoElement.videoWidth || !videoElement.videoHeight) return null;
+
+    const canvas = document.createElement("canvas");
+    const maxFrameWidth = 1920;
+    const scale = Math.min(1, maxFrameWidth / videoElement.videoWidth);
+    canvas.width = Math.max(1, Math.round(videoElement.videoWidth * scale));
+    canvas.height = Math.max(1, Math.round(videoElement.videoHeight * scale));
+
+    const context = canvas.getContext("2d");
+    if (!context) return null;
+
+    try {
+      context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+      return canvas.toDataURL("image/jpeg", 0.92);
+    } catch {
+      return null;
+    }
+  };
+
+  const advanceHeroVideo = (event?: SyntheticEvent<HTMLVideoElement>) => {
     if (heroVideoSources.length < 2) return;
     if (bufferingVideoLayer !== null) return;
     const currentIndex = heroVideoLayers[activeVideoLayer]?.sourceIndex ?? 0;
+    const retiringFrameSource = event?.currentTarget ? captureHeroVideoFrame(event.currentTarget) : null;
+    if (retiringFrameSource) {
+      retiringFrameVersion.current += 1;
+      setRetiringHeroFrame({
+        src: retiringFrameSource,
+        version: retiringFrameVersion.current,
+      });
+    }
     queueHeroVideo((currentIndex + 1) % heroVideoSources.length);
   };
 
@@ -633,12 +706,23 @@ export function V3Hero({
       data-video-group={video && isHome ? String(activeHeroCopyGroup) : undefined}
     >
       {video && !videoFailed
-        ? heroVideoLayers.map((layer, index) => {
+        ? <>
+            {retiringHeroFrame ? (
+              <img
+                key={`retiring-frame-${retiringHeroFrame.version}`}
+                className="v3-hero-video v3-hero-video-freeze is-retiring"
+                src={retiringHeroFrame.src}
+                alt=""
+                aria-hidden="true"
+              />
+            ) : null}
+            {heroVideoLayers.map((layer, index) => {
             const layerIndex = index as 0 | 1;
             const isActive = layerIndex === activeVideoLayer;
             const isBuffering = layerIndex === bufferingVideoLayer;
             const isRetiring = layerIndex === retiringVideoLayer;
-            if (!layer.src || (!isActive && !isBuffering && !isRetiring)) return null;
+            const shouldRenderRetiringVideo = isRetiring && !retiringHeroFrame;
+            if (!layer.src || (!isActive && !isBuffering && !shouldRenderRetiringVideo)) return null;
 
             return (
               <video
@@ -666,13 +750,14 @@ export function V3Hero({
                 onError={() => handleHeroVideoError(layerIndex, layer.sourceIndex)}
               />
             );
-          })
+          })}
+          </>
         : null}
       {video && isHome ? <div className="v3-hero-group-wipe" aria-hidden="true" /> : null}
       <div className="v3-hero-overlay" aria-hidden="true" />
       <div className="v3-hero-inner">
         <div className="v3-hero-copy" key={video && isHome ? `hero-copy-${activeHeroCopyGroup}` : "hero-copy-static"}>
-          <p className="v3-eyebrow">{activeHeroCopy.eyebrow}</p>
+          {activeHeroCopy.eyebrow ? <p className="v3-eyebrow">{activeHeroCopy.eyebrow}</p> : null}
           <h1>{activeHeroCopy.title}</h1>
           <p>{activeHeroCopy.description}</p>
           <div className="v3-hero-actions">

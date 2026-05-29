@@ -13,7 +13,7 @@ import {
 
 export const metadata: Metadata = {
   title: "대한산업AI | AI-Core 산업 업무 자동화",
-  description: "3000개 위젯을 조립해 산업별 업무 시스템을 5일 안에 시현하는 AI-Core 회사 소개 페이지입니다.",
+  description: "회사별 문서 양식, 승인 흐름, 운영 데이터를 반영해 실제 업무 방식에 맞는 AI-Core 시스템을 구성합니다.",
 };
 
 export default function V3HomePage() {
@@ -22,10 +22,9 @@ export default function V3HomePage() {
       <main>
         <V3Hero
           eyebrow="AI-Core for Industrial Operations"
-          title="산업별 업무 시스템을 5일 안에 시현합니다."
-          description="대한산업AI는 업무 화면, 문서, 승인, 리포트 모듈을 조립해 첫 자동화 가능성을 빠르게 확인하는 AI-Core를 만듭니다."
-          primary={{ label: "5일 도입 문의하기", href: "/v3/contact" }}
-          secondary={{ label: "AI-Core 보기", href: "/v3/products/ai-core" }}
+          title="현장의 데이터로 만드는 AI 시스템"
+          description="회사별 문서 양식, 승인 흐름, 운영 데이터를 반영해 실제 업무 방식에 맞는 시스템을 구성합니다."
+          primary={{ label: "AI-Core", href: "/v3/products/ai-core" }}
           visual="home"
           video
         />

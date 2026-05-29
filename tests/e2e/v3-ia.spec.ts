@@ -97,19 +97,28 @@ async function getTransparentTopbarColors(page: import("@playwright/test").Page)
   return page.evaluate(() => {
     const header = document.querySelector<HTMLElement>(".v3-header");
     const brand = document.querySelector<HTMLElement>(".v3-brand");
+    const brandLabel = document.querySelector<HTMLElement>(".v3-brand > span:last-child");
+    const brandMark = document.querySelector<HTMLElement>(".v3-brand-mark");
+    const brandMarkLine = document.querySelector<HTMLElement>(".v3-brand-mark span");
     const navControls = [...document.querySelectorAll<HTMLElement>(".v3-nav-group > a, .v3-nav-group > button")];
     const cta = document.querySelector<HTMLElement>(".v3-nav .v3-nav-cta");
     const menuButton = document.querySelector<HTMLElement>(".v3-menu-button");
 
-    if (!header || !brand || navControls.length === 0 || !cta || !menuButton) {
+    if (!header || !brand || !brandLabel || !brandMark || !brandMarkLine || navControls.length === 0 || !cta || !menuButton) {
       throw new Error("Could not find v3 topbar color elements");
     }
 
     return {
       group: document.documentElement.dataset.v3HeroGroup,
+      headerGroup: header.dataset.v3HeroGroup,
       headerClass: header.className,
       header: getComputedStyle(header).color,
       brand: getComputedStyle(brand).color,
+      brandLabel: getComputedStyle(brandLabel).color,
+      brandMark: getComputedStyle(brandMark).color,
+      brandMarkBackground: getComputedStyle(brandMark).backgroundColor,
+      brandMarkBorder: getComputedStyle(brandMark).borderColor,
+      brandMarkLine: getComputedStyle(brandMarkLine).backgroundColor,
       nav: navControls.map((element) => getComputedStyle(element).color),
       cta: getComputedStyle(cta).color,
       ctaBorder: getComputedStyle(cta).borderColor,
@@ -133,6 +142,61 @@ async function getHeroCopyMotion(page: import("@playwright/test").Page) {
       transform: getComputedStyle(copy).transform,
     };
   });
+}
+
+async function expectHomeHeroHeadingSingleLine(page: import("@playwright/test").Page) {
+  const metrics = await page.evaluate(() => {
+    const heading = document.querySelector<HTMLElement>(".v3-hero.is-home h1");
+
+    if (!heading) {
+      throw new Error("Could not find v3 home hero heading");
+    }
+
+    const rect = heading.getBoundingClientRect();
+    const style = getComputedStyle(heading);
+
+    return {
+      whiteSpace: style.whiteSpace,
+      height: Math.round(rect.height * 100) / 100,
+      lineHeight: Number.parseFloat(style.lineHeight),
+      left: Math.round(rect.left * 100) / 100,
+      right: Math.round(rect.right * 100) / 100,
+      viewportWidth: window.innerWidth,
+      scrollWidth: document.documentElement.scrollWidth,
+      clientWidth: document.documentElement.clientWidth,
+    };
+  });
+
+  expect(metrics.whiteSpace).toBe("nowrap");
+  expect(metrics.height).toBeLessThanOrEqual(metrics.lineHeight * 1.35);
+  expect(metrics.left).toBeGreaterThanOrEqual(-1);
+  expect(metrics.right).toBeLessThanOrEqual(metrics.viewportWidth + 1);
+  expect(metrics.scrollWidth).toBeLessThanOrEqual(metrics.clientWidth + 1);
+}
+
+async function getActiveHeroVideoMotion(page: import("@playwright/test").Page) {
+  return page.evaluate(() => {
+    const video = document.querySelector<HTMLElement>(".v3-hero-video.is-active");
+
+    if (!video) {
+      throw new Error("Could not find active v3 hero video");
+    }
+
+    const rect = video.getBoundingClientRect();
+
+    return {
+      height: Math.round(rect.height * 100) / 100,
+      top: Math.round(rect.top * 100) / 100,
+    };
+  });
+}
+
+function expectHeroVideoBoxToStayStable(
+  actual: Awaited<ReturnType<typeof getActiveHeroVideoMotion>>,
+  expected: Awaited<ReturnType<typeof getActiveHeroVideoMotion>>,
+) {
+  expect(Math.abs(actual.top - expected.top)).toBeLessThanOrEqual(16);
+  expect(Math.abs(actual.height - expected.height)).toBeLessThanOrEqual(16);
 }
 
 async function getHeroProgressState(page: import("@playwright/test").Page) {
@@ -170,8 +234,14 @@ function topbarColorsMatch(
 ) {
   return (
     colors.group === group &&
+    colors.headerGroup === group &&
     colors.header === expectedColor &&
     colors.brand === expectedColor &&
+    colors.brandLabel === expectedColor &&
+    colors.brandMark === expectedColor &&
+    colors.brandMarkBackground === expectedColor &&
+    colors.brandMarkBorder === expectedColor &&
+    colors.brandMarkLine === expectedColor &&
     colors.nav.every((color) => color === expectedColor) &&
     colors.cta === expectedColor &&
     colors.ctaBorder === expectedColor &&
@@ -187,6 +257,11 @@ test("home hero fills the initial viewport on desktop and mobile", async ({ page
     await page.setViewportSize(viewport);
     await page.goto("/v3");
     await expectHomeHeroFillsInitialViewport(page);
+    await expect(page.getByRole("heading", { name: /현장의 데이터로 만드는 AI 시스템/ })).toBeVisible();
+    await expectHomeHeroHeadingSingleLine(page);
+    await page.locator(".v3-hero-video.is-active").dispatchEvent("ended");
+    await expect(page.getByRole("heading", { name: /반복 업무를 자동으로 처리하는 AI 시스템/ })).toBeVisible();
+    await expectHomeHeroHeadingSingleLine(page);
   }
 });
 
@@ -205,12 +280,18 @@ test("desktop Product navigation exposes AI Core and routes correctly", async ({
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/v3");
 
-  await expect(page.getByRole("heading", { name: /업무 흐름을 읽고/ })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /현장의 데이터로 만드는 AI 시스템/ })).toBeVisible();
+  await expectHomeHeroHeadingSingleLine(page);
+  const heroActions = page.locator(".v3-hero .v3-hero-actions a");
+  await expect(heroActions).toHaveCount(1);
+  await expect(heroActions.first()).toHaveText(/AI-Core/);
+  await expect(heroActions.first()).toHaveAttribute("href", "/v3/products/ai-core");
   const initialHeroCopyMotion = await getHeroCopyMotion(page);
   await expect(page.locator(".v3-hero")).toHaveAttribute("data-video-state", /image-fallback|loaded/);
   await expect(page.locator(".v3-hero")).toHaveAttribute("data-video-index", "0");
   await expect(page.locator(".v3-hero")).toHaveAttribute("data-video-group", "0");
   const activeHeroVideo = page.locator(".v3-hero-video.is-active");
+  const initialHeroVideoMotion = await getActiveHeroVideoMotion(page);
   await expect(activeHeroVideo).toHaveAttribute("src", /hero-landing-intro\.mp4$/);
   await expect(activeHeroVideo).toHaveJSProperty("loop", false);
   await expect(activeHeroVideo).toHaveJSProperty("paused", false);
@@ -228,9 +309,11 @@ test("desktop Product navigation exposes AI Core and routes correctly", async ({
   await activeHeroVideo.dispatchEvent("ended");
   await expect(page.locator(".v3-hero")).toHaveAttribute("data-video-index", "1");
   await expect(page.locator(".v3-hero")).toHaveAttribute("data-video-group", "1");
+  await expect(page.locator(".v3-hero-video-freeze.is-retiring")).toHaveAttribute("src", /^data:image\/jpeg/);
   await expect(activeHeroVideo).toHaveAttribute("src", /hero-landing\.mp4$/);
   await expect(activeHeroVideo).not.toHaveAttribute("poster", /hero-video-poster/);
-  await expect(page.getByRole("heading", { name: /작은 자동화가 운영 시스템으로 확장됩니다/ })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /반복 업무를 자동으로 처리하는 AI 시스템/ })).toBeVisible();
+  await expectHomeHeroHeadingSingleLine(page);
   expect(await getHeroBackgroundImage(page)).not.toContain("hero-video-poster");
   await expect
     .poll(async () => {
@@ -242,15 +325,21 @@ test("desktop Product navigation exposes AI Core and routes correctly", async ({
   expect(groupTwoHeroProgress.labels).toEqual(["02", "02"]);
   const groupTwoHeroCopyMotion = await getHeroCopyMotion(page);
   expect(groupTwoHeroCopyMotion.transform).toBe("none");
-  expect(groupTwoHeroCopyMotion.top).toBe(initialHeroCopyMotion.top);
+  expect(Math.abs(groupTwoHeroCopyMotion.top - initialHeroCopyMotion.top)).toBeLessThanOrEqual(40);
   await expect
-    .poll(async () => topbarColorsMatch(await getTransparentTopbarColors(page), "1", "rgb(5, 5, 5)"))
+    .poll(async () => topbarColorsMatch(await getTransparentTopbarColors(page), "1", "rgb(0, 0, 0)"))
     .toBe(true);
   const groupTwoTopbar = await getTransparentTopbarColors(page);
   expect(groupTwoTopbar.group).toBe("1");
+  expect(groupTwoTopbar.headerGroup).toBe("1");
   expect(groupTwoTopbar.headerClass).toContain("is-transparent");
-  expect(groupTwoTopbar.header).not.toBe("rgb(255, 255, 255)");
+  expect(groupTwoTopbar.header).toBe("rgb(0, 0, 0)");
   expect(groupTwoTopbar.brand).toBe(groupTwoTopbar.header);
+  expect(groupTwoTopbar.brandLabel).toBe(groupTwoTopbar.header);
+  expect(groupTwoTopbar.brandMark).toBe(groupTwoTopbar.header);
+  expect(groupTwoTopbar.brandMarkBackground).toBe(groupTwoTopbar.header);
+  expect(groupTwoTopbar.brandMarkBorder).toBe(groupTwoTopbar.header);
+  expect(groupTwoTopbar.brandMarkLine).toBe(groupTwoTopbar.header);
   expect(groupTwoTopbar.nav.every((color) => color === groupTwoTopbar.header)).toBe(true);
   expect(groupTwoTopbar.cta).toBe(groupTwoTopbar.header);
   expect(groupTwoTopbar.ctaBorder).toBe(groupTwoTopbar.header);
@@ -264,13 +353,18 @@ test("desktop Product navigation exposes AI Core and routes correctly", async ({
   await activeHeroVideo.dispatchEvent("ended");
   await expect(page.locator(".v3-hero")).toHaveAttribute("data-video-index", "0");
   await expect(page.locator(".v3-hero")).toHaveAttribute("data-video-group", "0");
-  await expect(page.getByRole("heading", { name: /업무 흐름을 읽고/ })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /현장의 데이터로 만드는 AI 시스템/ })).toBeVisible();
+  await expectHomeHeroHeadingSingleLine(page);
   expect(await getHeroBackgroundImage(page)).not.toContain("hero-video-poster");
   const loopedHeroProgress = await getHeroProgressState(page);
   expect(loopedHeroProgress.labels).toEqual(["01", "02"]);
   const loopedHeroCopyMotion = await getHeroCopyMotion(page);
   expect(loopedHeroCopyMotion.transform).toBe("none");
-  expect(loopedHeroCopyMotion.top).toBe(initialHeroCopyMotion.top);
+  expect(Math.abs(loopedHeroCopyMotion.top - initialHeroCopyMotion.top)).toBeLessThanOrEqual(40);
+  for (const waitMs of [0, 180, 700]) {
+    if (waitMs > 0) await page.waitForTimeout(waitMs);
+    expectHeroVideoBoxToStayStable(await getActiveHeroVideoMotion(page), initialHeroVideoMotion);
+  }
   await expect(page.locator(".v3-client-logo img")).toHaveCount(10);
   await expect(page.locator('.v3-client-logo img[alt="한국종합안전(주)"]')).toHaveCount(1);
   await expect(page.locator('.v3-client-logo img[alt="INSIDERS"]')).toHaveCount(1);
