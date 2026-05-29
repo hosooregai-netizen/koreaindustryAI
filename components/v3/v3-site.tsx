@@ -23,7 +23,7 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { CSSProperties, ReactNode, SyntheticEvent } from "react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 type NavChild = {
   label: string;
@@ -48,6 +48,8 @@ const heroVideoSources = [
   "/v3/hero-landing-automation.mp4",
   "/v3/hero-landing.mp4",
 ];
+
+const heroVideoDurations = [5, 4.042, 5.042, 12];
 
 type HeroVideoLayer = {
   sourceIndex: number;
@@ -82,6 +84,26 @@ const createHeroVideoLayers = (): [HeroVideoLayer, HeroVideoLayer] => [
 ];
 
 const getHeroVideoCopyGroup = (sourceIndex: number) => (sourceIndex >= 3 ? 1 : 0);
+
+const heroVideoGroupDurations = heroVideoCopyGroups.map((_, groupIndex) =>
+  heroVideoDurations.reduce(
+    (total, duration, sourceIndex) => (getHeroVideoCopyGroup(sourceIndex) === groupIndex ? total + duration : total),
+    0,
+  ),
+);
+
+const getHeroVideoGroupProgress = (sourceIndex: number, currentTime: number) => {
+  const groupIndex = getHeroVideoCopyGroup(sourceIndex);
+  const groupDuration = heroVideoGroupDurations[groupIndex] ?? heroVideoDurations[sourceIndex] ?? 1;
+  const currentVideoDuration = heroVideoDurations[sourceIndex] ?? groupDuration;
+  const elapsedBeforeCurrentVideo = heroVideoDurations.reduce((total, duration, index) => {
+    if (index >= sourceIndex) return total;
+    return getHeroVideoCopyGroup(index) === groupIndex ? total + duration : total;
+  }, 0);
+  const safeCurrentTime = Number.isFinite(currentTime) ? Math.max(0, Math.min(currentTime, currentVideoDuration)) : 0;
+
+  return Math.max(0, Math.min(1, (elapsedBeforeCurrentVideo + safeCurrentTime) / groupDuration));
+};
 
 const mobileDropdownStyle: CSSProperties = {
   position: "static",
@@ -207,11 +229,11 @@ export const industryWordmarks = [
 export const clientLogos = [
   {
     name: "한국종합안전(주)",
-    src: "/v3/logos/hts.svg",
+    src: "/v3/logos/hts.png",
   },
   {
     name: "(주)볼트앤너트",
-    src: "/v3/logos/bolt-nut.svg",
+    src: "/v3/logos/bolt-nut.png",
   },
   {
     name: "AnC 기술사 사무소",
@@ -219,11 +241,11 @@ export const clientLogos = [
   },
   {
     name: "INSIDERS",
-    src: "/v3/logos/insiders.svg",
+    src: "/v3/logos/insiders.png",
   },
   {
     name: "마켓컬리",
-    src: "/v3/logos/market-kurly.svg",
+    src: "/v3/logos/market-kurly.png",
   },
 ];
 
@@ -462,7 +484,19 @@ export function V3Hero({
   const activeVideoIndex = heroVideoLayers[activeVideoLayer]?.sourceIndex ?? 0;
   const activeHeroCopyGroup = video && isHome ? getHeroVideoCopyGroup(activeVideoIndex) : 0;
   const activeHeroCopy = video && isHome ? heroVideoCopyGroups[activeHeroCopyGroup] : { eyebrow, title, description };
+  const activeHeroCopyGroupLabel = String(activeHeroCopyGroup + 1).padStart(2, "0");
+  const heroCopyGroupCountLabel = String(heroVideoCopyGroups.length).padStart(2, "0");
+  const initialHeroProgress = `${Math.round(getHeroVideoGroupProgress(activeVideoIndex, 0) * 1000) / 10}%`;
   const previousHeroCopyGroup = useRef(activeHeroCopyGroup);
+  const heroVideoRefs = useRef<[HTMLVideoElement | null, HTMLVideoElement | null]>([null, null]);
+  const heroProgressRef = useRef<HTMLElement | null>(null);
+
+  const updateHeroGroupProgress = (sourceIndex: number, currentTime: number) => {
+    heroProgressRef.current?.style.setProperty(
+      "--v3-hero-progress",
+      `${Math.round(getHeroVideoGroupProgress(sourceIndex, currentTime) * 1000) / 10}%`,
+    );
+  };
 
   useEffect(() => {
     setHeroVideoLayers(createHeroVideoLayers());
@@ -476,7 +510,7 @@ export function V3Hero({
 
   useEffect(() => {
     if (retiringVideoLayer === null) return;
-    const timeout = window.setTimeout(() => setRetiringVideoLayer(null), 320);
+    const timeout = window.setTimeout(() => setRetiringVideoLayer(null), 820);
     return () => window.clearTimeout(timeout);
   }, [retiringVideoLayer]);
 
@@ -493,6 +527,32 @@ export function V3Hero({
     const timeout = window.setTimeout(() => setHeroGroupTransition(false), 760);
     return () => window.clearTimeout(timeout);
   }, [activeHeroCopyGroup, isHome, video, videoReady]);
+
+  useLayoutEffect(() => {
+    if (!video || !isHome) {
+      document.documentElement.removeAttribute("data-v3-hero-group");
+      return;
+    }
+
+    document.documentElement.dataset.v3HeroGroup = String(activeHeroCopyGroup);
+    return () => document.documentElement.removeAttribute("data-v3-hero-group");
+  }, [activeHeroCopyGroup, isHome, video]);
+
+  useEffect(() => {
+    if (!video || !isHome || videoFailed) return;
+
+    let animationFrame = 0;
+    const tick = () => {
+      const activeVideoElement = heroVideoRefs.current[activeVideoLayer];
+      if (activeVideoElement) {
+        updateHeroGroupProgress(activeVideoIndex, activeVideoElement.currentTime);
+      }
+      animationFrame = window.requestAnimationFrame(tick);
+    };
+
+    animationFrame = window.requestAnimationFrame(tick);
+    return () => window.cancelAnimationFrame(animationFrame);
+  }, [activeVideoIndex, activeVideoLayer, isHome, video, videoFailed]);
 
   const queueHeroVideo = (sourceIndex: number, layerIndex?: 0 | 1) => {
     const targetLayer = layerIndex ?? (activeVideoLayer === 0 ? 1 : 0);
@@ -516,9 +576,21 @@ export function V3Hero({
     queueHeroVideo((currentIndex + 1) % heroVideoSources.length);
   };
 
-  const activateBufferedHeroVideo = (layerIndex: 0 | 1, event: SyntheticEvent<HTMLVideoElement>) => {
+  const playHeroVideo = (videoElement: HTMLVideoElement) => {
+    if (!videoElement.paused) return;
+    void videoElement.play().catch(() => undefined);
+  };
+
+  const handleHeroVideoPlayable = (layerIndex: 0 | 1, event: SyntheticEvent<HTMLVideoElement>) => {
+    if (layerIndex === bufferingVideoLayer && event.type === "loadedmetadata") return;
+
     if (layerIndex !== bufferingVideoLayer) {
-      if (layerIndex === activeVideoLayer) setVideoReady(true);
+      if (layerIndex === activeVideoLayer) {
+        const videoElement = event.currentTarget;
+        playHeroVideo(videoElement);
+        updateHeroGroupProgress(heroVideoLayers[layerIndex]?.sourceIndex ?? activeVideoIndex, videoElement.currentTime);
+        setVideoReady(true);
+      }
       return;
     }
 
@@ -529,7 +601,8 @@ export function V3Hero({
     } catch {
       // Some browsers can reject currentTime changes before metadata is ready.
     }
-    void videoElement.play().catch(() => undefined);
+    playHeroVideo(videoElement);
+    updateHeroGroupProgress(heroVideoLayers[layerIndex]?.sourceIndex ?? activeVideoIndex, 0);
     setActiveVideoLayer(layerIndex);
     if (layerIndex !== previousLayer) setRetiringVideoLayer(previousLayer);
     setBufferingVideoLayer(null);
@@ -572,6 +645,9 @@ export function V3Hero({
             return (
               <video
                 key={`${layerIndex}-${layer.version}-${layer.src}`}
+                ref={(element) => {
+                  heroVideoRefs.current[layerIndex] = element;
+                }}
                 className={`v3-hero-video ${
                   isActive ? "is-active" : isBuffering ? "is-buffering" : "is-retiring"
                 }`}
@@ -583,7 +659,11 @@ export function V3Hero({
                 preload="auto"
                 poster={layer.sourceIndex === 0 && !videoReady ? "/v3/hero-video-poster.jpg" : undefined}
                 src={layer.src}
-                onCanPlay={(event) => activateBufferedHeroVideo(layerIndex, event)}
+                onLoadedMetadata={(event) => handleHeroVideoPlayable(layerIndex, event)}
+                onLoadedData={(event) => handleHeroVideoPlayable(layerIndex, event)}
+                onCanPlay={(event) => handleHeroVideoPlayable(layerIndex, event)}
+                onPlaying={(event) => handleHeroVideoPlayable(layerIndex, event)}
+                onTimeUpdate={(event) => handleHeroVideoPlayable(layerIndex, event)}
                 onEnded={isActive ? advanceHeroVideo : undefined}
                 onError={() => handleHeroVideoError(layerIndex, layer.sourceIndex)}
               />
@@ -610,9 +690,12 @@ export function V3Hero({
           </div>
           {isHome && heroVideoSources.length > 1 ? (
             <div className="v3-hero-progress" aria-label="대표 메시지 진행 상태">
-              <span>01</span>
-              <strong />
-              <span>{String(heroVideoSources.length).padStart(2, "0")}</span>
+              <span>{activeHeroCopyGroupLabel}</span>
+              <strong
+                ref={heroProgressRef}
+                style={{ "--v3-hero-progress": initialHeroProgress } as CSSProperties}
+              />
+              <span>{heroCopyGroupCountLabel}</span>
             </div>
           ) : null}
         </div>
@@ -736,7 +819,7 @@ export function V3TrustStrip() {
             <div className="v3-trust-group" key={groupIndex} aria-hidden={groupIndex > 0}>
               {clientLogos.map((logo) => (
                 <div className="v3-client-logo" key={`${logo.name}-${groupIndex}`}>
-                  <img src={logo.src} alt={groupIndex === 0 ? logo.name : ""} loading="lazy" />
+                  <img src={logo.src} alt={groupIndex === 0 ? logo.name : ""} loading="eager" />
                 </div>
               ))}
             </div>
