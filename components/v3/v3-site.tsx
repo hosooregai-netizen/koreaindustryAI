@@ -42,10 +42,7 @@ type NavGroup = {
 
 type HeroVisualKind = "home" | "products" | "company" | "contact" | "community";
 
-const heroVideoSources = [
-  "/v3/hero-enterprise-erp-ai.mp4",
-  "/v3/hero-industrial-manufacturing-ai.mp4",
-];
+const heroVideoSources = ["/v3/hero-landing-intro.mp4", "/v3/hero-landing.mp4"];
 
 const mobileDropdownStyle: CSSProperties = {
   position: "static",
@@ -456,6 +453,7 @@ export function V3Hero({
           className="v3-hero-video"
           aria-hidden="true"
           autoPlay
+          loop={heroVideoSources.length === 1}
           muted
           playsInline
           preload="auto"
@@ -483,7 +481,7 @@ export function V3Hero({
               </Link>
             ) : null}
           </div>
-          {isHome ? (
+          {isHome && heroVideoSources.length > 1 ? (
             <div className="v3-hero-progress" aria-label="대표 메시지 진행 상태">
               <span>01</span>
               <strong />

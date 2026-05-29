@@ -91,19 +91,25 @@ test("dropdowns include shared image and group summary, not modal flags", () => 
 });
 
 test("industry cards avoid unverified customer names", () => {
+  const industryBlock = v3Site.match(/export const industryWordmarks[\s\S]*?export const clientLogos/)?.[0] ?? "";
+
   for (const wordmark of ["제조 운영팀", "금융 심사팀", "건설 안전팀", "물류 운영팀"]) {
-    assert.match(v3Site, new RegExp(wordmark), `${wordmark} should be present`);
+    assert.match(industryBlock, new RegExp(wordmark), `${wordmark} should be present`);
   }
 
   for (const customerName of ["볼넛", "K-Finance", "한국종합안전 ANC", "마켓컬리"]) {
-    assert.doesNotMatch(v3Site, new RegExp(customerName), `${customerName} should not be used as a verified customer`);
+    assert.doesNotMatch(industryBlock, new RegExp(customerName), `${customerName} should not be used as a verified customer`);
   }
 });
 
-test("home hero does not request the future video asset yet", () => {
+test("home hero uses the ordered landing video assets", () => {
+  const heroSourcesBlock = v3Site.match(/const heroVideoSources = \[[\s\S]*?\];/)?.[0] ?? "";
+
   assert.match(v3Site, /\/v3\/industrial-ai-hero\.png/);
   assert.match(v3Site, /data-video-state/);
-  assert.doesNotMatch(v3Home, /\n\s+video\n/);
+  assert.match(heroSourcesBlock, /\/v3\/hero-landing-intro\.mp4[\s\S]*\/v3\/hero-landing\.mp4/);
+  assert.match(v3Site, /loop=\{heroVideoSources\.length === 1\}/);
+  assert.match(v3Home, /\n\s+video\r?\n/);
 });
 
 test("v3 source does not include mojibake markers", () => {
