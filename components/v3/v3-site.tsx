@@ -726,16 +726,19 @@ export function V3IndustryWordmarks() {
 }
 
 export function V3TrustStrip() {
-  const repeatedLogos = [...clientLogos, ...clientLogos];
+  const logoGroups = [0, 1];
 
   return (
     <section className="v3-trust-strip" aria-label="고객사 및 프로젝트 로고">
-      <span>Project Partners</span>
       <div className="v3-trust-marquee">
         <div className="v3-trust-track">
-          {repeatedLogos.map((logo, index) => (
-            <div className="v3-client-logo" key={`${logo.name}-${index}`} aria-hidden={index >= clientLogos.length}>
-              <img src={logo.src} alt={index < clientLogos.length ? logo.name : ""} loading="lazy" />
+          {logoGroups.map((groupIndex) => (
+            <div className="v3-trust-group" key={groupIndex} aria-hidden={groupIndex > 0}>
+              {clientLogos.map((logo) => (
+                <div className="v3-client-logo" key={`${logo.name}-${groupIndex}`}>
+                  <img src={logo.src} alt={groupIndex === 0 ? logo.name : ""} loading="lazy" />
+                </div>
+              ))}
             </div>
           ))}
         </div>
