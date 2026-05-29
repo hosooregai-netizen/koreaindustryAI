@@ -5,7 +5,6 @@ import {
   BarChart3,
   Boxes,
   Building2,
-  CheckCircle2,
   ClipboardCheck,
   Database,
   FileText,
@@ -250,16 +249,6 @@ export const clientLogos = [
   {
     name: "마켓컬리",
     src: "/v3/logos/market-kurly.png",
-  },
-];
-
-export const productGroups = [
-  {
-    icon: Layers3,
-    title: "AI-Core",
-    href: "/v3/products/ai-core",
-    description: "업무 화면, 데이터, 승인, 리포트 모듈을 조립해 첫 시현 범위를 빠르게 확인합니다.",
-    points: ["위젯 조립", "ERP형 구조", "5일 시현"],
   },
 ];
 
@@ -1019,32 +1008,21 @@ export function V3AiCoreShowcase() {
   );
 }
 
-export function V3ProductCards() {
+export function V3ProductShowcase() {
   return (
-    <div className="v3-product-grid">
-      {productGroups.map((product) => {
-        const Icon = product.icon;
-        return (
-          <article className="v3-product-card" key={product.title}>
-            <Icon size={24} />
-            <h3>{product.title}</h3>
-            <p>{product.description}</p>
-            <ul>
-              {product.points.map((item) => (
-                <li key={item}>
-                  <CheckCircle2 size={15} />
-                  {item}
-                </li>
-              ))}
-            </ul>
-            <Link className="v3-text-link" href={product.href}>
-              자세히 보기
-              <ArrowRight size={16} />
-            </Link>
-          </article>
-        );
-      })}
-    </div>
+    <Link className="v3-product-showcase" href="/v3/products/ai-core" aria-label="AI-Core 페이지로 이동">
+      <div className="v3-product-showcase-copy">
+        <h2>AI-CORE</h2>
+        <p className="v3-product-showcase-lead">현장의 데이터를 기업 맞춤으로 전환하는 AI 솔루션</p>
+        <p>
+          AI-Core는 산업에서 사용되는 데이터를 기업 맞춤형 ERP로 제공할 수 있는 core로 다양한 시스템과
+          결합해 기업의 생산성을 향상하는 AI ERP 입니다.
+        </p>
+      </div>
+      <div className="v3-product-visual" aria-hidden="true">
+        <img className="v3-product-ui" src="/v3/ai-core-erp-ui.png" alt="" loading="lazy" />
+      </div>
+    </Link>
   );
 }
 

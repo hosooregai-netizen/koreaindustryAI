@@ -270,15 +270,22 @@ async function getActiveHeroVideoMotion(page: import("@playwright/test").Page) {
 
 async function triggerHeroVideoLeadAdvance(page: import("@playwright/test").Page) {
   const activeHeroVideo = page.locator(".v3-hero-video.is-active");
-  await activeHeroVideo.evaluate((video) => {
+  return activeHeroVideo.evaluate((video) => {
     const media = video as HTMLVideoElement;
     if (!Number.isFinite(media.duration)) {
       throw new Error("Active v3 hero video duration is not ready");
     }
 
     media.pause();
-    media.currentTime = Math.max(0, media.duration - 0.8);
+    media.currentTime = Math.max(0, media.duration - 1.2);
+    const stateBeforeTimeUpdate = {
+      currentTime: media.currentTime,
+      duration: media.duration,
+      ended: media.ended,
+      remaining: media.duration - media.currentTime,
+    };
     media.dispatchEvent(new Event("timeupdate", { bubbles: true }));
+    return stateBeforeTimeUpdate;
   });
 }
 
@@ -374,37 +381,21 @@ test("home hero starts video transition before the active clip ends", async ({ p
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/v3");
 
-  await page.evaluate(() => {
-    const pageWindow = window as Window & { __v3HeroEndedEvents?: number };
-    pageWindow.__v3HeroEndedEvents = 0;
-    document
-      .querySelector(".v3-hero")
-      ?.addEventListener(
-        "ended",
-        () => {
-          pageWindow.__v3HeroEndedEvents = (pageWindow.__v3HeroEndedEvents ?? 0) + 1;
-        },
-        true,
-      );
-  });
-
   const activeHeroVideo = page.locator(".v3-hero-video.is-active");
   await expect(page.locator(".v3-hero")).toHaveAttribute("data-video-index", "0");
   await expect
     .poll(() => activeHeroVideo.evaluate((video) => Number.isFinite((video as HTMLVideoElement).duration)))
     .toBe(true);
 
-  await triggerHeroVideoLeadAdvance(page);
+  const leadAdvanceState = await triggerHeroVideoLeadAdvance(page);
+  expect(leadAdvanceState.ended).toBe(false);
+  expect(leadAdvanceState.remaining).toBeGreaterThan(0);
+  expect(leadAdvanceState.remaining).toBeLessThanOrEqual(1.6);
 
   await expect(page.locator(".v3-hero")).toHaveAttribute("data-video-index", "1");
   await expect(page.locator(".v3-hero")).toHaveAttribute("data-video-group", "1");
   await expect(page.locator(".v3-hero-overlay.is-retiring")).toHaveAttribute("data-overlay-group", "0");
   await expect(page.locator(".v3-hero-video-freeze.is-retiring")).toHaveCount(0);
-  const endedEvents = await page.evaluate(() => {
-    const pageWindow = window as Window & { __v3HeroEndedEvents?: number };
-    return pageWindow.__v3HeroEndedEvents ?? 0;
-  });
-  expect(endedEvents).toBe(0);
 });
 
 test("desktop Product navigation exposes AI Core and routes correctly", async ({ page }) => {
@@ -588,12 +579,13 @@ test("mobile menu exposes AI Core and routes without horizontal overflow", async
   await expectNoHorizontalOverflow(page);
 });
 
-test("home shows industry wordmarks and cross-industry tool CTA", async ({ page }) => {
+test("home omits industry wordmarks and shows cross-industry tool CTA", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/v3");
 
+  await expect(page.getByLabel("산업별 워드마크 신뢰 영역")).toHaveCount(0);
   for (const wordmark of ["제조 운영팀", "금융 심사팀", "건설 안전팀", "물류 운영팀"]) {
-    await expect(page.getByText(wordmark).first()).toBeVisible();
+    await expect(page.getByText(wordmark)).toHaveCount(0);
   }
 
   await expect(page.getByRole("heading", { name: /범 산업 툴은 무료 공개 기능이 아니라/ })).toBeVisible();

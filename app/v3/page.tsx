@@ -3,8 +3,7 @@ import {
   V3AiCoreShowcase,
   V3CtaBand,
   V3Hero,
-  V3IndustryWordmarks,
-  V3ProductCards,
+  V3ProductShowcase,
   V3SectionHeading,
   V3Shell,
   V3ToolCta,
@@ -29,16 +28,9 @@ export default function V3HomePage() {
           video
         />
         <V3TrustStrip />
-        <V3IndustryWordmarks />
 
-        <section className="v3-section">
-          <V3SectionHeading
-            eyebrow="Products"
-            title="우선 제품은 AI-Core 하나에 집중합니다."
-            description="MVP와 산업별 페이지는 준비중으로 두고, 현재 첫 메시지는 AI-Core의 조립 방식에 맞춥니다."
-            split
-          />
-          <V3ProductCards />
+        <section className="v3-section v3-product-section">
+          <V3ProductShowcase />
         </section>
 
         <section className="v3-section v3-soft">
