@@ -1289,7 +1289,7 @@ export function V3CtaBand({
             <h2 id="v3-final-cta-title">{renderTypingText(title, 120)}</h2>
             <p>{renderTypingText(description, 1420)}</p>
             <Link className="v3-button v3-button-primary" href={href}>
-              {renderTypingText(label, 2680, "v3-final-cta-button-label")}
+              {label}
               <ArrowRight size={18} />
             </Link>
           </div>
