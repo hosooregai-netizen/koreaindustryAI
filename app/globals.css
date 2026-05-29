@@ -8785,6 +8785,12 @@ html[data-v3-hero-group="1"] .v3-header.is-transparent.is-home-route .v3-brand-m
   width: 100%;
   max-width: none;
   background: #ffffff;
+  transition: background-color 240ms ease;
+}
+
+.v3-product-section:hover,
+.v3-product-section:focus-within {
+  background: #f3f5f8;
 }
 
 .v3-product-showcase {
