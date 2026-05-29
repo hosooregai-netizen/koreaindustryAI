@@ -1,13 +1,10 @@
 import type { Metadata } from "next";
 import {
-  V3AiCoreShowcase,
   V3CtaBand,
   V3Hero,
   V3IndustryImageSection,
   V3ProductShowcase,
-  V3SectionHeading,
   V3Shell,
-  V3ToolCta,
   V3TrustStrip,
 } from "@/components/v3/v3-site";
 
@@ -35,18 +32,6 @@ export default function V3HomePage() {
         </section>
 
         <V3IndustryImageSection />
-
-        <section className="v3-section v3-soft">
-          <V3SectionHeading
-            eyebrow="AI-Core"
-            title="핵심 아이템을 고르고, ERP형 모듈을 조립하고, 5일 안에 시현합니다."
-            description="큰 구축을 약속하기보다 반복 업무 하나를 실제 화면과 흐름으로 먼저 보여줍니다."
-            split
-          />
-          <V3AiCoreShowcase />
-        </section>
-
-        <V3ToolCta />
 
         <V3CtaBand
           title="반복 업무 하나를 골라 5일 안에 자동화 가능성을 확인하세요."
