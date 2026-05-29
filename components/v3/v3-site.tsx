@@ -1237,15 +1237,17 @@ export function V3CtaBand({
         className={`v3-cta-band v3-final-cta ${isTyping ? "is-typing" : ""}`}
         aria-labelledby="v3-final-cta-title"
       >
-        <div className="v3-final-cta-copy">
-          <h2 id="v3-final-cta-title">{renderTypingText(title, 120)}</h2>
-          <p>{renderTypingText(description, 1420)}</p>
-          <Link className="v3-button v3-button-primary" href={href}>
-            {renderTypingText(label, 2680, "v3-final-cta-button-label")}
-            <ArrowRight size={18} />
-          </Link>
+        <div className="v3-final-cta-inner">
+          <div className="v3-final-cta-copy">
+            <h2 id="v3-final-cta-title">{renderTypingText(title, 120)}</h2>
+            <p>{renderTypingText(description, 1420)}</p>
+            <Link className="v3-button v3-button-primary" href={href}>
+              {renderTypingText(label, 2680, "v3-final-cta-button-label")}
+              <ArrowRight size={18} />
+            </Link>
+          </div>
+          <div className="v3-final-cta-empty" aria-hidden="true" />
         </div>
-        <div className="v3-final-cta-empty" aria-hidden="true" />
       </section>
     );
   }
