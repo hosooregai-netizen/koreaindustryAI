@@ -8863,8 +8863,8 @@ html[data-v3-hero-group="1"] .v3-header.is-transparent.is-home-route .v3-brand-m
 .v3-product-reveal {
   opacity: 0;
   transition:
-    opacity 1020ms ease,
-    transform 1020ms cubic-bezier(0.22, 1, 0.36, 1);
+    opacity 2040ms ease,
+    transform 2040ms cubic-bezier(0.22, 1, 0.36, 1);
   will-change: opacity, transform;
 }
 
@@ -8882,7 +8882,7 @@ html[data-v3-hero-group="1"] .v3-header.is-transparent.is-home-route .v3-brand-m
 }
 
 .v3-product-showcase.is-revealed .v3-product-reveal.is-right {
-  transition-delay: 180ms;
+  transition-delay: 360ms;
 }
 
 .v3-product-showcase-copy h3 {
