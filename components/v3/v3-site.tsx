@@ -44,12 +44,10 @@ type HeroVisualKind = "home" | "products" | "company" | "contact" | "community";
 
 const heroVideoSources = [
   "/v3/hero-landing-intro.mp4",
-  "/v3/hero-landing-process.mp4",
-  "/v3/hero-landing-automation.mp4",
   "/v3/hero-landing.mp4",
 ];
 
-const heroVideoDurations = [5, 4.042, 5.042, 12];
+const heroVideoDurations = [13.167, 12];
 
 type HeroVideoLayer = {
   sourceIndex: number;
@@ -83,7 +81,7 @@ const createHeroVideoLayers = (): [HeroVideoLayer, HeroVideoLayer] => [
   { sourceIndex: -1, src: "", version: 0 },
 ];
 
-const getHeroVideoCopyGroup = (sourceIndex: number) => (sourceIndex >= 3 ? 1 : 0);
+const getHeroVideoCopyGroup = (sourceIndex: number) => (sourceIndex >= 1 ? 1 : 0);
 
 const heroVideoGroupDurations = heroVideoCopyGroups.map((_, groupIndex) =>
   heroVideoDurations.reduce(
@@ -510,7 +508,7 @@ export function V3Hero({
 
   useEffect(() => {
     if (retiringVideoLayer === null) return;
-    const timeout = window.setTimeout(() => setRetiringVideoLayer(null), 820);
+    const timeout = window.setTimeout(() => setRetiringVideoLayer(null), 1460);
     return () => window.clearTimeout(timeout);
   }, [retiringVideoLayer]);
 
@@ -524,7 +522,7 @@ export function V3Hero({
     previousHeroCopyGroup.current = activeHeroCopyGroup;
 
     setHeroGroupTransition(true);
-    const timeout = window.setTimeout(() => setHeroGroupTransition(false), 760);
+    const timeout = window.setTimeout(() => setHeroGroupTransition(false), 1400);
     return () => window.clearTimeout(timeout);
   }, [activeHeroCopyGroup, isHome, video, videoReady]);
 

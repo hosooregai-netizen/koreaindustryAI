@@ -151,6 +151,18 @@ async function getHeroProgressState(page: import("@playwright/test").Page) {
   });
 }
 
+async function getHeroBackgroundImage(page: import("@playwright/test").Page) {
+  return page.evaluate(() => {
+    const hero = document.querySelector<HTMLElement>(".v3-hero");
+
+    if (!hero) {
+      throw new Error("Could not find v3 hero");
+    }
+
+    return getComputedStyle(hero).backgroundImage;
+  });
+}
+
 function topbarColorsMatch(
   colors: Awaited<ReturnType<typeof getTransparentTopbarColors>>,
   group: string,
@@ -205,6 +217,8 @@ test("desktop Product navigation exposes AI Core and routes correctly", async ({
   await expect
     .poll(() => activeHeroVideo.evaluate((video) => (video as HTMLVideoElement).currentTime))
     .toBeGreaterThan(0.1);
+  await expect(page.locator(".v3-hero")).toHaveClass(/has-video/);
+  expect(await getHeroBackgroundImage(page)).not.toContain("hero-video-poster");
   const initialHeroProgress = await getHeroProgressState(page);
   expect(initialHeroProgress.labels).toEqual(["01", "02"]);
   expect(initialHeroProgress.percent).toBeGreaterThan(0);
@@ -213,18 +227,11 @@ test("desktop Product navigation exposes AI Core and routes correctly", async ({
     .toBe(true);
   await activeHeroVideo.dispatchEvent("ended");
   await expect(page.locator(".v3-hero")).toHaveAttribute("data-video-index", "1");
-  await expect(page.locator(".v3-hero")).toHaveAttribute("data-video-group", "0");
-  await expect(activeHeroVideo).toHaveAttribute("src", /hero-landing-process\.mp4$/);
-  await expect(activeHeroVideo).not.toHaveAttribute("poster", /hero-video-poster/);
-  await activeHeroVideo.dispatchEvent("ended");
-  await expect(page.locator(".v3-hero")).toHaveAttribute("data-video-index", "2");
-  await expect(page.locator(".v3-hero")).toHaveAttribute("data-video-group", "0");
-  await expect(activeHeroVideo).toHaveAttribute("src", /hero-landing-automation\.mp4$/);
-  await expect(activeHeroVideo).not.toHaveAttribute("poster", /hero-video-poster/);
-  await activeHeroVideo.dispatchEvent("ended");
-  await expect(page.locator(".v3-hero")).toHaveAttribute("data-video-index", "3");
   await expect(page.locator(".v3-hero")).toHaveAttribute("data-video-group", "1");
+  await expect(activeHeroVideo).toHaveAttribute("src", /hero-landing\.mp4$/);
+  await expect(activeHeroVideo).not.toHaveAttribute("poster", /hero-video-poster/);
   await expect(page.getByRole("heading", { name: /작은 자동화가 운영 시스템으로 확장됩니다/ })).toBeVisible();
+  expect(await getHeroBackgroundImage(page)).not.toContain("hero-video-poster");
   await expect
     .poll(async () => {
       const progress = await getHeroProgressState(page);
@@ -258,6 +265,7 @@ test("desktop Product navigation exposes AI Core and routes correctly", async ({
   await expect(page.locator(".v3-hero")).toHaveAttribute("data-video-index", "0");
   await expect(page.locator(".v3-hero")).toHaveAttribute("data-video-group", "0");
   await expect(page.getByRole("heading", { name: /업무 흐름을 읽고/ })).toBeVisible();
+  expect(await getHeroBackgroundImage(page)).not.toContain("hero-video-poster");
   const loopedHeroProgress = await getHeroProgressState(page);
   expect(loopedHeroProgress.labels).toEqual(["01", "02"]);
   const loopedHeroCopyMotion = await getHeroCopyMotion(page);

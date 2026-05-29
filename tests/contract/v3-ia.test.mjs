@@ -109,8 +109,10 @@ test("home hero uses the ordered landing video assets", () => {
   assert.match(v3Site, /data-video-state/);
   assert.match(
     heroSourcesBlock,
-    /\/v3\/hero-landing-intro\.mp4[\s\S]*\/v3\/hero-landing-process\.mp4[\s\S]*\/v3\/hero-landing-automation\.mp4[\s\S]*\/v3\/hero-landing\.mp4/,
+    /\/v3\/hero-landing-intro\.mp4[\s\S]*\/v3\/hero-landing\.mp4/,
   );
+  assert.doesNotMatch(heroSourcesBlock, /\/v3\/hero-landing-process\.mp4/);
+  assert.doesNotMatch(heroSourcesBlock, /\/v3\/hero-landing-automation\.mp4/);
   assert.match(v3Site, /loop=\{heroVideoSources\.length === 1\}/);
   assert.match(v3Site, /is-active/);
   assert.match(v3Site, /is-buffering/);
