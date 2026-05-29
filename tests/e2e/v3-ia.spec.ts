@@ -144,6 +144,31 @@ async function getHeroCopyMotion(page: import("@playwright/test").Page) {
   });
 }
 
+async function getHeroCopyColors(page: import("@playwright/test").Page) {
+  return page.evaluate(() => {
+    const hero = document.querySelector<HTMLElement>(".v3-hero");
+    const copy = document.querySelector<HTMLElement>(".v3-hero-copy");
+    const heading = document.querySelector<HTMLElement>(".v3-hero-copy h1");
+    const description = document.querySelector<HTMLElement>(".v3-hero-copy > p:not(.v3-eyebrow)");
+    const primary = document.querySelector<HTMLElement>(".v3-hero .v3-button-primary");
+    const progress = document.querySelector<HTMLElement>(".v3-hero-progress");
+
+    if (!hero || !copy || !heading || !description || !primary || !progress) {
+      throw new Error("Could not find v3 hero copy color elements");
+    }
+
+    return {
+      group: hero.dataset.videoGroup,
+      copy: getComputedStyle(copy).color,
+      heading: getComputedStyle(heading).color,
+      description: getComputedStyle(description).color,
+      primary: getComputedStyle(primary).color,
+      primaryBorder: getComputedStyle(primary).borderColor,
+      progress: getComputedStyle(progress).color,
+    };
+  });
+}
+
 async function expectHomeHeroHeadingSingleLine(page: import("@playwright/test").Page) {
   const metrics = await page.evaluate(() => {
     const heading = document.querySelector<HTMLElement>(".v3-hero.is-home h1");
@@ -344,6 +369,14 @@ test("desktop Product navigation exposes AI Core and routes correctly", async ({
   expect(groupTwoTopbar.cta).toBe(groupTwoTopbar.header);
   expect(groupTwoTopbar.ctaBorder).toBe(groupTwoTopbar.header);
   expect(groupTwoTopbar.menu).toBe(groupTwoTopbar.header);
+  const groupTwoHeroCopyColors = await getHeroCopyColors(page);
+  expect(groupTwoHeroCopyColors.group).toBe("1");
+  expect(groupTwoHeroCopyColors.copy).toBe("rgb(0, 0, 0)");
+  expect(groupTwoHeroCopyColors.heading).toBe("rgb(0, 0, 0)");
+  expect(groupTwoHeroCopyColors.description).toBe("rgb(0, 0, 0)");
+  expect(groupTwoHeroCopyColors.primary).toBe("rgb(0, 0, 0)");
+  expect(groupTwoHeroCopyColors.primaryBorder).toBe("rgb(0, 0, 0)");
+  expect(groupTwoHeroCopyColors.progress).toBe("rgb(0, 0, 0)");
   await page.evaluate(() => window.scrollTo(0, 180));
   await expect(page.locator(".v3-header")).toHaveClass(/is-scrolled/);
   await page.evaluate(() => window.scrollTo(0, 0));
