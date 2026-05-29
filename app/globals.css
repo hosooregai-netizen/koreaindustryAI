@@ -8390,6 +8390,7 @@ textarea {
   gap: 0;
   overflow: hidden;
   padding: 81.3px 0;
+  border-bottom: 0;
   background: #ffffff;
   box-sizing: border-box;
 }
@@ -8781,13 +8782,16 @@ html[data-v3-hero-group="1"] .v3-header.is-transparent.is-home-route .v3-brand-m
 
 /* v3 home AI-Core product showcase */
 .v3-product-section {
+  width: 100%;
+  max-width: none;
   background: #ffffff;
 }
 
 .v3-product-showcase {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(280px, 0.48fr) minmax(520px, 0.92fr);
+  max-width: 1600px;
+  grid-template-columns: minmax(300px, 0.42fr) minmax(0, 1fr);
   gap: 72px;
   align-items: center;
   color: var(--v3-black);
@@ -8835,7 +8839,9 @@ html[data-v3-hero-group="1"] .v3-header.is-transparent.is-home-route .v3-brand-m
 
 .v3-product-visual {
   position: relative;
-  min-height: 560px;
+  width: 100%;
+  aspect-ratio: 1586 / 992;
+  min-height: 0;
   overflow: hidden;
   border-radius: 8px;
   isolation: isolate;
@@ -8856,9 +8862,9 @@ html[data-v3-hero-group="1"] .v3-header.is-transparent.is-home-route .v3-brand-m
 
 .v3-product-ui {
   position: absolute;
-  right: 5%;
-  bottom: 9%;
-  width: min(82%, 760px);
+  right: 4.5%;
+  bottom: 8%;
+  width: min(86%, 820px);
   border: 1px solid rgba(255, 255, 255, 0.58);
   border-radius: 8px;
   box-shadow: 0 28px 72px rgba(16, 24, 39, 0.24);
@@ -8889,10 +8895,6 @@ html[data-v3-hero-group="1"] .v3-header.is-transparent.is-home-route .v3-brand-m
   .v3-product-showcase-copy h2 {
     font-size: 54px;
   }
-
-  .v3-product-visual {
-    min-height: 480px;
-  }
 }
 
 @media (max-width: 760px) {
@@ -8915,13 +8917,9 @@ html[data-v3-hero-group="1"] .v3-header.is-transparent.is-home-route .v3-brand-m
     line-height: 1.7;
   }
 
-  .v3-product-visual {
-    min-height: 330px;
-  }
-
   .v3-product-ui {
-    right: 6%;
-    bottom: 44px;
+    right: 5%;
+    bottom: 8%;
     width: 88%;
   }
 }
@@ -8935,11 +8933,7 @@ html[data-v3-hero-group="1"] .v3-header.is-transparent.is-home-route .v3-brand-m
     font-size: 19px;
   }
 
-  .v3-product-visual {
-    min-height: 280px;
-  }
-
   .v3-product-ui {
-    bottom: 34px;
+    bottom: 8%;
   }
 }
