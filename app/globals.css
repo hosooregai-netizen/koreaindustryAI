@@ -8398,6 +8398,10 @@ textarea {
   object-fit: contain;
 }
 
+.v3-trust-strip .v3-client-logo img[src$="/bolt-nut.png"] {
+  filter: brightness(0) invert(32%);
+}
+
 @keyframes v3-client-logo-marquee {
   from {
     transform: translateX(0);
