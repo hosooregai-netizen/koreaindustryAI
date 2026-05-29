@@ -169,37 +169,47 @@ async function getHeroCopyColors(page: import("@playwright/test").Page) {
   });
 }
 
-async function expectHomeHeroHeadingSingleLine(page: import("@playwright/test").Page) {
+async function expectHomeHeroCopySingleLine(page: import("@playwright/test").Page) {
   if (await page.locator(".v3-hero.is-group-transitioning").count()) {
     await expect(page.locator(".v3-hero.is-group-transitioning")).toHaveCount(0);
   }
 
   const metrics = await page.evaluate(() => {
     const heading = document.querySelector<HTMLElement>(".v3-hero.is-home h1");
+    const description = document.querySelector<HTMLElement>(".v3-hero.is-home .v3-hero-copy > p:not(.v3-eyebrow)");
 
-    if (!heading) {
-      throw new Error("Could not find v3 home hero heading");
+    if (!heading || !description) {
+      throw new Error("Could not find v3 home hero copy");
     }
 
-    const rect = heading.getBoundingClientRect();
-    const style = getComputedStyle(heading);
+    const measure = (element: HTMLElement) => {
+      const rect = element.getBoundingClientRect();
+      const style = getComputedStyle(element);
+
+      return {
+        whiteSpace: style.whiteSpace,
+        height: Math.round(rect.height * 100) / 100,
+        lineHeight: Number.parseFloat(style.lineHeight),
+        left: Math.round(rect.left * 100) / 100,
+        right: Math.round(rect.right * 100) / 100,
+      };
+    };
 
     return {
-      whiteSpace: style.whiteSpace,
-      height: Math.round(rect.height * 100) / 100,
-      lineHeight: Number.parseFloat(style.lineHeight),
-      left: Math.round(rect.left * 100) / 100,
-      right: Math.round(rect.right * 100) / 100,
+      heading: measure(heading),
+      description: measure(description),
       viewportWidth: window.innerWidth,
       scrollWidth: document.documentElement.scrollWidth,
       clientWidth: document.documentElement.clientWidth,
     };
   });
 
-  expect(metrics.whiteSpace).toBe("nowrap");
-  expect(metrics.height).toBeLessThanOrEqual(metrics.lineHeight * 1.35);
-  expect(metrics.left).toBeGreaterThanOrEqual(-1);
-  expect(metrics.right).toBeLessThanOrEqual(metrics.viewportWidth + 1);
+  for (const copyMetrics of [metrics.heading, metrics.description]) {
+    expect(copyMetrics.whiteSpace).toBe("nowrap");
+    expect(copyMetrics.height).toBeLessThanOrEqual(copyMetrics.lineHeight * 1.35);
+    expect(copyMetrics.left).toBeGreaterThanOrEqual(-1);
+    expect(copyMetrics.right).toBeLessThanOrEqual(metrics.viewportWidth + 1);
+  }
   expect(metrics.scrollWidth).toBeLessThanOrEqual(metrics.clientWidth + 1);
 }
 
@@ -287,13 +297,13 @@ test("home hero fills the initial viewport on desktop and mobile", async ({ page
     await page.goto("/v3");
     await expectHomeHeroFillsInitialViewport(page);
     await expect(page.getByRole("heading", { name: /현장의 데이터로 만드는 AI 시스템/ })).toBeVisible();
-    await expectHomeHeroHeadingSingleLine(page);
+    if (viewport.width > 760) await expectHomeHeroCopySingleLine(page);
     await page.locator(".v3-hero-video.is-active").dispatchEvent("ended");
     await expect(page.locator(".v3-hero-copy.is-retiring")).toHaveCount(1);
     expect((await getHeroCopyMotion(page)).transform).not.toBe("none");
     await expect(page.locator(".v3-hero-copy.is-retiring")).toHaveCount(0);
     await expect(page.getByRole("heading", { name: /반복 업무를 자동으로 처리하는 AI 시스템/ })).toBeVisible();
-    await expectHomeHeroHeadingSingleLine(page);
+    if (viewport.width > 760) await expectHomeHeroCopySingleLine(page);
   }
 });
 
@@ -313,7 +323,7 @@ test("desktop Product navigation exposes AI Core and routes correctly", async ({
   await page.goto("/v3");
 
   await expect(page.getByRole("heading", { name: /현장의 데이터로 만드는 AI 시스템/ })).toBeVisible();
-  await expectHomeHeroHeadingSingleLine(page);
+  await expectHomeHeroCopySingleLine(page);
   const heroActions = page.locator(".v3-hero .v3-hero-actions a");
   await expect(heroActions).toHaveCount(1);
   await expect(heroActions.first()).toHaveText(/AI-Core/);
@@ -347,7 +357,7 @@ test("desktop Product navigation exposes AI Core and routes correctly", async ({
   await expect(activeHeroVideo).toHaveAttribute("src", /hero-landing\.mp4$/);
   await expect(activeHeroVideo).not.toHaveAttribute("poster", /hero-video-poster/);
   await expect(page.getByRole("heading", { name: /반복 업무를 자동으로 처리하는 AI 시스템/ })).toBeVisible();
-  await expectHomeHeroHeadingSingleLine(page);
+  await expectHomeHeroCopySingleLine(page);
   expect(await getHeroBackgroundImage(page)).not.toContain("hero-video-poster");
   await expect
     .poll(async () => {
@@ -399,7 +409,7 @@ test("desktop Product navigation exposes AI Core and routes correctly", async ({
   await expect(page.locator(".v3-hero-copy.is-retiring")).toHaveCount(1);
   expect((await getHeroCopyMotion(page)).transform).not.toBe("none");
   await expect(page.getByRole("heading", { name: /현장의 데이터로 만드는 AI 시스템/ })).toBeVisible();
-  await expectHomeHeroHeadingSingleLine(page);
+  await expectHomeHeroCopySingleLine(page);
   expect(await getHeroBackgroundImage(page)).not.toContain("hero-video-poster");
   const loopedHeroProgress = await getHeroProgressState(page);
   expect(loopedHeroProgress.labels).toEqual(["01", "02"]);

@@ -6638,12 +6638,12 @@ textarea {
 }
 
 .v3-hero.is-home .v3-hero-copy-stage {
-  width: min(100%, 860px);
-  max-width: 860px;
+  width: min(100%, 1240px);
+  max-width: 1240px;
 }
 
 .v3-hero.is-home .v3-hero-copy > p:not(.v3-eyebrow) {
-  max-width: 700px;
+  max-width: none;
 }
 
 .v3-trust-strip > span {
@@ -8669,7 +8669,7 @@ html[data-v3-hero-group="1"] .v3-header.is-transparent.is-home-route .v3-brand-m
   background: rgba(0, 0, 0, 0.24);
 }
 
-/* Keep the rotating home hero headlines on a single line. */
+/* Keep home hero copy on one line when the viewport has room. */
 .v3-hero.is-home h1 {
   max-width: none;
   white-space: nowrap;
@@ -8678,15 +8678,28 @@ html[data-v3-hero-group="1"] .v3-header.is-transparent.is-home-route .v3-brand-m
   line-height: 1.18;
 }
 
+.v3-hero.is-home .v3-hero-copy > p:not(.v3-eyebrow) {
+  white-space: nowrap;
+  text-wrap: nowrap;
+}
+
 @media (max-width: 1180px) {
   .v3-hero.is-home h1 {
     font-size: 50px;
+  }
+
+  .v3-hero.is-home .v3-hero-copy > p:not(.v3-eyebrow) {
+    font-size: 18px;
   }
 }
 
 @media (max-width: 980px) {
   .v3-hero.is-home h1 {
     font-size: 40px;
+  }
+
+  .v3-hero.is-home .v3-hero-copy > p:not(.v3-eyebrow) {
+    font-size: 16px;
   }
 }
 
@@ -8698,6 +8711,13 @@ html[data-v3-hero-group="1"] .v3-header.is-transparent.is-home-route .v3-brand-m
 
   .v3-hero.is-home h1 {
     font-size: 31px;
+    white-space: normal;
+    text-wrap: balance;
+  }
+
+  .v3-hero.is-home .v3-hero-copy > p:not(.v3-eyebrow) {
+    white-space: normal;
+    text-wrap: pretty;
   }
 }
 
