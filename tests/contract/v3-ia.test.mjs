@@ -109,7 +109,7 @@ test("home hero uses the ordered landing video assets", () => {
   assert.match(v3Site, /data-video-state/);
   assert.match(
     heroSourcesBlock,
-    /\/v3\/hero-landing-intro\.mp4[\s\S]*\/v3\/hero-landing\.mp4/,
+    /\/v3\/hero-landing-intro\.mp4[\s\S]*\/v3\/hero-landing-reverse\.mp4/,
   );
   assert.doesNotMatch(heroSourcesBlock, /\/v3\/hero-landing-process\.mp4/);
   assert.doesNotMatch(heroSourcesBlock, /\/v3\/hero-landing-automation\.mp4/);
@@ -123,7 +123,7 @@ test("home hero uses the ordered landing video assets", () => {
   assert.doesNotMatch(v3Site, /Modular Automation/);
   assert.match(v3Site, /data-video-group/);
   assert.match(v3Site, /v3-hero-group-wipe/);
-  assert.match(v3Site, /const heroVideoDurations = \[13\.167, 10\.042\];/);
+  assert.match(v3Site, /const heroVideoDurations = \[13\.167, 12\.243\];/);
   assert.match(v3Site, /layer\.sourceIndex === 0 && !videoReady/);
   assert.match(v3Site, /padStart\(2, "0"\)/);
   assert.match(v3Home, /\n\s+video\r?\n/);

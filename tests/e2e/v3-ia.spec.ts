@@ -277,7 +277,7 @@ async function triggerHeroVideoLeadAdvance(page: import("@playwright/test").Page
     }
 
     media.pause();
-    media.currentTime = Math.max(0, media.duration - 1.2);
+    media.currentTime = Math.max(0, media.duration - 0.3);
     const stateBeforeTimeUpdate = {
       currentTime: media.currentTime,
       duration: media.duration,
@@ -390,7 +390,7 @@ test("home hero starts video transition before the active clip ends", async ({ p
   const leadAdvanceState = await triggerHeroVideoLeadAdvance(page);
   expect(leadAdvanceState.ended).toBe(false);
   expect(leadAdvanceState.remaining).toBeGreaterThan(0);
-  expect(leadAdvanceState.remaining).toBeLessThanOrEqual(1.6);
+  expect(leadAdvanceState.remaining).toBeLessThanOrEqual(0.5);
 
   await expect(page.locator(".v3-hero")).toHaveAttribute("data-video-index", "1");
   await expect(page.locator(".v3-hero")).toHaveAttribute("data-video-group", "1");
@@ -437,7 +437,7 @@ test("desktop Product navigation exposes AI Core and routes correctly", async ({
   await expect(page.locator(".v3-hero-copy.is-retiring")).toHaveCount(1);
   expect((await getHeroCopyMotion(page)).transform).not.toBe("none");
   await expect(page.locator(".v3-hero-video-freeze.is-retiring")).toHaveAttribute("src", /^data:image\/jpeg/);
-  await expect(activeHeroVideo).toHaveAttribute("src", /hero-landing\.mp4$/);
+  await expect(activeHeroVideo).toHaveAttribute("src", /hero-landing-reverse\.mp4$/);
   await expect(activeHeroVideo).not.toHaveAttribute("poster", /hero-video-poster/);
   await expect(page.getByRole("heading", { name: /반복 업무를 자동으로 처리하는 AI 시스템/ })).toBeVisible();
   await expectHomeHeroCopySingleLine(page);
@@ -486,7 +486,7 @@ test("desktop Product navigation exposes AI Core and routes correctly", async ({
   await expect(page.locator(".v3-header")).toHaveClass(/is-scrolled/);
   await page.evaluate(() => window.scrollTo(0, 0));
   await expect(page.locator(".v3-header")).toHaveClass(/is-transparent/);
-  await expect(activeHeroVideo).toHaveAttribute("src", /hero-landing\.mp4$/);
+  await expect(activeHeroVideo).toHaveAttribute("src", /hero-landing-reverse\.mp4$/);
   await expect(activeHeroVideo).not.toHaveAttribute("poster", /hero-video-poster/);
   await activeHeroVideo.dispatchEvent("ended");
   await expect(page.locator(".v3-hero")).toHaveAttribute("data-video-index", "0");
