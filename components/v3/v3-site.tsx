@@ -1076,15 +1076,48 @@ export function V3ProductShowcase() {
       visualFirst: true,
     },
   ];
+  const [revealedProductRows, setRevealedProductRows] = useState<number[]>([]);
+  const productRowRefs = useRef<Array<HTMLElement | null>>([]);
 
-  const renderVisual = (item: (typeof productShowcases)[number]) => (
-    <Link className="v3-product-visual" href={item.href} aria-label={item.ariaLabel}>
+  useEffect(() => {
+    const rows = productRowRefs.current.filter(Boolean) as HTMLElement[];
+    if (rows.length === 0) return;
+
+    const revealRow = (index: number) => {
+      setRevealedProductRows((currentRows) =>
+        currentRows.includes(index) ? currentRows : [...currentRows, index],
+      );
+    };
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) {
+      rows.forEach((_, index) => revealRow(index));
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const rowIndex = Number((entry.target as HTMLElement).dataset.productIndex);
+          revealRow(rowIndex);
+          observer.unobserve(entry.target);
+        });
+      },
+      { rootMargin: "0px 0px -12% 0px", threshold: 0.28 },
+    );
+
+    rows.forEach((row) => observer.observe(row));
+    return () => observer.disconnect();
+  }, []);
+
+  const renderVisual = (item: (typeof productShowcases)[number], side: "left" | "right") => (
+    <Link className={`v3-product-visual v3-product-reveal is-${side}`} href={item.href} aria-label={item.ariaLabel}>
       <img className="v3-product-ui" src="/v3/ai-core-erp-ui.png" alt="" loading="lazy" />
     </Link>
   );
 
-  const renderCopy = (item: (typeof productShowcases)[number]) => (
-    <div className="v3-product-showcase-copy">
+  const renderCopy = (item: (typeof productShowcases)[number], side: "left" | "right") => (
+    <div className={`v3-product-showcase-copy v3-product-reveal is-${side}`}>
       <h3>{item.title}</h3>
       <p className="v3-product-showcase-lead">{item.lead}</p>
       <p>{item.description}</p>
@@ -1097,14 +1130,28 @@ export function V3ProductShowcase() {
         <h2 className="v3-products-title">Products</h2>
       </div>
       <div className="v3-product-showcase-list">
-        {productShowcases.map((item) => (
-          <article className={`v3-product-showcase ${item.visualFirst ? "is-visual-first" : ""}`} key={item.title}>
+        {productShowcases.map((item, index) => {
+          const copySide = item.visualFirst ? "right" : "left";
+          const visualSide = item.visualFirst ? "left" : "right";
+
+          return (
+          <article
+            className={`v3-product-showcase ${item.visualFirst ? "is-visual-first" : ""} ${
+              revealedProductRows.includes(index) ? "is-revealed" : ""
+            }`}
+            data-product-index={index}
+            key={item.title}
+            ref={(element) => {
+              productRowRefs.current[index] = element;
+            }}
+          >
             <div className="v3-product-showcase-inner">
-              {item.visualFirst ? renderVisual(item) : renderCopy(item)}
-              {item.visualFirst ? renderCopy(item) : renderVisual(item)}
+              {item.visualFirst ? renderVisual(item, visualSide) : renderCopy(item, copySide)}
+              {item.visualFirst ? renderCopy(item, copySide) : renderVisual(item, visualSide)}
             </div>
           </article>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
