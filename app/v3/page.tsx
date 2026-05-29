@@ -34,8 +34,10 @@ export default function V3HomePage() {
         <V3IndustryImageSection />
 
         <V3CtaBand
-          title="반복 업무 하나를 골라 5일 안에 자동화 가능성을 확인하세요."
-          description="업무 화면, 문서 샘플, 처리 기준을 공유해주시면 AI-Core로 시현할 수 있는 범위와 첫 도입 흐름을 정리해드립니다."
+          title="기업의 문제, 자동화로 해결하세요."
+          description="AI-core는 5일 안에 기업 맞춤형 솔루션을 제공합니다."
+          label="5일 도입하기"
+          variant="final"
         />
       </main>
     </V3Shell>

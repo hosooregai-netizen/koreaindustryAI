@@ -1056,19 +1056,56 @@ export function V3AiCoreShowcase() {
 }
 
 export function V3ProductShowcase() {
+  const productShowcases = [
+    {
+      title: "AI-CORE",
+      href: "/v3/products/ai-core",
+      ariaLabel: "AI-Core 페이지로 이동",
+      lead: "현장의 데이터를 기업 맞춤으로 전환하는 AI 솔루션",
+      description:
+        "AI-Core는 산업에서 사용되는 데이터를 기업 맞춤형 ERP로 제공할 수 있는 core로 다양한 시스템과 결합해 기업의 생산성을 향상하는 AI ERP 입니다.",
+      visualFirst: false,
+    },
+    {
+      title: "ERP Tools",
+      href: "/v3/mvp",
+      ariaLabel: "ERP Tools 페이지로 이동",
+      lead: "현장의 데이터를 기업 맞춤으로 전환하는 AI 솔루션",
+      description:
+        "AI-Core는 산업에서 사용되는 데이터를 기업 맞춤형 ERP로 제공할 수 있는 core로 다양한 시스템과 결합해 기업의 생산성을 향상하는 AI ERP 입니다.",
+      visualFirst: true,
+    },
+  ];
+
+  const renderVisual = (item: (typeof productShowcases)[number]) => (
+    <Link className="v3-product-visual" href={item.href} aria-label={item.ariaLabel}>
+      <img className="v3-product-ui" src="/v3/ai-core-erp-ui.png" alt="" loading="lazy" />
+    </Link>
+  );
+
+  const renderCopy = (item: (typeof productShowcases)[number]) => (
+    <div className="v3-product-showcase-copy">
+      <h3>{item.title}</h3>
+      <p className="v3-product-showcase-lead">{item.lead}</p>
+      <p>{item.description}</p>
+    </div>
+  );
+
   return (
-    <div className="v3-product-showcase">
-      <div className="v3-product-showcase-copy">
-        <h2>AI-CORE</h2>
-        <p className="v3-product-showcase-lead">현장의 데이터를 기업 맞춤으로 전환하는 AI 솔루션</p>
-        <p>
-          AI-Core는 산업에서 사용되는 데이터를 기업 맞춤형 ERP로 제공할 수 있는 core로 다양한 시스템과
-          결합해 기업의 생산성을 향상하는 AI ERP 입니다.
-        </p>
+    <div className="v3-products-showcase">
+      <div className="v3-products-header">
+        <h2 className="v3-products-title">Products</h2>
       </div>
-      <Link className="v3-product-visual" href="/v3/products/ai-core" aria-label="AI-Core 페이지로 이동">
-        <img className="v3-product-ui" src="/v3/ai-core-erp-ui.png" alt="" loading="lazy" />
-      </Link>
+      <div className="v3-product-showcase-list">
+        {productShowcases.map((item) => (
+          <article className={`v3-product-showcase ${item.visualFirst ? "is-visual-first" : ""}`} key={item.title}>
+            <div className="v3-product-showcase-inner">
+              {item.visualFirst ? renderVisual(item) : renderCopy(item)}
+              {item.visualFirst ? renderCopy(item) : renderVisual(item)}
+            </div>
+          </article>
+        ))}
+      </div>
     </div>
   );
 }
@@ -1144,12 +1181,75 @@ export function V3CtaBand({
   description,
   href = "/v3/contact",
   label = "5일 도입 문의하기",
+  variant = "default",
 }: {
   title: string;
   description: string;
   href?: string;
   label?: string;
+  variant?: "default" | "final";
 }) {
+  const [isTyping, setIsTyping] = useState(false);
+  const ctaRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    if (variant !== "final") return;
+
+    const section = ctaRef.current;
+    if (!section) return;
+
+    if (!("IntersectionObserver" in window)) {
+      setIsTyping(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) return;
+        setIsTyping(true);
+        observer.disconnect();
+      },
+      { rootMargin: "0px 0px -8% 0px", threshold: 0.35 },
+    );
+
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, [variant]);
+
+  const renderTypingText = (text: string, delay: number, className?: string) => (
+    <span
+      className={`v3-typewriter-text${className ? ` ${className}` : ""}`}
+      style={
+        {
+          "--v3-type-delay": `${delay}ms`,
+          "--v3-type-steps": Math.max([...text].length, 1),
+        } as CSSProperties
+      }
+    >
+      {text}
+    </span>
+  );
+
+  if (variant === "final") {
+    return (
+      <section
+        ref={ctaRef}
+        className={`v3-cta-band v3-final-cta ${isTyping ? "is-typing" : ""}`}
+        aria-labelledby="v3-final-cta-title"
+      >
+        <div className="v3-final-cta-copy">
+          <h2 id="v3-final-cta-title">{renderTypingText(title, 120)}</h2>
+          <p>{renderTypingText(description, 1420)}</p>
+          <Link className="v3-button v3-button-primary" href={href}>
+            {renderTypingText(label, 2680, "v3-final-cta-button-label")}
+            <ArrowRight size={18} />
+          </Link>
+        </div>
+        <div className="v3-final-cta-empty" aria-hidden="true" />
+      </section>
+    );
+  }
+
   return (
     <section className="v3-cta-band">
       <div>
