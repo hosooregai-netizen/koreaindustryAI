@@ -8561,7 +8561,7 @@ html[data-v3-hero-group="1"] .v3-header.is-transparent.is-home-route .v3-brand-m
 }
 
 .v3-hero.is-home[data-video-group="1"] .v3-hero-overlay {
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0.52), rgba(255, 255, 255, 0.12));
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.08));
 }
 
 .v3-hero.is-home[data-video-group="1"] .v3-hero-copy,
