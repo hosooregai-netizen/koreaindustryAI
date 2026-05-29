@@ -92,7 +92,7 @@
 - 기준 폰트: `Noto Sans KR`, `Lato`
 - 기본 본문: 16px / line-height 1.6 / font-weight 400
 - 보조 설명: 14px / line-height 1.55 / font-weight 400
-- 탑바 업체명: 16px / line-height 1 / font-weight 700
+- 탑바 업체명: 18px / line-height 1 / font-weight 700
 - 탑바 메뉴: 16px / line-height 32px / font-weight 400
 - 탑바 CTA: 16px / line-height 1.6 / font-weight 400
 - 드롭다운 설명: 14px / line-height 1.55 / font-weight 400
@@ -100,6 +100,8 @@
 - 카드 제목: 22px / line-height 1.3 / font-weight 700
 - 카드 설명: 15px / line-height 1.6 / font-weight 400
 - 섹션 제목: 40px / line-height 1.4 / font-weight 500
+- 제품/산업 섹션 타이틀: 56px / line-height 1 / font-weight 600
+- 제품명 타이틀: 56px / line-height 1.05 / font-weight 600
 - 히어로 제목: 64px / line-height 1.3 / font-weight 700
 - 히어로 설명문: 20px / line-height 1.5 / font-weight 400
 - 모바일 히어로 제목: 42px / line-height 1.3 / font-weight 700
