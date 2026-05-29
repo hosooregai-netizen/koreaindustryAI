@@ -107,8 +107,20 @@ test("home hero uses the ordered landing video assets", () => {
 
   assert.match(v3Site, /\/v3\/industrial-ai-hero\.png/);
   assert.match(v3Site, /data-video-state/);
-  assert.match(heroSourcesBlock, /\/v3\/hero-landing-intro\.mp4[\s\S]*\/v3\/hero-landing\.mp4/);
+  assert.match(
+    heroSourcesBlock,
+    /\/v3\/hero-landing-intro\.mp4[\s\S]*\/v3\/hero-landing-process\.mp4[\s\S]*\/v3\/hero-landing-automation\.mp4[\s\S]*\/v3\/hero-landing\.mp4/,
+  );
   assert.match(v3Site, /loop=\{heroVideoSources\.length === 1\}/);
+  assert.match(v3Site, /is-active/);
+  assert.match(v3Site, /is-buffering/);
+  assert.match(v3Site, /is-retiring/);
+  assert.match(v3Site, /AI-Core Build Flow/);
+  assert.match(v3Site, /Modular Automation/);
+  assert.match(v3Site, /data-video-group/);
+  assert.match(v3Site, /v3-hero-group-wipe/);
+  assert.match(v3Site, /layer\.sourceIndex === 0 && !videoReady/);
+  assert.match(v3Site, /padStart\(2, "0"\)/);
   assert.match(v3Home, /\n\s+video\r?\n/);
 });
 

@@ -22,8 +22,8 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import type { CSSProperties, ReactNode } from "react";
-import { useEffect, useState } from "react";
+import type { CSSProperties, ReactNode, SyntheticEvent } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type NavChild = {
   label: string;
@@ -42,7 +42,46 @@ type NavGroup = {
 
 type HeroVisualKind = "home" | "products" | "company" | "contact" | "community";
 
-const heroVideoSources = ["/v3/hero-landing-intro.mp4", "/v3/hero-landing.mp4"];
+const heroVideoSources = [
+  "/v3/hero-landing-intro.mp4",
+  "/v3/hero-landing-process.mp4",
+  "/v3/hero-landing-automation.mp4",
+  "/v3/hero-landing.mp4",
+];
+
+type HeroVideoLayer = {
+  sourceIndex: number;
+  src: string;
+  version: number;
+};
+
+type HeroCopy = {
+  eyebrow: string;
+  title: string;
+  description: string;
+};
+
+const heroVideoCopyGroups: HeroCopy[] = [
+  {
+    eyebrow: "AI-Core Build Flow",
+    title: "업무 흐름을 읽고, 5일 안에 시현합니다.",
+    description:
+      "현장 업무와 데이터를 먼저 정리한 뒤 화면, 승인, 리포트 모듈을 조립해 자동화 가능성을 빠르게 보여드립니다.",
+  },
+  {
+    eyebrow: "Modular Automation",
+    title: "작은 자동화가 운영 시스템으로 확장됩니다.",
+    description:
+      "반복 업무 하나에서 시작해 ERP형 데이터 구조와 AI 처리 흐름까지, 필요한 만큼 단계적으로 연결합니다.",
+  },
+];
+
+const createHeroVideoLayers = (): [HeroVideoLayer, HeroVideoLayer] => [
+  { sourceIndex: 0, src: heroVideoSources[0] ?? "", version: 0 },
+  { sourceIndex: -1, src: "", version: 0 },
+];
+
+const getHeroVideoCopyGroup = (sourceIndex: number) => (sourceIndex >= 3 ? 1 : 0);
 
 const mobileDropdownStyle: CSSProperties = {
   position: "static",
@@ -413,63 +452,151 @@ export function V3Hero({
   video?: boolean;
 }) {
   const isHome = visual === "home";
-  const [activeVideoIndex, setActiveVideoIndex] = useState(0);
+  const [heroVideoLayers, setHeroVideoLayers] = useState<[HeroVideoLayer, HeroVideoLayer]>(createHeroVideoLayers);
+  const [activeVideoLayer, setActiveVideoLayer] = useState<0 | 1>(0);
+  const [bufferingVideoLayer, setBufferingVideoLayer] = useState<0 | 1 | null>(null);
+  const [retiringVideoLayer, setRetiringVideoLayer] = useState<0 | 1 | null>(null);
+  const [heroGroupTransition, setHeroGroupTransition] = useState(false);
   const [videoReady, setVideoReady] = useState(false);
   const [videoFailed, setVideoFailed] = useState(false);
-  const activeVideoSrc = video ? heroVideoSources[activeVideoIndex] : undefined;
+  const activeVideoIndex = heroVideoLayers[activeVideoLayer]?.sourceIndex ?? 0;
+  const activeHeroCopyGroup = video && isHome ? getHeroVideoCopyGroup(activeVideoIndex) : 0;
+  const activeHeroCopy = video && isHome ? heroVideoCopyGroups[activeHeroCopyGroup] : { eyebrow, title, description };
+  const previousHeroCopyGroup = useRef(activeHeroCopyGroup);
 
   useEffect(() => {
-    setActiveVideoIndex(0);
+    setHeroVideoLayers(createHeroVideoLayers());
+    setActiveVideoLayer(0);
+    setBufferingVideoLayer(null);
+    setRetiringVideoLayer(null);
+    setHeroGroupTransition(false);
     setVideoReady(false);
     setVideoFailed(false);
   }, [video, visual]);
 
-  const advanceHeroVideo = () => {
-    if (heroVideoSources.length < 2) return;
-    setVideoReady(false);
-    setActiveVideoIndex((index) => (index + 1) % heroVideoSources.length);
-  };
+  useEffect(() => {
+    if (retiringVideoLayer === null) return;
+    const timeout = window.setTimeout(() => setRetiringVideoLayer(null), 320);
+    return () => window.clearTimeout(timeout);
+  }, [retiringVideoLayer]);
 
-  const handleHeroVideoError = () => {
-    setVideoReady(false);
-    if (activeVideoIndex < heroVideoSources.length - 1) {
-      setActiveVideoIndex((index) => index + 1);
+  useEffect(() => {
+    if (!video || !isHome || !videoReady) {
+      previousHeroCopyGroup.current = activeHeroCopyGroup;
       return;
     }
-    setVideoFailed(true);
+
+    if (previousHeroCopyGroup.current === activeHeroCopyGroup) return;
+    previousHeroCopyGroup.current = activeHeroCopyGroup;
+
+    setHeroGroupTransition(true);
+    const timeout = window.setTimeout(() => setHeroGroupTransition(false), 760);
+    return () => window.clearTimeout(timeout);
+  }, [activeHeroCopyGroup, isHome, video, videoReady]);
+
+  const queueHeroVideo = (sourceIndex: number, layerIndex?: 0 | 1) => {
+    const targetLayer = layerIndex ?? (activeVideoLayer === 0 ? 1 : 0);
+    setBufferingVideoLayer(targetLayer);
+    setHeroVideoLayers((layers) => {
+      const nextLayers = [...layers] as [HeroVideoLayer, HeroVideoLayer];
+      const target = nextLayers[targetLayer];
+      nextLayers[targetLayer] = {
+        sourceIndex,
+        src: heroVideoSources[sourceIndex] ?? "",
+        version: target.version + 1,
+      };
+      return nextLayers;
+    });
+  };
+
+  const advanceHeroVideo = () => {
+    if (heroVideoSources.length < 2) return;
+    if (bufferingVideoLayer !== null) return;
+    const currentIndex = heroVideoLayers[activeVideoLayer]?.sourceIndex ?? 0;
+    queueHeroVideo((currentIndex + 1) % heroVideoSources.length);
+  };
+
+  const activateBufferedHeroVideo = (layerIndex: 0 | 1, event: SyntheticEvent<HTMLVideoElement>) => {
+    if (layerIndex !== bufferingVideoLayer) {
+      if (layerIndex === activeVideoLayer) setVideoReady(true);
+      return;
+    }
+
+    const videoElement = event.currentTarget;
+    const previousLayer = activeVideoLayer;
+    try {
+      videoElement.currentTime = 0;
+    } catch {
+      // Some browsers can reject currentTime changes before metadata is ready.
+    }
+    void videoElement.play().catch(() => undefined);
+    setActiveVideoLayer(layerIndex);
+    if (layerIndex !== previousLayer) setRetiringVideoLayer(previousLayer);
+    setBufferingVideoLayer(null);
+    setVideoReady(true);
+  };
+
+  const handleHeroVideoError = (layerIndex: 0 | 1, sourceIndex: number) => {
+    if (sourceIndex < heroVideoSources.length - 1) {
+      if (layerIndex === activeVideoLayer) setVideoReady(false);
+      queueHeroVideo(sourceIndex + 1, layerIndex);
+      return;
+    }
+
+    if (layerIndex === activeVideoLayer) {
+      setVideoReady(false);
+      setVideoFailed(true);
+      return;
+    }
+
+    setBufferingVideoLayer(null);
   };
 
   return (
     <section
       className={`v3-hero v3-hero-${visual} ${isHome ? "is-home" : "is-subpage"} ${
         videoReady ? "has-video" : "has-image-fallback"
-      }`}
+      } ${heroGroupTransition ? "is-group-transitioning" : ""}`}
       data-video-state={videoFailed ? "failed" : videoReady ? "loaded" : "image-fallback"}
       data-video-index={video ? String(activeVideoIndex) : undefined}
+      data-video-group={video && isHome ? String(activeHeroCopyGroup) : undefined}
     >
-      {video && activeVideoSrc && !videoFailed ? (
-        <video
-          key={activeVideoSrc}
-          className="v3-hero-video"
-          aria-hidden="true"
-          autoPlay
-          loop={heroVideoSources.length === 1}
-          muted
-          playsInline
-          preload="auto"
-          poster="/v3/hero-video-poster.jpg"
-          src={activeVideoSrc}
-          onCanPlay={() => setVideoReady(true)}
-          onEnded={advanceHeroVideo}
-          onError={handleHeroVideoError}
-        />
-      ) : null}
+      {video && !videoFailed
+        ? heroVideoLayers.map((layer, index) => {
+            const layerIndex = index as 0 | 1;
+            const isActive = layerIndex === activeVideoLayer;
+            const isBuffering = layerIndex === bufferingVideoLayer;
+            const isRetiring = layerIndex === retiringVideoLayer;
+            if (!layer.src || (!isActive && !isBuffering && !isRetiring)) return null;
+
+            return (
+              <video
+                key={`${layerIndex}-${layer.version}-${layer.src}`}
+                className={`v3-hero-video ${
+                  isActive ? "is-active" : isBuffering ? "is-buffering" : "is-retiring"
+                }`}
+                aria-hidden="true"
+                autoPlay={isActive}
+                loop={heroVideoSources.length === 1}
+                muted
+                playsInline
+                preload="auto"
+                poster={layer.sourceIndex === 0 && !videoReady ? "/v3/hero-video-poster.jpg" : undefined}
+                src={layer.src}
+                onCanPlay={(event) => activateBufferedHeroVideo(layerIndex, event)}
+                onEnded={isActive ? advanceHeroVideo : undefined}
+                onError={() => handleHeroVideoError(layerIndex, layer.sourceIndex)}
+              />
+            );
+          })
+        : null}
+      {video && isHome ? <div className="v3-hero-group-wipe" aria-hidden="true" /> : null}
       <div className="v3-hero-overlay" aria-hidden="true" />
       <div className="v3-hero-inner">
-        <div className="v3-hero-copy">
-          <p className="v3-eyebrow">{eyebrow}</p>
-          <h1>{title}</h1>
-          <p>{description}</p>
+        <div className="v3-hero-copy" key={video && isHome ? `hero-copy-${activeHeroCopyGroup}` : "hero-copy-static"}>
+          <p className="v3-eyebrow">{activeHeroCopy.eyebrow}</p>
+          <h1>{activeHeroCopy.title}</h1>
+          <p>{activeHeroCopy.description}</p>
           <div className="v3-hero-actions">
             <Link className="v3-button v3-button-primary" href={primary.href}>
               {primary.label}
@@ -485,7 +612,7 @@ export function V3Hero({
             <div className="v3-hero-progress" aria-label="대표 메시지 진행 상태">
               <span>01</span>
               <strong />
-              <span>02</span>
+              <span>{String(heroVideoSources.length).padStart(2, "0")}</span>
             </div>
           ) : null}
         </div>
