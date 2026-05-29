@@ -8790,6 +8790,7 @@ html[data-v3-hero-group="1"] .v3-header.is-transparent.is-home-route .v3-brand-m
 
 .v3-products-showcase {
   width: 100%;
+  max-width: none;
   margin: 0 auto;
 }
 
