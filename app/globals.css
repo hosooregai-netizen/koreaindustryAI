@@ -8635,6 +8635,27 @@ html[data-v3-hero-group="1"] .v3-header.is-transparent.is-home-route .v3-brand-m
   box-shadow: 0 10px 28px rgba(16, 24, 39, 0.16);
 }
 
+@media (max-width: 760px) {
+  .v3-header.is-open.is-transparent.is-home-route .v3-nav.is-open,
+  .v3-header.is-open.is-transparent.is-home-route .v3-nav.is-open .v3-nav-group > a,
+  .v3-header.is-open.is-transparent.is-home-route .v3-nav.is-open .v3-nav-group > button,
+  .v3-header.is-open.is-transparent.is-home-route .v3-nav.is-open .v3-dropdown a,
+  .v3-header.is-open.is-transparent.is-home-route .v3-nav.is-open .v3-dropdown button,
+  .v3-header.is-open.is-transparent.is-home-route .v3-nav.is-open .v3-nav-cta {
+    color: var(--v3-black) !important;
+  }
+
+  .v3-header.is-open.is-transparent.is-home-route .v3-nav.is-open .v3-nav-cta {
+    border-color: var(--v3-black) !important;
+    background: transparent !important;
+  }
+
+  .v3-header.is-open.is-transparent.is-home-route .v3-nav.is-open .v3-nav-cta:hover {
+    color: #ffffff !important;
+    background: var(--v3-black) !important;
+  }
+}
+
 .v3-hero.is-home[data-video-group="1"] .v3-hero-copy,
 .v3-hero.is-home[data-video-group="1"] .v3-hero-copy h1,
 .v3-hero.is-home[data-video-group="1"] .v3-hero-copy > p:not(.v3-eyebrow),

@@ -50,6 +50,7 @@ const heroVideoSources = [
 const heroGroupChangeEventName = "v3HeroGroupChange";
 
 const heroVideoDurations = [13.167, 10.042];
+const heroVideoAdvanceLeadSeconds = 1.6;
 
 type HeroVideoLayer = {
   sourceIndex: number;
@@ -523,6 +524,7 @@ export function V3Hero({
   const heroVideoRefs = useRef<[HTMLVideoElement | null, HTMLVideoElement | null]>([null, null]);
   const heroProgressRef = useRef<HTMLElement | null>(null);
   const retiringFrameVersion = useRef(0);
+  const advancingHeroVideoRef = useRef(false);
 
   const updateHeroGroupProgress = (sourceIndex: number, currentTime: number) => {
     heroProgressRef.current?.style.setProperty(
@@ -541,7 +543,12 @@ export function V3Hero({
     setHeroGroupTransition(false);
     setVideoReady(false);
     setVideoFailed(false);
+    advancingHeroVideoRef.current = false;
   }, [video, visual]);
+
+  useEffect(() => {
+    advancingHeroVideoRef.current = false;
+  }, [activeVideoIndex, activeVideoLayer]);
 
   useEffect(() => {
     if (retiringVideoLayer === null) return;
@@ -596,13 +603,14 @@ export function V3Hero({
       const activeVideoElement = heroVideoRefs.current[activeVideoLayer];
       if (activeVideoElement) {
         updateHeroGroupProgress(activeVideoIndex, activeVideoElement.currentTime);
+        maybeAdvanceHeroVideoBeforeEnd(activeVideoElement);
       }
       animationFrame = window.requestAnimationFrame(tick);
     };
 
     animationFrame = window.requestAnimationFrame(tick);
     return () => window.cancelAnimationFrame(animationFrame);
-  }, [activeVideoIndex, activeVideoLayer, isHome, video, videoFailed]);
+  }, [activeVideoIndex, activeVideoLayer, bufferingVideoLayer, isHome, video, videoFailed]);
 
   const queueHeroVideo = (sourceIndex: number, layerIndex?: 0 | 1) => {
     const targetLayer = layerIndex ?? (activeVideoLayer === 0 ? 1 : 0);
@@ -639,19 +647,39 @@ export function V3Hero({
     }
   };
 
-  const advanceHeroVideo = (event?: SyntheticEvent<HTMLVideoElement>) => {
+  const freezeRetiringHeroVideoFrame = (videoElement: HTMLVideoElement) => {
+    const retiringFrameSource = captureHeroVideoFrame(videoElement);
+    if (!retiringFrameSource) return;
+
+    retiringFrameVersion.current += 1;
+    setRetiringHeroFrame({
+      src: retiringFrameSource,
+      version: retiringFrameVersion.current,
+    });
+  };
+
+  const advanceHeroVideo = (videoElement?: HTMLVideoElement, options?: { freezeFrame?: boolean }) => {
     if (heroVideoSources.length < 2) return;
+    if (options?.freezeFrame && videoElement) freezeRetiringHeroVideoFrame(videoElement);
     if (bufferingVideoLayer !== null) return;
+    if (advancingHeroVideoRef.current) return;
+    advancingHeroVideoRef.current = true;
     const currentIndex = heroVideoLayers[activeVideoLayer]?.sourceIndex ?? 0;
-    const retiringFrameSource = event?.currentTarget ? captureHeroVideoFrame(event.currentTarget) : null;
-    if (retiringFrameSource) {
-      retiringFrameVersion.current += 1;
-      setRetiringHeroFrame({
-        src: retiringFrameSource,
-        version: retiringFrameVersion.current,
-      });
-    }
     queueHeroVideo((currentIndex + 1) % heroVideoSources.length);
+  };
+
+  const maybeAdvanceHeroVideoBeforeEnd = (videoElement: HTMLVideoElement) => {
+    if (!video || !isHome || heroVideoSources.length < 2) return;
+    if (bufferingVideoLayer !== null || advancingHeroVideoRef.current || videoElement.ended) return;
+
+    const fallbackDuration = heroVideoDurations[activeVideoIndex] ?? 0;
+    const duration = Number.isFinite(videoElement.duration) ? videoElement.duration : fallbackDuration;
+    if (duration <= 0) return;
+
+    const remaining = duration - videoElement.currentTime;
+    if (remaining > 0 && remaining <= heroVideoAdvanceLeadSeconds) {
+      advanceHeroVideo(videoElement);
+    }
   };
 
   const playHeroVideo = (videoElement: HTMLVideoElement) => {
@@ -667,6 +695,7 @@ export function V3Hero({
         const videoElement = event.currentTarget;
         playHeroVideo(videoElement);
         updateHeroGroupProgress(heroVideoLayers[layerIndex]?.sourceIndex ?? activeVideoIndex, videoElement.currentTime);
+        maybeAdvanceHeroVideoBeforeEnd(videoElement);
         setVideoReady(true);
       }
       return;
@@ -685,6 +714,10 @@ export function V3Hero({
     if (layerIndex !== previousLayer) setRetiringVideoLayer(previousLayer);
     setBufferingVideoLayer(null);
     setVideoReady(true);
+  };
+
+  const handleHeroVideoEnded = (event: SyntheticEvent<HTMLVideoElement>) => {
+    advanceHeroVideo(event.currentTarget, { freezeFrame: true });
   };
 
   const handleHeroVideoError = (layerIndex: 0 | 1, sourceIndex: number) => {
@@ -801,7 +834,7 @@ export function V3Hero({
                 onCanPlay={(event) => handleHeroVideoPlayable(layerIndex, event)}
                 onPlaying={(event) => handleHeroVideoPlayable(layerIndex, event)}
                 onTimeUpdate={(event) => handleHeroVideoPlayable(layerIndex, event)}
-                onEnded={isActive ? advanceHeroVideo : undefined}
+                onEnded={isActive ? handleHeroVideoEnded : undefined}
                 onError={() => handleHeroVideoError(layerIndex, layer.sourceIndex)}
               />
             );

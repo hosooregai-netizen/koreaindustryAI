@@ -127,6 +127,28 @@ async function getTransparentTopbarColors(page: import("@playwright/test").Page)
   });
 }
 
+async function getMobileMenuColors(page: import("@playwright/test").Page) {
+  return page.evaluate(() => {
+    const nav = document.querySelector<HTMLElement>(".v3-nav.is-open");
+    const navControls = [...document.querySelectorAll<HTMLElement>(".v3-nav.is-open .v3-nav-group > a, .v3-nav.is-open .v3-nav-group > button")];
+    const dropdownItems = [...document.querySelectorAll<HTMLElement>(".v3-nav.is-open .v3-dropdown a")];
+    const cta = document.querySelector<HTMLElement>(".v3-nav.is-open .v3-nav-cta");
+
+    if (!nav || navControls.length === 0 || dropdownItems.length === 0 || !cta) {
+      throw new Error("Could not find open v3 mobile menu color elements");
+    }
+
+    return {
+      navBackground: getComputedStyle(nav).backgroundColor,
+      navControls: navControls.map((element) => getComputedStyle(element).color),
+      dropdownItems: dropdownItems.map((element) => getComputedStyle(element).color),
+      cta: getComputedStyle(cta).color,
+      ctaBorder: getComputedStyle(cta).borderColor,
+      ctaBackground: getComputedStyle(cta).backgroundColor,
+    };
+  });
+}
+
 async function getHeroCopyMotion(page: import("@playwright/test").Page) {
   return page.evaluate(() => {
     const copy = document.querySelector<HTMLElement>(".v3-hero-copy.is-active, .v3-hero-copy");
@@ -246,6 +268,20 @@ async function getActiveHeroVideoMotion(page: import("@playwright/test").Page) {
   });
 }
 
+async function triggerHeroVideoLeadAdvance(page: import("@playwright/test").Page) {
+  const activeHeroVideo = page.locator(".v3-hero-video.is-active");
+  await activeHeroVideo.evaluate((video) => {
+    const media = video as HTMLVideoElement;
+    if (!Number.isFinite(media.duration)) {
+      throw new Error("Active v3 hero video duration is not ready");
+    }
+
+    media.pause();
+    media.currentTime = Math.max(0, media.duration - 0.8);
+    media.dispatchEvent(new Event("timeupdate", { bubbles: true }));
+  });
+}
+
 function expectHeroVideoBoxToStayStable(
   actual: Awaited<ReturnType<typeof getActiveHeroVideoMotion>>,
   expected: Awaited<ReturnType<typeof getActiveHeroVideoMotion>>,
@@ -332,6 +368,43 @@ test("topbar becomes white on scroll without resizing", async ({ page }) => {
     await page.goto("/v3");
     await expectTopbarChangesBackgroundWithoutResizing(page);
   }
+});
+
+test("home hero starts video transition before the active clip ends", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/v3");
+
+  await page.evaluate(() => {
+    const pageWindow = window as Window & { __v3HeroEndedEvents?: number };
+    pageWindow.__v3HeroEndedEvents = 0;
+    document
+      .querySelector(".v3-hero")
+      ?.addEventListener(
+        "ended",
+        () => {
+          pageWindow.__v3HeroEndedEvents = (pageWindow.__v3HeroEndedEvents ?? 0) + 1;
+        },
+        true,
+      );
+  });
+
+  const activeHeroVideo = page.locator(".v3-hero-video.is-active");
+  await expect(page.locator(".v3-hero")).toHaveAttribute("data-video-index", "0");
+  await expect
+    .poll(() => activeHeroVideo.evaluate((video) => Number.isFinite((video as HTMLVideoElement).duration)))
+    .toBe(true);
+
+  await triggerHeroVideoLeadAdvance(page);
+
+  await expect(page.locator(".v3-hero")).toHaveAttribute("data-video-index", "1");
+  await expect(page.locator(".v3-hero")).toHaveAttribute("data-video-group", "1");
+  await expect(page.locator(".v3-hero-overlay.is-retiring")).toHaveAttribute("data-overlay-group", "0");
+  await expect(page.locator(".v3-hero-video-freeze.is-retiring")).toHaveCount(0);
+  const endedEvents = await page.evaluate(() => {
+    const pageWindow = window as Window & { __v3HeroEndedEvents?: number };
+    return pageWindow.__v3HeroEndedEvents ?? 0;
+  });
+  expect(endedEvents).toBe(0);
 });
 
 test("desktop Product navigation exposes AI Core and routes correctly", async ({ page }) => {
@@ -498,6 +571,14 @@ test("mobile menu exposes AI Core and routes without horizontal overflow", async
 
   await page.getByRole("button", { name: "메뉴 열기" }).click();
   const mainNav = page.getByLabel("주요 메뉴");
+  await expect(mainNav).toBeVisible();
+  const mobileMenuColors = await getMobileMenuColors(page);
+  expect(mobileMenuColors.navBackground).toBe("rgb(255, 255, 255)");
+  expect(mobileMenuColors.navControls.every((color) => color === "rgb(5, 5, 5)")).toBe(true);
+  expect(mobileMenuColors.dropdownItems.every((color) => color === "rgb(5, 5, 5)")).toBe(true);
+  expect(mobileMenuColors.cta).toBe("rgb(5, 5, 5)");
+  expect(mobileMenuColors.ctaBorder).toBe("rgb(5, 5, 5)");
+  expect(mobileMenuColors.ctaBackground).toBe("rgba(0, 0, 0, 0)");
   const aiCoreMenuItem = mainNav.getByRole("menuitem", { name: /^AI Core\b/ });
   await expect(aiCoreMenuItem).toBeVisible();
   await aiCoreMenuItem.click();
