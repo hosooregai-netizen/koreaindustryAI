@@ -8266,7 +8266,7 @@ textarea {
   grid-template-columns: none;
   gap: 0;
   overflow: hidden;
-  padding: 54px 0;
+  padding: 81.3px 0;
   background: #ffffff;
   box-sizing: border-box;
 }
@@ -8342,7 +8342,7 @@ textarea {
     grid-template-columns: 1fr;
     gap: 18px;
     width: min(100%, calc(100% - 40px));
-    padding: 38px 0;
+    padding: 58.1px 0;
   }
 
   .v3-trust-strip .v3-trust-track {
