@@ -243,10 +243,6 @@ export const clientLogos = [
     src: "/v3/logos/anc.svg",
   },
   {
-    name: "INSIDERS",
-    src: "/v3/logos/insiders.png",
-  },
-  {
     name: "마켓컬리",
     src: "/v3/logos/market-kurly.png",
   },
