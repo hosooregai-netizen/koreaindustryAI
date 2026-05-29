@@ -7594,7 +7594,7 @@ textarea {
   max-width: none;
   margin: 0;
   align-items: end;
-  padding: clamp(72px, 14vh, 180px) clamp(24px, 4vw, 80px) clamp(38px, 7vh, 84px);
+  padding: clamp(72px, 14vh, 180px) max(24px, calc((100% - 1600px) / 2)) clamp(38px, 7vh, 84px);
 }
 
 /* Compact shared v3 topbar to roughly two-thirds of the previous scale. */
