@@ -79,7 +79,7 @@ async function expectTopbarChangesBackgroundWithoutResizing(page: import("@playw
   const top = await getTopbarMetrics(page);
 
   await page.evaluate(() => window.scrollTo(0, 180));
-  await page.waitForTimeout(100);
+  await expect.poll(async () => (await getTopbarMetrics(page)).background).toBe("rgb(255, 255, 255)");
   const scrolled = await getTopbarMetrics(page);
 
   expect(top.className).toContain("is-transparent");
@@ -129,7 +129,7 @@ async function getTransparentTopbarColors(page: import("@playwright/test").Page)
 
 async function getHeroCopyMotion(page: import("@playwright/test").Page) {
   return page.evaluate(() => {
-    const copy = document.querySelector<HTMLElement>(".v3-hero-copy");
+    const copy = document.querySelector<HTMLElement>(".v3-hero-copy.is-active, .v3-hero-copy");
 
     if (!copy) {
       throw new Error("Could not find v3 hero copy");
@@ -147,9 +147,9 @@ async function getHeroCopyMotion(page: import("@playwright/test").Page) {
 async function getHeroCopyColors(page: import("@playwright/test").Page) {
   return page.evaluate(() => {
     const hero = document.querySelector<HTMLElement>(".v3-hero");
-    const copy = document.querySelector<HTMLElement>(".v3-hero-copy");
-    const heading = document.querySelector<HTMLElement>(".v3-hero-copy h1");
-    const description = document.querySelector<HTMLElement>(".v3-hero-copy > p:not(.v3-eyebrow)");
+    const copy = document.querySelector<HTMLElement>(".v3-hero-copy.is-active, .v3-hero-copy");
+    const heading = copy?.querySelector<HTMLElement>("h1");
+    const description = copy?.querySelector<HTMLElement>("p:not(.v3-eyebrow)");
     const primary = document.querySelector<HTMLElement>(".v3-hero .v3-button-primary");
     const progress = document.querySelector<HTMLElement>(".v3-hero-progress");
 
@@ -170,6 +170,10 @@ async function getHeroCopyColors(page: import("@playwright/test").Page) {
 }
 
 async function expectHomeHeroHeadingSingleLine(page: import("@playwright/test").Page) {
+  if (await page.locator(".v3-hero.is-group-transitioning").count()) {
+    await expect(page.locator(".v3-hero.is-group-transitioning")).toHaveCount(0);
+  }
+
   const metrics = await page.evaluate(() => {
     const heading = document.querySelector<HTMLElement>(".v3-hero.is-home h1");
 
@@ -285,6 +289,9 @@ test("home hero fills the initial viewport on desktop and mobile", async ({ page
     await expect(page.getByRole("heading", { name: /현장의 데이터로 만드는 AI 시스템/ })).toBeVisible();
     await expectHomeHeroHeadingSingleLine(page);
     await page.locator(".v3-hero-video.is-active").dispatchEvent("ended");
+    await expect(page.locator(".v3-hero-copy.is-retiring")).toHaveCount(1);
+    expect((await getHeroCopyMotion(page)).transform).not.toBe("none");
+    await expect(page.locator(".v3-hero-copy.is-retiring")).toHaveCount(0);
     await expect(page.getByRole("heading", { name: /반복 업무를 자동으로 처리하는 AI 시스템/ })).toBeVisible();
     await expectHomeHeroHeadingSingleLine(page);
   }
@@ -334,6 +341,8 @@ test("desktop Product navigation exposes AI Core and routes correctly", async ({
   await activeHeroVideo.dispatchEvent("ended");
   await expect(page.locator(".v3-hero")).toHaveAttribute("data-video-index", "1");
   await expect(page.locator(".v3-hero")).toHaveAttribute("data-video-group", "1");
+  await expect(page.locator(".v3-hero-copy.is-retiring")).toHaveCount(1);
+  expect((await getHeroCopyMotion(page)).transform).not.toBe("none");
   await expect(page.locator(".v3-hero-video-freeze.is-retiring")).toHaveAttribute("src", /^data:image\/jpeg/);
   await expect(activeHeroVideo).toHaveAttribute("src", /hero-landing\.mp4$/);
   await expect(activeHeroVideo).not.toHaveAttribute("poster", /hero-video-poster/);
@@ -348,6 +357,7 @@ test("desktop Product navigation exposes AI Core and routes correctly", async ({
     .toBeGreaterThan(0);
   const groupTwoHeroProgress = await getHeroProgressState(page);
   expect(groupTwoHeroProgress.labels).toEqual(["02", "02"]);
+  await expect(page.locator(".v3-hero-copy.is-retiring")).toHaveCount(0);
   const groupTwoHeroCopyMotion = await getHeroCopyMotion(page);
   expect(groupTwoHeroCopyMotion.transform).toBe("none");
   expect(Math.abs(groupTwoHeroCopyMotion.top - initialHeroCopyMotion.top)).toBeLessThanOrEqual(40);
@@ -386,11 +396,14 @@ test("desktop Product navigation exposes AI Core and routes correctly", async ({
   await activeHeroVideo.dispatchEvent("ended");
   await expect(page.locator(".v3-hero")).toHaveAttribute("data-video-index", "0");
   await expect(page.locator(".v3-hero")).toHaveAttribute("data-video-group", "0");
+  await expect(page.locator(".v3-hero-copy.is-retiring")).toHaveCount(1);
+  expect((await getHeroCopyMotion(page)).transform).not.toBe("none");
   await expect(page.getByRole("heading", { name: /현장의 데이터로 만드는 AI 시스템/ })).toBeVisible();
   await expectHomeHeroHeadingSingleLine(page);
   expect(await getHeroBackgroundImage(page)).not.toContain("hero-video-poster");
   const loopedHeroProgress = await getHeroProgressState(page);
   expect(loopedHeroProgress.labels).toEqual(["01", "02"]);
+  await expect(page.locator(".v3-hero-copy.is-retiring")).toHaveCount(0);
   const loopedHeroCopyMotion = await getHeroCopyMotion(page);
   expect(loopedHeroCopyMotion.transform).toBe("none");
   expect(Math.abs(loopedHeroCopyMotion.top - initialHeroCopyMotion.top)).toBeLessThanOrEqual(40);

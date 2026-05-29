@@ -510,13 +510,13 @@ export function V3Hero({
   const [bufferingVideoLayer, setBufferingVideoLayer] = useState<0 | 1 | null>(null);
   const [retiringVideoLayer, setRetiringVideoLayer] = useState<0 | 1 | null>(null);
   const [retiringHeroFrame, setRetiringHeroFrame] = useState<HeroRetiringFrame | null>(null);
+  const [retiringHeroCopyGroup, setRetiringHeroCopyGroup] = useState<number | null>(null);
   const [heroGroupTransition, setHeroGroupTransition] = useState(false);
   const [videoReady, setVideoReady] = useState(false);
   const [videoFailed, setVideoFailed] = useState(false);
   const activeVideoIndex = heroVideoLayers[activeVideoLayer]?.sourceIndex ?? 0;
   const activeHeroCopyGroup = video && isHome ? getHeroVideoCopyGroup(activeVideoIndex) : 0;
   const activeHeroCopy = video && isHome ? heroVideoCopyGroups[activeHeroCopyGroup] : { eyebrow, title, description };
-  const activeHeroCopyGroupLabel = String(activeHeroCopyGroup + 1).padStart(2, "0");
   const heroCopyGroupCountLabel = String(heroVideoCopyGroups.length).padStart(2, "0");
   const initialHeroProgress = `${Math.round(getHeroVideoGroupProgress(activeVideoIndex, 0) * 1000) / 10}%`;
   const previousHeroCopyGroup = useRef(activeHeroCopyGroup);
@@ -537,6 +537,7 @@ export function V3Hero({
     setBufferingVideoLayer(null);
     setRetiringVideoLayer(null);
     setRetiringHeroFrame(null);
+    setRetiringHeroCopyGroup(null);
     setHeroGroupTransition(false);
     setVideoReady(false);
     setVideoFailed(false);
@@ -554,17 +555,23 @@ export function V3Hero({
     return () => window.clearTimeout(timeout);
   }, [retiringHeroFrame, retiringVideoLayer]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!video || !isHome || !videoReady) {
       previousHeroCopyGroup.current = activeHeroCopyGroup;
+      setRetiringHeroCopyGroup(null);
       return;
     }
 
     if (previousHeroCopyGroup.current === activeHeroCopyGroup) return;
+    const retiringCopyGroup = previousHeroCopyGroup.current;
     previousHeroCopyGroup.current = activeHeroCopyGroup;
 
+    setRetiringHeroCopyGroup(retiringCopyGroup);
     setHeroGroupTransition(true);
-    const timeout = window.setTimeout(() => setHeroGroupTransition(false), 1400);
+    const timeout = window.setTimeout(() => {
+      setHeroGroupTransition(false);
+      setRetiringHeroCopyGroup(null);
+    }, 1400);
     return () => window.clearTimeout(timeout);
   }, [activeHeroCopyGroup, isHome, video, videoReady]);
 
@@ -696,6 +703,45 @@ export function V3Hero({
     setBufferingVideoLayer(null);
   };
 
+  const renderHeroCopy = (copy: HeroCopy, copyGroup: number, state: "active" | "retiring") => {
+    const isActiveCopy = state === "active";
+    const progressValue = isActiveCopy ? initialHeroProgress : "100%";
+
+    return (
+      <div
+        className={`v3-hero-copy is-${state}`}
+        data-copy-group={video && isHome ? String(copyGroup) : undefined}
+        key={video && isHome ? `hero-copy-${state}-${copyGroup}` : "hero-copy-static"}
+        aria-hidden={isActiveCopy ? undefined : "true"}
+      >
+        {copy.eyebrow ? <p className="v3-eyebrow">{copy.eyebrow}</p> : null}
+        <h1>{copy.title}</h1>
+        <p>{copy.description}</p>
+        <div className="v3-hero-actions">
+          <Link className="v3-button v3-button-primary" href={primary.href} tabIndex={isActiveCopy ? undefined : -1}>
+            {primary.label}
+            <ArrowRight size={18} />
+          </Link>
+          {secondary ? (
+            <Link className="v3-button v3-button-secondary" href={secondary.href} tabIndex={isActiveCopy ? undefined : -1}>
+              {secondary.label}
+            </Link>
+          ) : null}
+        </div>
+        {isHome && heroVideoSources.length > 1 ? (
+          <div className="v3-hero-progress" aria-label="대표 메시지 진행 상태">
+            <span>{String(copyGroup + 1).padStart(2, "0")}</span>
+            <strong
+              ref={isActiveCopy ? heroProgressRef : undefined}
+              style={{ "--v3-hero-progress": progressValue } as CSSProperties}
+            />
+            <span>{heroCopyGroupCountLabel}</span>
+          </div>
+        ) : null}
+      </div>
+    );
+  };
+
   return (
     <section
       className={`v3-hero v3-hero-${visual} ${isHome ? "is-home" : "is-subpage"} ${
@@ -756,31 +802,11 @@ export function V3Hero({
       {video && isHome ? <div className="v3-hero-group-wipe" aria-hidden="true" /> : null}
       <div className="v3-hero-overlay" aria-hidden="true" />
       <div className="v3-hero-inner">
-        <div className="v3-hero-copy" key={video && isHome ? `hero-copy-${activeHeroCopyGroup}` : "hero-copy-static"}>
-          {activeHeroCopy.eyebrow ? <p className="v3-eyebrow">{activeHeroCopy.eyebrow}</p> : null}
-          <h1>{activeHeroCopy.title}</h1>
-          <p>{activeHeroCopy.description}</p>
-          <div className="v3-hero-actions">
-            <Link className="v3-button v3-button-primary" href={primary.href}>
-              {primary.label}
-              <ArrowRight size={18} />
-            </Link>
-            {secondary ? (
-              <Link className="v3-button v3-button-secondary" href={secondary.href}>
-                {secondary.label}
-              </Link>
-            ) : null}
-          </div>
-          {isHome && heroVideoSources.length > 1 ? (
-            <div className="v3-hero-progress" aria-label="대표 메시지 진행 상태">
-              <span>{activeHeroCopyGroupLabel}</span>
-              <strong
-                ref={heroProgressRef}
-                style={{ "--v3-hero-progress": initialHeroProgress } as CSSProperties}
-              />
-              <span>{heroCopyGroupCountLabel}</span>
-            </div>
-          ) : null}
+        <div className="v3-hero-copy-stage">
+          {renderHeroCopy(activeHeroCopy, activeHeroCopyGroup, "active")}
+          {retiringHeroCopyGroup !== null && retiringHeroCopyGroup !== activeHeroCopyGroup
+            ? renderHeroCopy(heroVideoCopyGroups[retiringHeroCopyGroup] ?? activeHeroCopy, retiringHeroCopyGroup, "retiring")
+            : null}
         </div>
         {isHome ? null : <V3HeroVisual kind={visual} />}
       </div>
