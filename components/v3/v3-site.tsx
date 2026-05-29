@@ -49,7 +49,7 @@ const heroVideoSources = [
 
 const heroGroupChangeEventName = "v3HeroGroupChange";
 
-const heroVideoDurations = [13.167, 12];
+const heroVideoDurations = [13.167, 10.042];
 
 type HeroVideoLayer = {
   sourceIndex: number;
