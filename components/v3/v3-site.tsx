@@ -229,6 +229,33 @@ export const industryWordmarks = [
   },
 ];
 
+export const industryImageCards = [
+  {
+    name: "금융",
+    href: "/v3/industries/finance",
+    src: "/v3/industries/finance-card.png",
+    alt: "도시 전망의 금융 데이터 운영실",
+  },
+  {
+    name: "제조",
+    href: "/v3/industries/manufacturing",
+    src: "/v3/industries/manufacturing-card.png",
+    alt: "자동화 로봇이 배치된 제조 공정",
+  },
+  {
+    name: "물류",
+    href: "/v3/industries/logistics",
+    src: "/v3/industries/logistics-card.png",
+    alt: "컨베이어와 지게차가 움직이는 물류 창고",
+  },
+  {
+    name: "건설",
+    href: "/v3/industries/construction",
+    src: "/v3/industries/construction-card.png",
+    alt: "건설 현장을 검토하는 작업자",
+  },
+];
+
 export const clientLogos = [
   {
     name: "한국종합안전(주)",
@@ -952,6 +979,26 @@ export function V3IndustryWordmarks() {
             <p>{item.note}</p>
           </article>
         ))}
+      </div>
+    </section>
+  );
+}
+
+export function V3IndustryImageSection() {
+  return (
+    <section className="v3-home-industries-section" aria-labelledby="v3-home-industries-title">
+      <div className="v3-home-industries-wrap">
+        <h2 id="v3-home-industries-title" className="v3-home-industries-title">
+          INDUSTRIES
+        </h2>
+        <div className="v3-home-industries">
+          {industryImageCards.map((item) => (
+            <Link className="v3-home-industry-card" href={item.href} key={item.name} aria-label={`${item.name} 산업 페이지로 이동`}>
+              <img src={item.src} alt={item.alt} loading="lazy" />
+              <span>{item.name}</span>
+            </Link>
+          ))}
+        </div>
       </div>
     </section>
   );

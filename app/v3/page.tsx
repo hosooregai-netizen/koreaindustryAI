@@ -3,6 +3,7 @@ import {
   V3AiCoreShowcase,
   V3CtaBand,
   V3Hero,
+  V3IndustryImageSection,
   V3ProductShowcase,
   V3SectionHeading,
   V3Shell,
@@ -32,6 +33,8 @@ export default function V3HomePage() {
         <section className="v3-section v3-product-section">
           <V3ProductShowcase />
         </section>
+
+        <V3IndustryImageSection />
 
         <section className="v3-section v3-soft">
           <V3SectionHeading
