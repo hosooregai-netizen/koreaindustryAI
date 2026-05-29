@@ -144,6 +144,22 @@ async function getHeroCopyMotion(page: import("@playwright/test").Page) {
   });
 }
 
+async function getActiveHeroOverlayMotion(page: import("@playwright/test").Page) {
+  return page.evaluate(() => {
+    const overlay = document.querySelector<HTMLElement>(".v3-hero-overlay.is-active");
+
+    if (!overlay) {
+      throw new Error("Could not find active v3 hero overlay");
+    }
+
+    return {
+      group: overlay.dataset.overlayGroup,
+      background: getComputedStyle(overlay).backgroundImage,
+      transform: getComputedStyle(overlay).transform,
+    };
+  });
+}
+
 async function getHeroCopyColors(page: import("@playwright/test").Page) {
   return page.evaluate(() => {
     const hero = document.querySelector<HTMLElement>(".v3-hero");
@@ -351,6 +367,9 @@ test("desktop Product navigation exposes AI Core and routes correctly", async ({
   await activeHeroVideo.dispatchEvent("ended");
   await expect(page.locator(".v3-hero")).toHaveAttribute("data-video-index", "1");
   await expect(page.locator(".v3-hero")).toHaveAttribute("data-video-group", "1");
+  await expect(page.locator(".v3-hero-overlay.is-retiring")).toHaveAttribute("data-overlay-group", "0");
+  await expect(page.locator(".v3-hero-overlay.is-active")).toHaveAttribute("data-overlay-group", "1");
+  expect((await getActiveHeroOverlayMotion(page)).transform).not.toBe("none");
   await expect(page.locator(".v3-hero-copy.is-retiring")).toHaveCount(1);
   expect((await getHeroCopyMotion(page)).transform).not.toBe("none");
   await expect(page.locator(".v3-hero-video-freeze.is-retiring")).toHaveAttribute("src", /^data:image\/jpeg/);
@@ -367,7 +386,9 @@ test("desktop Product navigation exposes AI Core and routes correctly", async ({
     .toBeGreaterThan(0);
   const groupTwoHeroProgress = await getHeroProgressState(page);
   expect(groupTwoHeroProgress.labels).toEqual(["02", "02"]);
+  await expect(page.locator(".v3-hero-overlay.is-retiring")).toHaveCount(0);
   await expect(page.locator(".v3-hero-copy.is-retiring")).toHaveCount(0);
+  expect((await getActiveHeroOverlayMotion(page)).group).toBe("1");
   const groupTwoHeroCopyMotion = await getHeroCopyMotion(page);
   expect(groupTwoHeroCopyMotion.transform).toBe("none");
   expect(Math.abs(groupTwoHeroCopyMotion.top - initialHeroCopyMotion.top)).toBeLessThanOrEqual(40);
@@ -406,6 +427,9 @@ test("desktop Product navigation exposes AI Core and routes correctly", async ({
   await activeHeroVideo.dispatchEvent("ended");
   await expect(page.locator(".v3-hero")).toHaveAttribute("data-video-index", "0");
   await expect(page.locator(".v3-hero")).toHaveAttribute("data-video-group", "0");
+  await expect(page.locator(".v3-hero-overlay.is-retiring")).toHaveAttribute("data-overlay-group", "1");
+  await expect(page.locator(".v3-hero-overlay.is-active")).toHaveAttribute("data-overlay-group", "0");
+  expect((await getActiveHeroOverlayMotion(page)).transform).not.toBe("none");
   await expect(page.locator(".v3-hero-copy.is-retiring")).toHaveCount(1);
   expect((await getHeroCopyMotion(page)).transform).not.toBe("none");
   await expect(page.getByRole("heading", { name: /현장의 데이터로 만드는 AI 시스템/ })).toBeVisible();
@@ -413,7 +437,9 @@ test("desktop Product navigation exposes AI Core and routes correctly", async ({
   expect(await getHeroBackgroundImage(page)).not.toContain("hero-video-poster");
   const loopedHeroProgress = await getHeroProgressState(page);
   expect(loopedHeroProgress.labels).toEqual(["01", "02"]);
+  await expect(page.locator(".v3-hero-overlay.is-retiring")).toHaveCount(0);
   await expect(page.locator(".v3-hero-copy.is-retiring")).toHaveCount(0);
+  expect((await getActiveHeroOverlayMotion(page)).group).toBe("0");
   const loopedHeroCopyMotion = await getHeroCopyMotion(page);
   expect(loopedHeroCopyMotion.transform).toBe("none");
   expect(Math.abs(loopedHeroCopyMotion.top - initialHeroCopyMotion.top)).toBeLessThanOrEqual(40);

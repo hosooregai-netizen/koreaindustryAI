@@ -742,6 +742,15 @@ export function V3Hero({
     );
   };
 
+  const renderHeroOverlay = (copyGroup: number, state: "active" | "retiring") => (
+    <div
+      className={`v3-hero-overlay is-${state}`}
+      data-overlay-group={String(copyGroup)}
+      key={`hero-overlay-${state}-${copyGroup}`}
+      aria-hidden="true"
+    />
+  );
+
   return (
     <section
       className={`v3-hero v3-hero-${visual} ${isHome ? "is-home" : "is-subpage"} ${
@@ -800,7 +809,16 @@ export function V3Hero({
           </>
         : null}
       {video && isHome ? <div className="v3-hero-group-wipe" aria-hidden="true" /> : null}
-      <div className="v3-hero-overlay" aria-hidden="true" />
+      {video && isHome ? (
+        <>
+          {retiringHeroCopyGroup !== null && retiringHeroCopyGroup !== activeHeroCopyGroup
+            ? renderHeroOverlay(retiringHeroCopyGroup, "retiring")
+            : null}
+          {renderHeroOverlay(activeHeroCopyGroup, "active")}
+        </>
+      ) : (
+        <div className="v3-hero-overlay" aria-hidden="true" />
+      )}
       <div className="v3-hero-inner">
         <div className="v3-hero-copy-stage">
           {renderHeroCopy(activeHeroCopy, activeHeroCopyGroup, "active")}
