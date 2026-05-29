@@ -131,6 +131,15 @@ test("home hero uses the ordered landing video assets", () => {
   assert.doesNotMatch(v3Home, /secondary=\{\{ label: "AI-Core 보기"/);
 });
 
+test("home product showcase links only the product visual", () => {
+  const productBlock =
+    v3Site.match(/export function V3ProductShowcase\(\) \{[\s\S]*?export function V3ToolCta/)?.[0] ?? "";
+
+  assert.match(productBlock, /<div className="v3-product-showcase">/);
+  assert.doesNotMatch(productBlock, /<Link className="v3-product-showcase"/);
+  assert.match(productBlock, /<Link className="v3-product-visual" href="\/v3\/products\/ai-core"/);
+});
+
 test("v3 source does not include mojibake markers", () => {
   const files = [...collectTsxFiles("app/v3"), ...collectTsxFiles("components/v3")];
   const markers = ["�", "占", "?쒖", "硫"];

@@ -1010,7 +1010,7 @@ export function V3AiCoreShowcase() {
 
 export function V3ProductShowcase() {
   return (
-    <Link className="v3-product-showcase" href="/v3/products/ai-core" aria-label="AI-Core 페이지로 이동">
+    <div className="v3-product-showcase">
       <div className="v3-product-showcase-copy">
         <h2>AI-CORE</h2>
         <p className="v3-product-showcase-lead">현장의 데이터를 기업 맞춤으로 전환하는 AI 솔루션</p>
@@ -1019,10 +1019,10 @@ export function V3ProductShowcase() {
           결합해 기업의 생산성을 향상하는 AI ERP 입니다.
         </p>
       </div>
-      <div className="v3-product-visual" aria-hidden="true">
+      <Link className="v3-product-visual" href="/v3/products/ai-core" aria-label="AI-Core 페이지로 이동">
         <img className="v3-product-ui" src="/v3/ai-core-erp-ui.png" alt="" loading="lazy" />
-      </div>
-    </Link>
+      </Link>
+    </div>
   );
 }
 
