@@ -43,12 +43,12 @@ type HeroVisualKind = "home" | "products" | "company" | "contact" | "community";
 
 const heroVideoSources = [
   "/v3/hero-landing-intro.mp4",
-  "/v3/hero-landing.mp4",
+  "/v3/hero-landing-reverse.mp4",
 ];
 
 const heroGroupChangeEventName = "v3HeroGroupChange";
 
-const heroVideoDurations = [13.167, 10.042];
+const heroVideoDurations = [13.167, 12.243];
 const heroVideoAdvanceLeadSeconds = 0.5;
 
 type HeroVideoLayer = {
