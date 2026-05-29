@@ -423,12 +423,12 @@ test("desktop Product navigation exposes AI Core and routes correctly", async ({
   await expect(page.locator(".v3-hero")).toHaveClass(/has-video/);
   expect(await getHeroBackgroundImage(page)).not.toContain("hero-video-poster");
   const initialHeroProgress = await getHeroProgressState(page);
-  expect(initialHeroProgress.labels).toEqual(["01", "02"]);
+  expect(initialHeroProgress.labels).toEqual(["AI-Core Scene 01"]);
   expect(initialHeroProgress.percent).toBeGreaterThan(0);
   await expect
     .poll(async () => topbarColorsMatch(await getTransparentTopbarColors(page), "0", "rgb(255, 255, 255)"))
     .toBe(true);
-  await activeHeroVideo.dispatchEvent("ended");
+  await page.locator(".v3-hero-copy.is-active .v3-hero-progress-next").click();
   await expect(page.locator(".v3-hero")).toHaveAttribute("data-video-index", "1");
   await expect(page.locator(".v3-hero")).toHaveAttribute("data-video-group", "1");
   await expect(page.locator(".v3-hero-overlay.is-retiring")).toHaveAttribute("data-overlay-group", "0");
@@ -449,7 +449,7 @@ test("desktop Product navigation exposes AI Core and routes correctly", async ({
     })
     .toBeGreaterThan(0);
   const groupTwoHeroProgress = await getHeroProgressState(page);
-  expect(groupTwoHeroProgress.labels).toEqual(["02", "02"]);
+  expect(groupTwoHeroProgress.labels).toEqual(["AI-Core Scene 02"]);
   await expect(page.locator(".v3-hero-overlay.is-retiring")).toHaveCount(0);
   await expect(page.locator(".v3-hero-copy.is-retiring")).toHaveCount(0);
   expect((await getActiveHeroOverlayMotion(page)).group).toBe("1");
@@ -488,7 +488,7 @@ test("desktop Product navigation exposes AI Core and routes correctly", async ({
   await expect(page.locator(".v3-header")).toHaveClass(/is-transparent/);
   await expect(activeHeroVideo).toHaveAttribute("src", /hero-landing-reverse\.mp4$/);
   await expect(activeHeroVideo).not.toHaveAttribute("poster", /hero-video-poster/);
-  await activeHeroVideo.dispatchEvent("ended");
+  await page.locator(".v3-hero-copy.is-active .v3-hero-progress-prev").click();
   await expect(page.locator(".v3-hero")).toHaveAttribute("data-video-index", "0");
   await expect(page.locator(".v3-hero")).toHaveAttribute("data-video-group", "0");
   await expect(page.locator(".v3-hero-overlay.is-retiring")).toHaveAttribute("data-overlay-group", "1");
@@ -500,7 +500,7 @@ test("desktop Product navigation exposes AI Core and routes correctly", async ({
   await expectHomeHeroCopySingleLine(page);
   expect(await getHeroBackgroundImage(page)).not.toContain("hero-video-poster");
   const loopedHeroProgress = await getHeroProgressState(page);
-  expect(loopedHeroProgress.labels).toEqual(["01", "02"]);
+  expect(loopedHeroProgress.labels).toEqual(["AI-Core Scene 01"]);
   await expect(page.locator(".v3-hero-overlay.is-retiring")).toHaveCount(0);
   await expect(page.locator(".v3-hero-copy.is-retiring")).toHaveCount(0);
   expect((await getActiveHeroOverlayMotion(page)).group).toBe("0");

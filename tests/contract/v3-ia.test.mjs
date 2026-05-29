@@ -135,9 +135,10 @@ test("home product showcase links only the product visual", () => {
   const productBlock =
     v3Site.match(/export function V3ProductShowcase\(\) \{[\s\S]*?export function V3ToolCta/)?.[0] ?? "";
 
-  assert.match(productBlock, /<div className="v3-product-showcase">/);
-  assert.doesNotMatch(productBlock, /<Link className="v3-product-showcase"/);
-  assert.match(productBlock, /<Link className="v3-product-visual" href="\/v3\/products\/ai-core"/);
+  assert.match(productBlock, /<article\s+className=\{`v3-product-showcase/);
+  assert.doesNotMatch(productBlock, /<Link[^>]*className=\{?`?v3-product-showcase/);
+  assert.match(productBlock, /href: "\/v3\/products\/ai-core"/);
+  assert.match(productBlock, /<Link\s+className=\{`v3-product-visual[\s\S]*?href=\{item\.href\}/);
 });
 
 test("v3 source does not include mojibake markers", () => {

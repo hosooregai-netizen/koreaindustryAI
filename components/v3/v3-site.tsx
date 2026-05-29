@@ -5,6 +5,8 @@ import {
   BarChart3,
   Boxes,
   Building2,
+  ChevronLeft,
+  ChevronRight,
   ClipboardCheck,
   Database,
   FileText,
@@ -534,7 +536,6 @@ export function V3Hero({
   const activeVideoIndex = heroVideoLayers[activeVideoLayer]?.sourceIndex ?? 0;
   const activeHeroCopyGroup = video && isHome ? getHeroVideoCopyGroup(activeVideoIndex) : 0;
   const activeHeroCopy = video && isHome ? heroVideoCopyGroups[activeHeroCopyGroup] : { eyebrow, title, description };
-  const heroCopyGroupCountLabel = String(heroVideoCopyGroups.length).padStart(2, "0");
   const initialHeroProgress = `${Math.round(getHeroVideoGroupProgress(activeVideoIndex, 0) * 1000) / 10}%`;
   const previousHeroCopyGroup = useRef(activeHeroCopyGroup);
   const heroVideoRefs = useRef<[HTMLVideoElement | null, HTMLVideoElement | null]>([null, null]);
@@ -674,14 +675,29 @@ export function V3Hero({
     });
   };
 
-  const advanceHeroVideo = (videoElement?: HTMLVideoElement, options?: { freezeFrame?: boolean }) => {
+  const goToHeroVideo = (targetIndex: number, options?: { freezeFrame?: boolean }) => {
     if (heroVideoSources.length < 2) return;
-    if (options?.freezeFrame && videoElement) freezeRetiringHeroVideoFrame(videoElement);
-    if (bufferingVideoLayer !== null) return;
-    if (advancingHeroVideoRef.current) return;
-    advancingHeroVideoRef.current = true;
+    if (bufferingVideoLayer !== null || advancingHeroVideoRef.current || heroGroupTransition) return;
+
     const currentIndex = heroVideoLayers[activeVideoLayer]?.sourceIndex ?? 0;
-    queueHeroVideo((currentIndex + 1) % heroVideoSources.length);
+    const normalizedTargetIndex = (targetIndex + heroVideoSources.length) % heroVideoSources.length;
+    if (normalizedTargetIndex === currentIndex) return;
+
+    const activeVideoElement = heroVideoRefs.current[activeVideoLayer];
+    if (options?.freezeFrame && activeVideoElement) freezeRetiringHeroVideoFrame(activeVideoElement);
+    advancingHeroVideoRef.current = true;
+    queueHeroVideo(normalizedTargetIndex);
+  };
+
+  const advanceHeroVideo = (videoElement?: HTMLVideoElement, options?: { freezeFrame?: boolean }) => {
+    const currentIndex = heroVideoLayers[activeVideoLayer]?.sourceIndex ?? 0;
+    if (options?.freezeFrame && videoElement) freezeRetiringHeroVideoFrame(videoElement);
+    goToHeroVideo(currentIndex + 1);
+  };
+
+  const handleHeroVideoProgressNavigation = (direction: -1 | 1) => {
+    const currentIndex = heroVideoLayers[activeVideoLayer]?.sourceIndex ?? 0;
+    goToHeroVideo(currentIndex + direction, { freezeFrame: true });
   };
 
   const maybeAdvanceHeroVideoBeforeEnd = (videoElement: HTMLVideoElement) => {
@@ -779,12 +795,33 @@ export function V3Hero({
         </div>
         {isHome && heroVideoSources.length > 1 ? (
           <div className="v3-hero-progress" aria-label="대표 메시지 진행 상태">
-            <span>{String(copyGroup + 1).padStart(2, "0")}</span>
+            <div className="v3-hero-progress-header">
+              <button
+                className="v3-hero-progress-button v3-hero-progress-prev"
+                type="button"
+                aria-label="이전 AI-Core Scene 보기"
+                disabled={!isActiveCopy || bufferingVideoLayer !== null || heroGroupTransition}
+                onClick={() => handleHeroVideoProgressNavigation(-1)}
+                tabIndex={isActiveCopy ? undefined : -1}
+              >
+                <ChevronLeft size={21} strokeWidth={2.25} />
+              </button>
+              <span>AI-Core Scene {String(copyGroup + 1).padStart(2, "0")}</span>
+              <button
+                className="v3-hero-progress-button v3-hero-progress-next"
+                type="button"
+                aria-label="다음 AI-Core Scene 보기"
+                disabled={!isActiveCopy || bufferingVideoLayer !== null || heroGroupTransition}
+                onClick={() => handleHeroVideoProgressNavigation(1)}
+                tabIndex={isActiveCopy ? undefined : -1}
+              >
+                <ChevronRight size={21} strokeWidth={2.25} />
+              </button>
+            </div>
             <strong
               ref={isActiveCopy ? heroProgressRef : undefined}
               style={{ "--v3-hero-progress": progressValue } as CSSProperties}
             />
-            <span>{heroCopyGroupCountLabel}</span>
           </div>
         ) : null}
       </div>
