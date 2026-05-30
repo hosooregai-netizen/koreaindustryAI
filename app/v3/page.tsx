@@ -21,7 +21,6 @@ export default function V3HomePage() {
           eyebrow="AI-Core for Industrial Operations"
           title="현장의 데이터로 만드는 AI 시스템"
           description="회사별 문서 양식, 승인 흐름, 운영 데이터를 반영해 실제 업무 방식에 맞는 시스템을 구성합니다."
-          primary={{ label: "AI-Core", href: "/v3/products/ai-core" }}
           visual="home"
           video
         />

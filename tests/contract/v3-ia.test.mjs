@@ -127,7 +127,7 @@ test("home hero uses the ordered landing video assets", () => {
   assert.match(v3Site, /layer\.sourceIndex === 0 && !videoReady/);
   assert.match(v3Site, /padStart\(2, "0"\)/);
   assert.match(v3Home, /\n\s+video\r?\n/);
-  assert.match(v3Home, /primary=\{\{ label: "AI-Core", href: "\/v3\/products\/ai-core" \}\}/);
+  assert.doesNotMatch(v3Home, /primary=\{\{ label: "AI-Core", href: "\/v3\/products\/ai-core" \}\}/);
   assert.doesNotMatch(v3Home, /secondary=\{\{ label: "AI-Core 보기"/);
 });
 

@@ -188,10 +188,9 @@ async function getHeroCopyColors(page: import("@playwright/test").Page) {
     const copy = document.querySelector<HTMLElement>(".v3-hero-copy.is-active, .v3-hero-copy");
     const heading = copy?.querySelector<HTMLElement>("h1");
     const description = copy?.querySelector<HTMLElement>("p:not(.v3-eyebrow)");
-    const primary = document.querySelector<HTMLElement>(".v3-hero .v3-button-primary");
     const progress = document.querySelector<HTMLElement>(".v3-hero-progress");
 
-    if (!hero || !copy || !heading || !description || !primary || !progress) {
+    if (!hero || !copy || !heading || !description || !progress) {
       throw new Error("Could not find v3 hero copy color elements");
     }
 
@@ -200,8 +199,6 @@ async function getHeroCopyColors(page: import("@playwright/test").Page) {
       copy: getComputedStyle(copy).color,
       heading: getComputedStyle(heading).color,
       description: getComputedStyle(description).color,
-      primary: getComputedStyle(primary).color,
-      primaryBorder: getComputedStyle(primary).borderColor,
       progress: getComputedStyle(progress).color,
     };
   });
@@ -313,6 +310,28 @@ async function getHeroProgressState(page: import("@playwright/test").Page) {
   });
 }
 
+async function getHoverBackground(page: import("@playwright/test").Page, selector: string) {
+  const target = page.locator(selector).first();
+  await target.hover();
+  return target.evaluate((element) => getComputedStyle(element).backgroundColor);
+}
+
+async function getHeroProgressHeadingOrder(page: import("@playwright/test").Page) {
+  return page.evaluate(() => {
+    const progress = document.querySelector<HTMLElement>(".v3-hero-copy.is-active .v3-hero-progress");
+    const heading = document.querySelector<HTMLElement>(".v3-hero-copy.is-active h1");
+
+    if (!progress || !heading) {
+      throw new Error("Could not find active hero progress or heading");
+    }
+
+    return {
+      progressBottom: progress.getBoundingClientRect().bottom,
+      headingTop: heading.getBoundingClientRect().top,
+    };
+  });
+}
+
 async function getHeroBackgroundImage(page: import("@playwright/test").Page) {
   return page.evaluate(() => {
     const hero = document.querySelector<HTMLElement>(".v3-hero");
@@ -405,9 +424,7 @@ test("desktop Product navigation exposes AI Core and routes correctly", async ({
   await expect(page.getByRole("heading", { name: /현장의 데이터로 만드는 AI 시스템/ })).toBeVisible();
   await expectHomeHeroCopySingleLine(page);
   const heroActions = page.locator(".v3-hero .v3-hero-actions a");
-  await expect(heroActions).toHaveCount(1);
-  await expect(heroActions.first()).toHaveText(/AI-Core/);
-  await expect(heroActions.first()).toHaveAttribute("href", "/v3/products/ai-core");
+  await expect(heroActions).toHaveCount(0);
   const initialHeroCopyMotion = await getHeroCopyMotion(page);
   await expect(page.locator(".v3-hero")).toHaveAttribute("data-video-state", /image-fallback|loaded/);
   await expect(page.locator(".v3-hero")).toHaveAttribute("data-video-index", "0");
@@ -425,6 +442,10 @@ test("desktop Product navigation exposes AI Core and routes correctly", async ({
   const initialHeroProgress = await getHeroProgressState(page);
   expect(initialHeroProgress.labels).toEqual(["AI-Core Scene 01"]);
   expect(initialHeroProgress.percent).toBeGreaterThan(0);
+  expect(await getHoverBackground(page, ".v3-hero-copy.is-active .v3-hero-progress-prev")).toBe("rgba(0, 0, 0, 0)");
+  expect(await getHoverBackground(page, ".v3-hero-copy.is-active .v3-hero-progress-next")).toBe("rgba(0, 0, 0, 0)");
+  const progressOrder = await getHeroProgressHeadingOrder(page);
+  expect(progressOrder.progressBottom).toBeLessThan(progressOrder.headingTop);
   await expect
     .poll(async () => topbarColorsMatch(await getTransparentTopbarColors(page), "0", "rgb(255, 255, 255)"))
     .toBe(true);
@@ -479,8 +500,6 @@ test("desktop Product navigation exposes AI Core and routes correctly", async ({
   expect(groupTwoHeroCopyColors.copy).toBe("rgb(0, 0, 0)");
   expect(groupTwoHeroCopyColors.heading).toBe("rgb(0, 0, 0)");
   expect(groupTwoHeroCopyColors.description).toBe("rgb(0, 0, 0)");
-  expect(groupTwoHeroCopyColors.primary).toBe("rgb(0, 0, 0)");
-  expect(groupTwoHeroCopyColors.primaryBorder).toBe("rgb(0, 0, 0)");
   expect(groupTwoHeroCopyColors.progress).toBe("rgb(0, 0, 0)");
   await page.evaluate(() => window.scrollTo(0, 180));
   await expect(page.locator(".v3-header")).toHaveClass(/is-scrolled/);

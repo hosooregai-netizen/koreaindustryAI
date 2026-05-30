@@ -518,7 +518,7 @@ export function V3Hero({
   eyebrow: string;
   title: string;
   description: string;
-  primary: { label: string; href: string };
+  primary?: { label: string; href: string };
   secondary?: { label: string; href: string };
   visual?: HeroVisualKind;
   video?: boolean;
@@ -780,19 +780,6 @@ export function V3Hero({
         aria-hidden={isActiveCopy ? undefined : "true"}
       >
         {copy.eyebrow ? <p className="v3-eyebrow">{copy.eyebrow}</p> : null}
-        <h1>{copy.title}</h1>
-        <p>{copy.description}</p>
-        <div className="v3-hero-actions">
-          <Link className="v3-button v3-button-primary" href={primary.href} tabIndex={isActiveCopy ? undefined : -1}>
-            {primary.label}
-            <ArrowRight size={18} />
-          </Link>
-          {secondary ? (
-            <Link className="v3-button v3-button-secondary" href={secondary.href} tabIndex={isActiveCopy ? undefined : -1}>
-              {secondary.label}
-            </Link>
-          ) : null}
-        </div>
         {isHome && heroVideoSources.length > 1 ? (
           <div className="v3-hero-progress" aria-label="대표 메시지 진행 상태">
             <div className="v3-hero-progress-header">
@@ -822,6 +809,21 @@ export function V3Hero({
               ref={isActiveCopy ? heroProgressRef : undefined}
               style={{ "--v3-hero-progress": progressValue } as CSSProperties}
             />
+          </div>
+        ) : null}
+        <h1>{copy.title}</h1>
+        <p>{copy.description}</p>
+        {primary ? (
+          <div className="v3-hero-actions">
+            <Link className="v3-button v3-button-primary" href={primary.href} tabIndex={isActiveCopy ? undefined : -1}>
+              {primary.label}
+              <ArrowRight size={18} />
+            </Link>
+            {secondary ? (
+              <Link className="v3-button v3-button-secondary" href={secondary.href} tabIndex={isActiveCopy ? undefined : -1}>
+                {secondary.label}
+              </Link>
+            ) : null}
           </div>
         ) : null}
       </div>

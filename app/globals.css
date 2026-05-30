@@ -5157,29 +5157,13 @@ textarea {
   margin-top: 34px;
 }
 
-.v3-hero.is-home .v3-button-primary {
-  color: #fff;
-  border-color: rgba(255, 255, 255, 0.92);
-  background: transparent;
-}
-
-.v3-hero.is-home .v3-button-primary:hover {
-  color: var(--v3-black);
-  background: #fff;
-}
-
-.v3-hero.is-home .v3-button-secondary {
-  color: #fff;
-  border-color: rgba(255, 255, 255, 0.42);
-}
-
 .v3-hero-progress {
   display: grid;
   grid-template-columns: minmax(180px, 320px);
   gap: 11px;
   align-items: start;
   max-width: 320px;
-  margin-top: 72px;
+  margin: 0 0 28px;
   color: rgba(255, 255, 255, 0.76);
   font-size: 13px;
   font-weight: 900;
@@ -5200,6 +5184,7 @@ textarea {
 }
 
 .v3-hero-progress-button {
+  appearance: none;
   display: inline-flex;
   width: 32px;
   height: 32px;
@@ -5218,6 +5203,7 @@ textarea {
 
 .v3-hero-progress-button:hover,
 .v3-hero-progress-button:focus-visible {
+  background: transparent;
   opacity: 1;
 }
 
@@ -6546,7 +6532,7 @@ textarea {
   }
 
   .v3-hero-progress {
-    margin-top: 42px;
+    margin-bottom: 24px;
   }
 
   .v3-visual-body {
@@ -6949,7 +6935,7 @@ textarea {
   }
 
   .v3-hero-progress {
-    margin-top: 30px;
+    margin-bottom: 20px;
   }
 
   .v3-hero.is-subpage .v3-hero-visual {
