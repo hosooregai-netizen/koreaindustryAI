@@ -530,8 +530,12 @@ test("desktop Product navigation exposes AI Core and routes correctly", async ({
     if (waitMs > 0) await page.waitForTimeout(waitMs);
     expectHeroVideoBoxToStayStable(await getActiveHeroVideoMotion(page), initialHeroVideoMotion);
   }
-  await expect(page.locator(".v3-client-logo img")).toHaveCount(8);
+  await expect(page.locator(".v3-client-logo img")).toHaveCount(14);
   await expect(page.locator('.v3-client-logo img[alt="한국종합안전(주)"]')).toHaveCount(1);
+  await expect(page.locator('.v3-client-logo img[alt="금융결제원"]')).toHaveCount(1);
+  await expect(page.locator('.v3-client-logo img[alt="대신자산운용"]')).toHaveCount(1);
+  await expect(page.locator('.v3-client-logo img[alt="NH투자증권"]')).toHaveCount(1);
+  await expect(page.locator('.v3-client-logo img[alt="뽀득"]')).toHaveCount(0);
   await expect(page.locator('.v3-client-logo img[alt="Ownist"]')).toHaveCount(0);
   await expect(page.locator('.v3-client-logo img[alt="INSIDERS"]')).toHaveCount(0);
 

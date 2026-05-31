@@ -272,6 +272,18 @@ export const clientLogos = [
     src: "/v3/logos/anc.svg",
   },
   {
+    name: "금융결제원",
+    src: "/v3/logos/kftc.png",
+  },
+  {
+    name: "대신자산운용",
+    src: "/v3/logos/daishin.png",
+  },
+  {
+    name: "NH투자증권",
+    src: "/v3/logos/nh-investment.png",
+  },
+  {
     name: "마켓컬리",
     src: "/v3/logos/market-kurly.png",
   },
