@@ -379,7 +379,7 @@ function V3Header() {
   }, []);
 
   const closeMenu = () => setOpen(false);
-  const isHomeRoute = pathname === "/v3";
+  const isHomeRoute = pathname === "/" || pathname === "/v3";
   const transparentHomeTopbarColor = heroTopbarGroup === "1" ? "#000000" : "#ffffff";
   const transparentHomeTopbarStyle =
     isHomeRoute && !scrolled
