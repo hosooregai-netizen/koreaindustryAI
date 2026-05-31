@@ -272,10 +272,6 @@ export const clientLogos = [
     src: "/v3/logos/anc.svg",
   },
   {
-    name: "Ownist",
-    src: "/v3/logos/ownist.png",
-  },
-  {
     name: "마켓컬리",
     src: "/v3/logos/market-kurly.png",
   },
