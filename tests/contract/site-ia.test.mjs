@@ -9,8 +9,8 @@ const siteHome = readFileSync(join(root, "app/page.tsx"), "utf8");
 
 const plannedRoutes = [
   "app/page.tsx",
-  "app/products/ai-core/page.tsx",
-  "app/mvp/page.tsx",
+  "app/products/data-driven/page.tsx",
+  "app/products/automation/page.tsx",
   "app/industries/construction/page.tsx",
   "app/industries/manufacturing/page.tsx",
   "app/industries/logistics/page.tsx",
@@ -25,6 +25,8 @@ const plannedRoutes = [
 
 const removedRoutes = [
   "app/products/page.tsx",
+  "app/products/ai-core/page.tsx",
+  "app/mvp/page.tsx",
   "app/products/ai-apps/page.tsx",
   "app/products/tools/page.tsx",
   "app/products/si-ai/page.tsx",
@@ -66,10 +68,10 @@ test("header navigation exposes the site IA", () => {
   }
 
   assert.match(siteSource, /<Link className="site-nav-cta" href="\/contact"/);
-  assert.match(navBlock, /label: "AI Core"/);
-  assert.match(navBlock, /href: "\/products\/ai-core"/);
-  assert.match(navBlock, /label: "MVP"/);
-  assert.match(navBlock, /href: "\/mvp"/);
+  assert.match(navBlock, /label: "Data-Driven AI-Core"/);
+  assert.match(navBlock, /href: "\/products\/data-driven"/);
+  assert.match(navBlock, /label: "Automation AI-Core"/);
+  assert.match(navBlock, /href: "\/products\/automation"/);
   assert.match(navBlock, /label: "건설"/);
   assert.match(navBlock, /href: "\/industries\/construction"/);
   assert.match(navBlock, /label: "Technology"/);
@@ -77,7 +79,17 @@ test("header navigation exposes the site IA", () => {
   assert.match(navBlock, /label: "문의하기"/);
   assert.match(navBlock, /href: "\/contact"/);
 
-  for (const removed of ["AI Apps", "Tools", "Threads", "/products/ai-apps", "/products/tools", "/community/threads"]) {
+  for (const removed of [
+    "AI Apps",
+    "Tools",
+    "Threads",
+    "MVP",
+    "/mvp",
+    "/products/ai-core",
+    "/products/ai-apps",
+    "/products/tools",
+    "/community/threads",
+  ]) {
     assert.doesNotMatch(navBlock, new RegExp(removed.replaceAll("/", "\\/")));
   }
 });
@@ -127,7 +139,7 @@ test("home hero uses the ordered landing video assets", () => {
   assert.match(siteSource, /layer\.sourceIndex === 0 && !videoReady/);
   assert.match(siteSource, /padStart\(2, "0"\)/);
   assert.match(siteHome, /\n\s+video\r?\n/);
-  assert.doesNotMatch(siteHome, /primary=\{\{ label: "AI-Core", href: "\/products\/ai-core" \}\}/);
+  assert.doesNotMatch(siteHome, /primary=\{\{ label: "AI-Core", href: "\/products\/data-driven" \}\}/);
   assert.doesNotMatch(siteHome, /secondary=\{\{ label: "AI-Core 보기"/);
 });
 
@@ -137,7 +149,8 @@ test("home product showcase links only the product visual", () => {
 
   assert.match(productBlock, /<article\s+className=\{`site-product-showcase/);
   assert.doesNotMatch(productBlock, /<Link[^>]*className=\{?`?site-product-showcase/);
-  assert.match(productBlock, /href: "\/products\/ai-core"/);
+  assert.match(productBlock, /href: "\/products\/data-driven"/);
+  assert.match(productBlock, /href: "\/products\/automation"/);
   assert.match(productBlock, /<Link\s+className=\{`site-product-visual[\s\S]*?href=\{item\.href\}/);
 });
 

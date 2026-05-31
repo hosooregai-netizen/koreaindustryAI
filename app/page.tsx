@@ -34,7 +34,7 @@ export default function SiteHomePage() {
 
         <SiteCtaBand
           title="기업의 문제, 자동화로 해결하세요."
-          description="AI-core는 5일 안에 기업 맞춤형 솔루션을 제공합니다."
+          description="AI-Core는 5일 안에 기업 맞춤형 솔루션을 제공합니다."
           label="5일 도입하기"
           variant="final"
         />

@@ -28,20 +28,20 @@
 - 상태: 일부 구현
 - 목적: 제공 제품과 작동 방식을 설명한다.
 
-#### AI Core
+#### Data-Driven AI-Core
 
-- 라우트: `/products/ai-core`
+- 라우트: `/products/data-driven`
 - 상태: 구현
-- 의도: 고객 업무 시스템을 빠르게 조립해 시현하는 핵심 제품으로 설명한다.
-- 주의: 탑바 라벨은 `AI Core`, 본문 제품명은 기존 `AI-Core`를 유지할 수 있다.
+- 의도: 현장 데이터, 문서, 승인 흐름을 기업 맞춤 ERP 구조로 연결하는 제품으로 설명한다.
+- 주의: 탑바 라벨과 본문 제품명은 `Data-Driven AI-Core`로 통일한다.
 
-#### MVP
+#### Automation AI-Core
 
-- 라우트: `/mvp`
+- 라우트: `/products/automation`
 - 상태: 준비중
-- 의도: 큰 구축 전 작은 자동화 시작 패키지.
+- 의도: 큰 구축 전 작은 반복 업무 자동화로 시작하는 준비중 제품.
 - 현재 처리: 클릭 시 준비중 stub 페이지로 이동.
-- 결정 필요: 제품명, CTA 라벨, 상세 페이지 생성 여부.
+- 결정 필요: 상세 페이지 생성 여부.
 
 ### Industries
 
@@ -125,6 +125,8 @@
 ## 3. 삭제한 site 라우트
 
 - `/products`
+- `/products/ai-core`
+- `/mvp`
 - `/products/ai-apps`
 - `/products/tools`
 - `/products/si-ai`

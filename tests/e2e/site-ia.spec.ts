@@ -417,7 +417,7 @@ test("home hero starts video transition before the active clip ends", async ({ p
   await expect(page.locator(".site-hero-video-freeze.is-retiring")).toHaveCount(0);
 });
 
-test("desktop Product navigation exposes AI Core and routes correctly", async ({ page }) => {
+test("desktop Product navigation exposes Data-Driven AI-Core and routes correctly", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/");
 
@@ -546,7 +546,7 @@ test("desktop Product navigation exposes AI Core and routes correctly", async ({
 
   await mainNav.getByRole("button", { name: "Product" }).hover();
   await expect(productGroup.locator(".site-dropdown-media img")).toBeVisible();
-  await expect(productGroup.locator(".site-dropdown-summary")).toContainText("AI-Core와 MVP");
+  await expect(productGroup.locator(".site-dropdown-summary")).toContainText("데이터 관리와 업무 자동화");
 
   const triggerBox = await mainNav.getByRole("button", { name: "Product" }).boundingBox();
   const dropdownBox = await productGroup.locator(".site-dropdown").boundingBox();
@@ -554,33 +554,33 @@ test("desktop Product navigation exposes AI Core and routes correctly", async ({
   await page.mouse.move(triggerBox.x + triggerBox.width / 2, (triggerBox.y + triggerBox.height + dropdownBox.y) / 2);
   await expect(productGroup.locator(".site-dropdown-media img")).toBeVisible();
   await page.mouse.move(dropdownBox.x + dropdownBox.width - 80, dropdownBox.y + 48);
-  await expect(mainNav.getByRole("menuitem", { name: /AI Core/ })).toBeVisible();
+  await expect(mainNav.getByRole("menuitem", { name: /Data-Driven AI-Core/ })).toBeVisible();
 
-  await expect(mainNav.getByRole("menuitem", { name: /AI Core/ })).toBeVisible();
-  await expect(mainNav.getByRole("menuitem", { name: /^MVP/ })).toBeVisible();
+  await expect(mainNav.getByRole("menuitem", { name: /Data-Driven AI-Core/ })).toBeVisible();
+  await expect(mainNav.getByRole("menuitem", { name: /Automation AI-Core/ })).toBeVisible();
   await expect(mainNav.getByRole("menuitem", { name: /AI Apps/ })).toHaveCount(0);
   await expect(mainNav.getByRole("menuitem", { name: /Tools/ })).toHaveCount(0);
 
-  await mainNav.getByRole("menuitem", { name: /AI Core/ }).click();
-  await expect(page).toHaveURL(/\/products\/ai-core$/);
-  await expect(page.getByRole("heading", { name: /모듈을 조립해 고객 맞춤/ })).toBeVisible();
+  await mainNav.getByRole("menuitem", { name: /Data-Driven AI-Core/ }).click();
+  await expect(page).toHaveURL(/\/products\/data-driven$/);
+  await expect(page.getByRole("heading", { name: /현장 데이터를 기업 맞춤 ERP 구조로 연결합니다/ })).toBeVisible();
   await expectNoHorizontalOverflow(page);
 });
 
-test("Product MVP item routes to the coming soon page", async ({ page }) => {
+test("Product Automation item routes to the coming soon page", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/");
 
   const mainNav = page.getByLabel("주요 메뉴");
   await mainNav.getByRole("button", { name: "Product" }).hover();
-  await mainNav.getByRole("menuitem", { name: /^MVP/ }).click();
+  await mainNav.getByRole("menuitem", { name: /Automation AI-Core/ }).click();
 
-  await expect(page).toHaveURL(/\/mvp$/);
-  await expect(page.getByRole("heading", { name: /MVP 시작 패키지는 준비 중입니다/ })).toBeVisible();
+  await expect(page).toHaveURL(/\/products\/automation$/);
+  await expect(page.getByRole("heading", { name: /Automation AI-Core 페이지는 준비 중입니다/ })).toBeVisible();
   await expectNoHorizontalOverflow(page);
 });
 
-test("mobile menu exposes AI Core and routes without horizontal overflow", async ({ page }) => {
+test("mobile menu exposes Data-Driven AI-Core and routes without horizontal overflow", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/");
 
@@ -594,12 +594,12 @@ test("mobile menu exposes AI Core and routes without horizontal overflow", async
   expect(mobileMenuColors.cta).toBe("rgb(5, 5, 5)");
   expect(mobileMenuColors.ctaBorder).toBe("rgb(5, 5, 5)");
   expect(mobileMenuColors.ctaBackground).toBe("rgba(0, 0, 0, 0)");
-  const aiCoreMenuItem = mainNav.getByRole("menuitem", { name: /^AI Core\b/ });
+  const aiCoreMenuItem = mainNav.getByRole("menuitem", { name: /Data-Driven AI-Core/ });
   await expect(aiCoreMenuItem).toBeVisible();
   await aiCoreMenuItem.click();
 
-  await expect(page).toHaveURL(/\/products\/ai-core$/);
-  await expect(page.getByRole("heading", { name: /AI-Core는 핵심 업무/ })).toBeVisible();
+  await expect(page).toHaveURL(/\/products\/data-driven$/);
+  await expect(page.getByRole("heading", { name: /Data-Driven AI-Core는 흩어진 업무 데이터를/ })).toBeVisible();
   await expectNoHorizontalOverflow(page);
 });
 
@@ -654,7 +654,7 @@ test("contact form shows a success state", async ({ page }) => {
   await page.getByLabel("회사명").fill("대한테스트");
   await page.getByLabel("담당자명").fill("테스터");
   await page.getByLabel("연락처").fill("test@example.com");
-  await page.getByLabel("관심 영역").selectOption("AI-Core");
+  await page.getByLabel("관심 영역").selectOption("Data-Driven AI-Core");
   await page.getByRole("button", { name: /문의 접수하기/ }).click();
   await expect(page.getByText("문의가 접수되었습니다. 담당자가 확인 후 연락드리겠습니다.")).toBeVisible();
   await expectNoHorizontalOverflow(page);

@@ -123,17 +123,17 @@ const mobileDropdownStyle: CSSProperties = {
 export const navItems: NavGroup[] = [
   {
     label: "Product",
-    summary: "AI-Core와 MVP 시작 패키지를 제품 진입점으로 정리합니다.",
+    summary: "데이터 관리와 업무 자동화를 두 AI-Core 제품으로 정리합니다.",
     children: [
       {
-        label: "AI Core",
-        href: "/products/ai-core",
-        description: "고객 업무 시스템을 빠르게 조립해 시현하는 핵심 제품",
+        label: "Data-Driven AI-Core",
+        href: "/products/data-driven",
+        description: "현장 데이터를 기업 맞춤 ERP 구조로 연결하는 제품",
       },
       {
-        label: "MVP",
-        href: "/mvp",
-        description: "큰 구축 전 작은 자동화로 시작하는 준비중 패키지",
+        label: "Automation AI-Core",
+        href: "/products/automation",
+        description: "반복 업무를 기업 자동화 흐름으로 전환하는 준비중 제품",
       },
     ],
   },
@@ -500,14 +500,15 @@ export function SiteFooter() {
         <p>AI-Core for Industrial Operations</p>
       </div>
       <nav aria-label="푸터 메뉴">
-        <Link href="/products/ai-core">Product</Link>
+        <Link href="/products/data-driven">Data-Driven AI-Core</Link>
+        <Link href="/products/automation">Automation AI-Core</Link>
         <Link href="/community/newsletter">Resources</Link>
         <Link href="/company">Company</Link>
         <Link href="/contact">문의하기</Link>
       </nav>
       <div className="site-footer-info">
-        <span>AI-Core 기반 업무 시스템 조립</span>
-        <span>5일 시현 및 도입 범위 검토</span>
+        <span>기업 데이터 관리 ERP</span>
+        <span>반복 업무 자동화 범위 검토</span>
         <span>contact@koreaindustry.ai</span>
       </div>
     </footer>
@@ -1082,14 +1083,14 @@ export function SiteAiCoreShowcase() {
   return (
     <div className="site-ai-core-panel">
       <div className="site-ai-core-copy">
-        <span>AI-Core</span>
-        <h3>3000개 위젯을 조립해 고객 맞춤 ERP형 시스템을 빠르게 시현합니다.</h3>
+        <span>Data-Driven AI-Core</span>
+        <h3>현장 데이터를 기업 맞춤 ERP 구조로 연결합니다.</h3>
         <p>
-          AI-Core는 단일 SaaS가 아니라 업무 화면, 데이터, 승인, 리포트, 대시보드 모듈을 조합하는 시작
-          방식입니다. 핵심 아이템을 먼저 고르고 5일 안에 눈으로 확인할 수 있는 흐름을 만듭니다.
+          Data-Driven AI-Core는 문서, 운영 데이터, 승인 흐름을 한 구조로 묶어 업무 화면과 리포트에서
+          바로 활용할 수 있게 만드는 제품입니다.
         </p>
-        <Link className="site-text-link" href="/products/ai-core">
-          AI-Core 자세히 보기
+        <Link className="site-text-link" href="/products/data-driven">
+          Data-Driven AI-Core 자세히 보기
           <ArrowRight size={17} />
         </Link>
       </div>
@@ -1105,21 +1106,23 @@ export function SiteAiCoreShowcase() {
 export function SiteProductShowcase() {
   const productShowcases = [
     {
-      title: "AI-CORE",
-      href: "/products/ai-core",
-      ariaLabel: "AI-Core 페이지로 이동",
+      title: "Data-Driven AI-Core",
+      href: "/products/data-driven",
+      ariaLabel: "Data-Driven AI-Core 페이지로 이동",
       lead: "현장의 데이터를 기업 맞춤으로 전환하는 AI 솔루션",
       description:
-        "AI-Core는 산업에서 사용되는 데이터를 기업 맞춤형 ERP로 제공할 수 있는 core로 다양한 시스템과 결합해 기업의 생산성을 향상하는 AI ERP 입니다.",
+        "문서, 승인 흐름, 운영 데이터를 기업 맞춤 ERP 구조로 연결해 업무 데이터를 관리하고 활용할 수 있게 합니다.",
+      imageSrc: "/assets/ai-core-erp-ui.png",
       visualFirst: false,
     },
     {
-      title: "ERP Tools",
-      href: "/mvp",
-      ariaLabel: "ERP Tools 페이지로 이동",
-      lead: "현장의 데이터를 기업 맞춤으로 전환하는 AI 솔루션",
+      title: "Automation AI-Core",
+      href: "/products/automation",
+      ariaLabel: "Automation AI-Core 페이지로 이동",
+      lead: "반복 업무를 자동으로 처리하는 기업 자동화 솔루션",
       description:
-        "AI-Core는 산업에서 사용되는 데이터를 기업 맞춤형 ERP로 제공할 수 있는 core로 다양한 시스템과 결합해 기업의 생산성을 향상하는 AI ERP 입니다.",
+        "확인, 분류, 정리, 보고처럼 매일 반복되는 업무를 작은 자동화 흐름으로 시작해 기업 업무 시스템으로 확장합니다.",
+      imageSrc: "/assets/ai-core-erp-ui.png",
       visualFirst: true,
     },
   ];
@@ -1159,7 +1162,7 @@ export function SiteProductShowcase() {
 
   const renderVisual = (item: (typeof productShowcases)[number], side: "left" | "right") => (
     <Link className={`site-product-visual site-product-reveal is-${side}`} href={item.href} aria-label={item.ariaLabel}>
-      <img className="site-product-ui" src="/assets/ai-core-erp-ui.png" alt="" loading="lazy" />
+      <img className="site-product-ui" src={item.imageSrc} alt="" loading="lazy" />
     </Link>
   );
 
@@ -1380,7 +1383,7 @@ export function SiteComingSoonPage({
           title={title}
           description={description}
           primary={{ label: "문의하기", href: "/contact" }}
-          secondary={{ label: "AI-Core 보기", href: "/products/ai-core" }}
+          secondary={{ label: "Data-Driven AI-Core 보기", href: "/products/data-driven" }}
           visual={visual}
         />
         <SiteCtaBand
@@ -1421,9 +1424,8 @@ export function SiteContactForm() {
           <option value="" disabled>
             선택해주세요
           </option>
-          <option>AI-Core</option>
-          <option>5일 시현</option>
-          <option>Tool 모듈</option>
+          <option>Data-Driven AI-Core</option>
+          <option>Automation AI-Core</option>
           <option>산업별 적용</option>
         </select>
       </label>
