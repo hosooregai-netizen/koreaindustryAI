@@ -8244,6 +8244,11 @@ html[data-site-hero-group="1"] .site-header.is-transparent.is-home-route .site-b
   transform: translateY(0.08em);
 }
 
+.site-final-cta h2 .site-typewriter-text::after {
+  width: 3px;
+  margin-left: 5px;
+}
+
 .site-final-cta.is-typing .site-typewriter-text::after {
   animation: site-typewriter-caret var(--site-type-duration, 1200ms) steps(1, end) var(--site-type-delay, 0ms) both;
 }
