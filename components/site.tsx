@@ -1690,12 +1690,6 @@ export function SiteCtaBand({
         className={`site-cta-band site-final-cta ${isTyping ? "is-typing" : ""}`}
         aria-labelledby="site-final-cta-title"
       >
-        <div className="site-final-cta-motion" aria-hidden="true">
-          <span className="site-final-cta-grid" />
-          <span className="site-final-cta-frame" />
-          <span className="site-final-cta-frame site-final-cta-frame-secondary" />
-          <span className="site-final-cta-scanline" />
-        </div>
         <div className="site-final-cta-inner">
           <div className="site-final-cta-copy">
             <h2 id="site-final-cta-title">{renderTypingText(title, 120)}</h2>
@@ -1705,7 +1699,17 @@ export function SiteCtaBand({
               <ArrowRight size={18} />
             </Link>
           </div>
-          <div className="site-final-cta-empty" aria-hidden="true" />
+          <div className="site-final-cta-terminal" aria-hidden="true">
+            <div className="site-final-cta-terminal-top">
+              <span>C:\AI-CORE</span>
+            </div>
+            <div className="site-final-cta-terminal-body">
+              <p>&gt; scan business_issue</p>
+              <p>&gt; connect workflow_data</p>
+              <p>&gt; build automation_plan</p>
+              <p className="is-ready">&gt; ready in 5 days<span /></p>
+            </div>
+          </div>
         </div>
       </section>
     );
