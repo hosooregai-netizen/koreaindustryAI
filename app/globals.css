@@ -6491,6 +6491,16 @@ html[data-site-hero-group="1"] .site-header.is-transparent.is-home-route .site-b
 }
 
 .site-work-overview-card {
+  --site-work-card-photo-position: 34% 60%;
+  --site-work-card-photo-size: 185% auto;
+  --site-work-card-ribbon-left: auto;
+  --site-work-card-ribbon-right: -112px;
+  --site-work-card-ribbon-bottom: -116px;
+  --site-work-card-ribbon-rotate: -8deg;
+  --site-work-card-line-left: auto;
+  --site-work-card-line-right: -82px;
+  --site-work-card-line-bottom: -112px;
+  --site-work-card-line-rotate: -6deg;
   position: relative;
   display: flex;
   min-height: 342px;
@@ -6501,67 +6511,124 @@ html[data-site-hero-group="1"] .site-header.is-transparent.is-home-route .site-b
   border-radius: 8px;
   color: #ffffff;
   background:
-    linear-gradient(160deg, rgba(4, 12, 27, 0.98) 0%, rgba(5, 16, 34, 0.98) 52%, rgba(2, 8, 20, 0.98) 100%);
-  box-shadow: 0 30px 82px rgba(15, 23, 36, 0.12);
+    linear-gradient(180deg, rgba(3, 9, 22, 0.86), rgba(2, 7, 18, 0.96)),
+    linear-gradient(126deg, rgba(42, 111, 255, 0.12), rgba(115, 76, 255, 0.13) 42%, rgba(2, 9, 24, 0.76)),
+    url("/assets/배경2.png") var(--site-work-card-photo-position) / var(--site-work-card-photo-size) no-repeat,
+    #050b1f;
+  background-blend-mode: normal;
+  box-shadow: 0 30px 82px rgba(15, 23, 36, 0.14);
   isolation: isolate;
 }
 
 .site-work-overview-card::before,
 .site-work-overview-card::after {
   position: absolute;
-  z-index: -1;
+  z-index: 0;
   border-radius: 999px;
   content: "";
   pointer-events: none;
 }
 
 .site-work-overview-card::before {
-  right: -74px;
-  bottom: -122px;
-  width: 520px;
-  height: 260px;
-  border: 2px solid rgba(65, 159, 255, 0.88);
-  box-shadow:
-    0 0 16px rgba(65, 159, 255, 0.4),
-    inset 0 0 32px rgba(47, 107, 255, 0.16);
-  transform: rotate(-7deg);
+  right: var(--site-work-card-ribbon-right);
+  bottom: var(--site-work-card-ribbon-bottom);
+  left: var(--site-work-card-ribbon-left);
+  width: 490px;
+  height: 340px;
+  background:
+    linear-gradient(100deg, rgba(16, 68, 166, 0.3), rgba(42, 49, 141, 0.12) 56%, rgba(3, 10, 27, 0)),
+    linear-gradient(180deg, rgba(74, 148, 255, 0.06), transparent 60%);
+  box-shadow: inset 0 1px 0 rgba(111, 182, 255, 0.12);
+  opacity: 0.68;
+  transform: rotate(var(--site-work-card-ribbon-rotate));
   transition: transform 420ms var(--site-home-reveal-ease), opacity 420ms ease;
 }
 
 .site-work-overview-card::after {
-  right: -192px;
-  bottom: -238px;
-  width: 560px;
-  height: 380px;
-  border: 42px solid rgba(38, 117, 255, 0.16);
-  opacity: 0.9;
-  transform: rotate(7deg);
+  right: var(--site-work-card-line-right);
+  bottom: var(--site-work-card-line-bottom);
+  left: var(--site-work-card-line-left);
+  width: 470px;
+  height: 330px;
+  border: 2px solid rgba(64, 159, 255, 0.78);
+  border-left-color: rgba(64, 159, 255, 0.28);
+  border-bottom-color: rgba(64, 159, 255, 0.2);
+  box-shadow:
+    0 0 18px rgba(64, 159, 255, 0.26),
+    inset 0 0 34px rgba(22, 88, 219, 0.12);
+  opacity: 0.84;
+  transform: rotate(var(--site-work-card-line-rotate));
   transition: transform 420ms var(--site-home-reveal-ease), opacity 420ms ease;
 }
 
+.site-work-overview-card:nth-child(1) {
+  --site-work-card-photo-position: 24% 62%;
+  --site-work-card-photo-size: 190% auto;
+  --site-work-card-ribbon-right: -150px;
+  --site-work-card-ribbon-bottom: -150px;
+  --site-work-card-line-right: -124px;
+  --site-work-card-line-bottom: -142px;
+}
+
+.site-work-overview-card:nth-child(2) {
+  --site-work-card-photo-position: 52% 58%;
+  --site-work-card-photo-size: 170% auto;
+  --site-work-card-ribbon-left: -138px;
+  --site-work-card-ribbon-right: auto;
+  --site-work-card-ribbon-bottom: -146px;
+  --site-work-card-ribbon-rotate: -17deg;
+  --site-work-card-line-left: -118px;
+  --site-work-card-line-right: auto;
+  --site-work-card-line-bottom: -144px;
+  --site-work-card-line-rotate: -12deg;
+  background:
+    linear-gradient(180deg, rgba(3, 9, 22, 0.92), rgba(2, 7, 18, 0.98)),
+    linear-gradient(126deg, rgba(42, 111, 255, 0.1), rgba(115, 76, 255, 0.1) 42%, rgba(2, 9, 24, 0.78)),
+    url("/assets/배경2.png") var(--site-work-card-photo-position) / var(--site-work-card-photo-size) no-repeat,
+    #050b1f;
+}
+
 .site-work-overview-card:nth-child(2)::before {
-  right: auto;
-  bottom: -88px;
-  left: -84px;
-  transform: rotate(-18deg);
+  width: 540px;
+  height: 360px;
 }
 
 .site-work-overview-card:nth-child(2)::after {
-  right: -92px;
-  bottom: -282px;
-  transform: rotate(-10deg);
+  width: 520px;
+  height: 360px;
+}
+
+.site-work-overview-card:nth-child(3) {
+  --site-work-card-photo-position: 100% 72%;
+  --site-work-card-photo-size: 205% auto;
+  --site-work-card-ribbon-right: -154px;
+  --site-work-card-ribbon-bottom: -106px;
+  --site-work-card-ribbon-rotate: 10deg;
+  --site-work-card-line-right: -136px;
+  --site-work-card-line-bottom: -92px;
+  --site-work-card-line-rotate: 8deg;
+  background:
+    linear-gradient(180deg, rgba(3, 9, 22, 0.96), rgba(2, 7, 18, 0.985)),
+    linear-gradient(126deg, rgba(42, 111, 255, 0.08), rgba(115, 76, 255, 0.08) 42%, rgba(2, 9, 24, 0.82)),
+    url("/assets/배경2.png") var(--site-work-card-photo-position) / var(--site-work-card-photo-size) no-repeat,
+    #050b1f;
 }
 
 .site-work-overview-card:nth-child(3)::before {
-  right: -112px;
-  bottom: -86px;
-  transform: rotate(10deg);
+  width: 520px;
+  height: 350px;
 }
 
 .site-work-overview-card:nth-child(3)::after {
-  right: -232px;
-  bottom: -196px;
-  transform: rotate(18deg);
+  width: 480px;
+  height: 340px;
+}
+
+.site-work-overview-card small,
+.site-work-overview-card strong,
+.site-work-overview-card p {
+  position: relative;
+  z-index: 1;
 }
 
 .site-work-overview-card small {
@@ -6602,12 +6669,12 @@ html[data-site-hero-group="1"] .site-header.is-transparent.is-home-route .site-b
   }
 
   .site-work-transition-section.is-revealed .site-work-overview-card:hover::before {
-    transform: translate3d(0, -8px, 0) rotate(-5deg);
+    transform: translate3d(0, -8px, 0) rotate(calc(var(--site-work-card-ribbon-rotate) + 3deg));
   }
 
   .site-work-transition-section.is-revealed .site-work-overview-card:hover::after {
     opacity: 1;
-    transform: translate3d(0, -10px, 0) rotate(8deg);
+    transform: translate3d(0, -10px, 0) rotate(calc(var(--site-work-card-line-rotate) + 3deg));
   }
 }
 
