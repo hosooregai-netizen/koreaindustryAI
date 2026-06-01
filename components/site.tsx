@@ -1486,6 +1486,9 @@ export function SiteProductShowcase() {
 
   const renderVisual = (item: (typeof productShowcases)[number], side: "left" | "right") => (
     <Link className={`site-product-visual site-product-reveal is-${side}`} href={item.href} aria-label={item.ariaLabel}>
+      <video className="site-product-bg-video" autoPlay loop muted playsInline preload="metadata" aria-hidden="true">
+        <source src="/assets/kling_20260601_作品____________5338_0.mp4" type="video/mp4" />
+      </video>
       <img className="site-product-ui" src={item.imageSrc} alt="" loading="lazy" />
     </Link>
   );
@@ -1667,6 +1670,12 @@ export function SiteCtaBand({
         className={`site-cta-band site-final-cta ${isTyping ? "is-typing" : ""}`}
         aria-labelledby="site-final-cta-title"
       >
+        <div className="site-final-cta-motion" aria-hidden="true">
+          <span className="site-final-cta-grid" />
+          <span className="site-final-cta-frame" />
+          <span className="site-final-cta-frame site-final-cta-frame-secondary" />
+          <span className="site-final-cta-scanline" />
+        </div>
         <div className="site-final-cta-inner">
           <div className="site-final-cta-copy">
             <h2 id="site-final-cta-title">{renderTypingText(title, 120)}</h2>
