@@ -7112,3 +7112,156 @@ html[data-site-hero-group="1"] .site-header.is-transparent.is-home-route .site-b
     display: none;
   }
 }
+
+
+/* Brand symbol and topbar palette */
+.site-page {
+  --site-brand-blue: #003478;
+  --site-brand-blue-strong: #002a5f;
+  --site-brand-blue-soft: #edf4ff;
+}
+
+.site-header:not(.is-home-route),
+.site-header.is-scrolled {
+  border-bottom-color: rgba(5, 5, 5, 0.08);
+  background: rgba(255, 255, 255, 0.96);
+}
+
+.site-header.is-scrolled {
+  box-shadow: 0 12px 34px rgba(5, 17, 33, 0.1);
+}
+
+.site-header:not(.is-home-route) .site-brand,
+.site-header.is-scrolled .site-brand,
+.site-header.is-open .site-brand {
+  color: var(--site-black);
+}
+
+.site-brand-mark,
+.site-header.is-transparent .site-brand-mark,
+.site-header.is-scrolled .site-brand-mark,
+.site-header.is-open .site-brand-mark,
+.site-footer .site-brand-mark {
+  position: relative;
+  display: inline-grid;
+  width: 31px;
+  height: 31px;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: var(--site-brand-logo-color, var(--site-black)) !important;
+  box-shadow: none !important;
+  clip-path: none !important;
+  -webkit-mask: url("/assets/brand/koreaindustry-symbol.svg") center / contain no-repeat;
+  mask: url("/assets/brand/koreaindustry-symbol.svg") center / contain no-repeat;
+}
+
+.site-brand-mark span {
+  display: none !important;
+}
+
+.site-header:not(.is-home-route) .site-brand-mark,
+.site-header.is-scrolled .site-brand-mark,
+.site-header.is-open .site-brand-mark {
+  --site-brand-logo-color: var(--site-black);
+}
+
+.site-footer .site-brand-mark {
+  --site-brand-logo-color: #ffffff;
+  width: 34px;
+  height: 34px;
+}
+
+.site-header:not(.is-home-route) .site-nav-group > a:hover,
+.site-header:not(.is-home-route) .site-nav-group > button:hover,
+.site-header:not(.is-home-route) .site-nav-group.is-active > a,
+.site-header:not(.is-home-route) .site-nav-group.is-active > button,
+.site-header.is-scrolled .site-nav-group > a:hover,
+.site-header.is-scrolled .site-nav-group > button:hover,
+.site-header.is-scrolled .site-nav-group.is-active > a,
+.site-header.is-scrolled .site-nav-group.is-active > button {
+  color: var(--site-black);
+  background: #f4f7fc;
+}
+
+.site-header:not(.is-home-route) .site-nav .site-nav-cta,
+.site-header.is-scrolled .site-nav .site-nav-cta {
+  color: #ffffff;
+  border-color: var(--site-black);
+  background: var(--site-black);
+}
+
+.site-header:not(.is-home-route) .site-nav .site-nav-cta:hover,
+.site-header.is-scrolled .site-nav .site-nav-cta:hover {
+  color: var(--site-black);
+  border-color: var(--site-black);
+  background: #ffffff;
+}
+
+html[data-site-hero-group="1"] .site-header.is-transparent.is-home-route,
+html .site-header.is-transparent.is-home-route[data-site-hero-group="1"] {
+  --site-home-topbar-color: #000000;
+  --site-home-topbar-mark-line: #000000;
+  color: #000000 !important;
+}
+
+html[data-site-hero-group="1"] .site-header.is-transparent.is-home-route .site-brand,
+html[data-site-hero-group="1"] .site-header.is-transparent.is-home-route .site-brand > span:last-child,
+html[data-site-hero-group="1"] .site-header.is-transparent.is-home-route .site-menu-button,
+html[data-site-hero-group="1"] .site-header.is-transparent.is-home-route .site-menu-button svg,
+html[data-site-hero-group="1"] .site-header.is-transparent.is-home-route .site-nav,
+html[data-site-hero-group="1"] .site-header.is-transparent.is-home-route .site-nav-group > a,
+html[data-site-hero-group="1"] .site-header.is-transparent.is-home-route .site-nav-group > button,
+html[data-site-hero-group="1"] .site-header.is-transparent.is-home-route .site-nav .site-nav-cta,
+html .site-header.is-transparent.is-home-route[data-site-hero-group="1"] .site-brand,
+html .site-header.is-transparent.is-home-route[data-site-hero-group="1"] .site-brand > span:last-child,
+html .site-header.is-transparent.is-home-route[data-site-hero-group="1"] .site-menu-button,
+html .site-header.is-transparent.is-home-route[data-site-hero-group="1"] .site-menu-button svg,
+html .site-header.is-transparent.is-home-route[data-site-hero-group="1"] .site-nav,
+html .site-header.is-transparent.is-home-route[data-site-hero-group="1"] .site-nav-group > a,
+html .site-header.is-transparent.is-home-route[data-site-hero-group="1"] .site-nav-group > button,
+html .site-header.is-transparent.is-home-route[data-site-hero-group="1"] .site-nav .site-nav-cta {
+  color: #000000 !important;
+}
+
+html[data-site-hero-group="1"] .site-header.is-transparent.is-home-route .site-nav .site-nav-cta,
+html .site-header.is-transparent.is-home-route[data-site-hero-group="1"] .site-nav .site-nav-cta {
+  border-color: #000000 !important;
+  background: transparent !important;
+}
+
+html[data-site-hero-group="1"] .site-header.is-transparent.is-home-route .site-nav .site-nav-cta:hover,
+html .site-header.is-transparent.is-home-route[data-site-hero-group="1"] .site-nav .site-nav-cta:hover {
+  color: #ffffff !important;
+  background: #000000 !important;
+}
+
+html[data-site-hero-group="0"] .site-header.is-transparent.is-home-route .site-brand-mark,
+html .site-header.is-transparent.is-home-route[data-site-hero-group="0"] .site-brand-mark {
+  --site-brand-logo-color: #ffffff;
+  background: #ffffff !important;
+}
+
+html[data-site-hero-group="1"] .site-header.is-transparent.is-home-route .site-brand-mark,
+html .site-header.is-transparent.is-home-route[data-site-hero-group="1"] .site-brand-mark {
+  --site-brand-logo-color: #000000;
+  background: #000000 !important;
+}
+
+@media (max-width: 760px) {
+  .site-header.is-open .site-brand,
+  .site-header.is-open.is-transparent.is-home-route .site-brand,
+  .site-header.is-open.is-transparent.is-home-route .site-brand > span:last-child,
+  .site-header.is-open.is-transparent.is-home-route .site-menu-button {
+    color: var(--site-black) !important;
+  }
+
+  .site-header.is-open .site-brand-mark,
+  .site-header.is-open.is-transparent.is-home-route .site-brand-mark {
+    --site-brand-logo-color: var(--site-black);
+    width: 30px;
+    height: 30px;
+    background: var(--site-black) !important;
+  }
+}
