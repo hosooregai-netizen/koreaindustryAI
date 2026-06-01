@@ -1484,9 +1484,29 @@ export function SiteProductShowcase() {
     return () => observer.disconnect();
   }, []);
 
+  const playProductBgVideo = (event: SyntheticEvent<HTMLAnchorElement>) => {
+    const videoElement = event.currentTarget.querySelector<HTMLVideoElement>(".site-product-bg-video");
+    if (!videoElement) return;
+    void videoElement.play().catch(() => undefined);
+  };
+
+  const pauseProductBgVideo = (event: SyntheticEvent<HTMLAnchorElement>) => {
+    const videoElement = event.currentTarget.querySelector<HTMLVideoElement>(".site-product-bg-video");
+    if (!videoElement) return;
+    videoElement.pause();
+  };
+
   const renderVisual = (item: (typeof productShowcases)[number], side: "left" | "right") => (
-    <Link className={`site-product-visual site-product-reveal is-${side}`} href={item.href} aria-label={item.ariaLabel}>
-      <video className="site-product-bg-video" autoPlay loop muted playsInline preload="metadata" aria-hidden="true">
+    <Link
+      className={`site-product-visual site-product-reveal is-${side}`}
+      href={item.href}
+      aria-label={item.ariaLabel}
+      onMouseEnter={playProductBgVideo}
+      onMouseLeave={pauseProductBgVideo}
+      onFocus={playProductBgVideo}
+      onBlur={pauseProductBgVideo}
+    >
+      <video className="site-product-bg-video" loop muted playsInline preload="metadata" aria-hidden="true">
         <source src="/assets/kling_20260601_作品____________5338_0.mp4" type="video/mp4" />
       </video>
       <img className="site-product-ui" src={item.imageSrc} alt="" loading="lazy" />
