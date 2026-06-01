@@ -1699,17 +1699,7 @@ export function SiteCtaBand({
               <ArrowRight size={18} />
             </Link>
           </div>
-          <div className="site-final-cta-terminal" aria-hidden="true">
-            <div className="site-final-cta-terminal-top">
-              <span>C:\AI-CORE</span>
-            </div>
-            <div className="site-final-cta-terminal-body">
-              <p>&gt; scan business_issue</p>
-              <p>&gt; connect workflow_data</p>
-              <p>&gt; build automation_plan</p>
-              <p className="is-ready">&gt; ready in 5 days<span /></p>
-            </div>
-          </div>
+          <div className="site-final-cta-empty" aria-hidden="true" />
         </div>
       </section>
     );

@@ -8067,8 +8067,8 @@ html[data-site-hero-group="1"] .site-header.is-transparent.is-home-route .site-b
   width: min(100%, 1600px);
   min-height: 620px;
   margin: 0 auto;
-  grid-template-columns: minmax(0, 0.88fr) minmax(360px, 0.42fr);
-  gap: 56px;
+  grid-template-columns: minmax(0, 1fr) minmax(120px, 0.14fr);
+  gap: 48px;
   align-items: center;
   padding: 146px 72px;
   box-sizing: border-box;
@@ -8112,117 +8112,6 @@ html[data-site-hero-group="1"] .site-header.is-transparent.is-home-route .site-b
   color: #000000;
   border-color: rgba(255, 255, 255, 0.84);
   background: rgba(255, 255, 255, 0.84);
-}
-
-.site-final-cta-terminal {
-  position: relative;
-  justify-self: end;
-  width: min(100%, 460px);
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: 8px;
-  color: rgba(210, 255, 220, 0.88);
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent 42%),
-    #030303;
-  box-shadow:
-    0 30px 90px rgba(0, 0, 0, 0.42),
-    inset 0 0 0 1px rgba(120, 255, 170, 0.06),
-    inset 0 0 44px rgba(76, 255, 134, 0.04);
-  animation: site-final-terminal-glow 4.8s steps(1, end) infinite;
-}
-
-.site-final-cta-terminal::before {
-  position: absolute;
-  inset: 0;
-  content: "";
-  pointer-events: none;
-  background: repeating-linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.035) 0 1px,
-    transparent 1px 4px
-  );
-  opacity: 0.42;
-}
-
-.site-final-cta-terminal-top {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  min-height: 34px;
-  align-items: center;
-  padding: 0 14px;
-  color: rgba(255, 255, 255, 0.58);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.045);
-  font-family: Consolas, "Courier New", monospace;
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.site-final-cta-terminal-body {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  gap: 12px;
-  min-height: 240px;
-  padding: 28px 24px 30px;
-  font-family: Consolas, "Courier New", monospace;
-  font-size: 15px;
-  font-weight: 700;
-  line-height: 1.35;
-}
-
-.site-final-cta-terminal-body p {
-  margin: 0;
-  color: rgba(190, 255, 205, 0.74);
-  text-shadow: 0 0 12px rgba(79, 255, 131, 0.12);
-}
-
-.site-final-cta-terminal-body p:nth-child(1) {
-  opacity: 0;
-}
-
-.site-final-cta-terminal-body p:nth-child(2) {
-  opacity: 0;
-}
-
-.site-final-cta-terminal-body p:nth-child(3) {
-  opacity: 0;
-}
-
-.site-final-cta-terminal-body p:nth-child(4) {
-  opacity: 0;
-}
-
-.site-final-cta.is-typing .site-final-cta-terminal-body p:nth-child(1) {
-  animation: site-final-terminal-line 420ms steps(1, end) 520ms both;
-}
-
-.site-final-cta.is-typing .site-final-cta-terminal-body p:nth-child(2) {
-  animation: site-final-terminal-line 420ms steps(1, end) 1120ms both;
-}
-
-.site-final-cta.is-typing .site-final-cta-terminal-body p:nth-child(3) {
-  animation: site-final-terminal-line 420ms steps(1, end) 1720ms both;
-}
-
-.site-final-cta.is-typing .site-final-cta-terminal-body p:nth-child(4) {
-  animation: site-final-terminal-line 420ms steps(1, end) 2320ms both;
-}
-
-.site-final-cta-terminal-body .is-ready {
-  color: rgba(225, 255, 232, 0.92);
-}
-
-.site-final-cta-terminal-body .is-ready span {
-  display: inline-block;
-  width: 8px;
-  height: 1em;
-  margin-left: 4px;
-  background: currentColor;
-  transform: translateY(0.16em);
-  animation: site-final-terminal-cursor 900ms steps(1, end) infinite;
 }
 
 @keyframes site-final-cta-plane-drift {
@@ -8318,39 +8207,6 @@ html[data-site-hero-group="1"] .site-header.is-transparent.is-home-route .site-b
   }
 }
 
-@keyframes site-final-terminal-line {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes site-final-terminal-cursor {
-  0%,
-  48% {
-    opacity: 1;
-  }
-
-  49%,
-  100% {
-    opacity: 0;
-  }
-}
-
-@keyframes site-final-terminal-glow {
-  0%,
-  100% {
-    opacity: 0.92;
-  }
-
-  50% {
-    opacity: 1;
-  }
-}
-
 .site-typewriter-text {
   position: relative;
   display: inline-block;
@@ -8392,6 +8248,13 @@ html[data-site-hero-group="1"] .site-header.is-transparent.is-home-route .site-b
   animation: site-typewriter-caret var(--site-type-duration, 1200ms) steps(1, end) var(--site-type-delay, 0ms) both;
 }
 
+.site-final-cta.is-typing h2 .site-typewriter-text::after {
+  animation:
+    site-typewriter-caret var(--site-type-duration, 1200ms) steps(1, end) var(--site-type-delay, 0ms) both,
+    site-typewriter-cursor-blink 920ms steps(1, end)
+      calc(var(--site-type-delay, 0ms) + var(--site-type-duration, 1200ms)) infinite;
+}
+
 @keyframes site-typewriter-reveal {
   from {
     clip-path: inset(0 100% 0 0);
@@ -8413,6 +8276,18 @@ html[data-site-hero-group="1"] .site-header.is-transparent.is-home-route .site-b
   }
 }
 
+@keyframes site-typewriter-cursor-blink {
+  0%,
+  48% {
+    opacity: 1;
+  }
+
+  49%,
+  100% {
+    opacity: 0;
+  }
+}
+
 @media (max-width: 1180px) {
   .site-final-cta::after {
     background:
@@ -8422,19 +8297,9 @@ html[data-site-hero-group="1"] .site-header.is-transparent.is-home-route .site-b
 
   .site-final-cta-inner {
     min-height: 580px;
-    grid-template-columns: minmax(0, 1fr) minmax(320px, 0.38fr);
-    gap: 36px;
+    grid-template-columns: minmax(0, 1fr) minmax(96px, 0.14fr);
+    gap: 32px;
     padding: 120px 28px;
-  }
-
-  .site-final-cta-terminal {
-    width: min(100%, 380px);
-  }
-
-  .site-final-cta-terminal-body {
-    min-height: 220px;
-    padding: 24px 20px 26px;
-    font-size: 14px;
   }
 
   .site-final-cta h2 {
@@ -8502,7 +8367,7 @@ html[data-site-hero-group="1"] .site-header.is-transparent.is-home-route .site-b
     margin-top: 34px;
   }
 
-  .site-final-cta-terminal {
+  .site-final-cta-empty {
     display: none;
   }
 }
@@ -8520,15 +8385,8 @@ html[data-site-hero-group="1"] .site-header.is-transparent.is-home-route .site-b
   .site-final-cta-grid::after,
   .site-final-cta-frame,
   .site-final-cta-frame::after,
-  .site-final-cta-scanline,
-  .site-final-cta-terminal,
-  .site-final-cta-terminal-body p,
-  .site-final-cta-terminal-body .is-ready span {
+  .site-final-cta-scanline {
     animation: none;
-  }
-
-  .site-final-cta-terminal-body p {
-    opacity: 1;
   }
 
   .site-typewriter-text {
