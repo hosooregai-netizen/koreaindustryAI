@@ -613,12 +613,12 @@ test("home omits industry wordmarks and shows industry image cards", async ({ pa
   await expectNoHorizontalOverflow(page);
 });
 
-test("Resources and Industries route to coming soon pages", async ({ page }) => {
+test("Community and Industries route to coming soon pages", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/");
 
   const mainNav = page.getByLabel("주요 메뉴");
-  await mainNav.getByRole("button", { name: "Resources" }).hover();
+  await mainNav.getByRole("button", { name: "Community" }).hover();
   await expect(mainNav.getByRole("menuitem", { name: /News Letter/ })).toBeVisible();
   await expect(mainNav.getByRole("menuitem", { name: /Blog/ })).toBeVisible();
   await mainNav.getByRole("menuitem", { name: /Technology/ }).click();

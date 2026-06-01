@@ -42,6 +42,8 @@ type NavGroup = {
 };
 
 type HeroVisualKind = "home" | "products" | "company" | "contact" | "community";
+type WhatsNewTag = "Blog" | "News letter" | "Technology";
+type WhatsNewFilter = "All" | WhatsNewTag;
 
 const heroVideoSources = [
   "/assets/hero-landing-intro.mp4",
@@ -52,6 +54,36 @@ const heroGroupChangeEventName = "siteHeroGroupChange";
 
 const heroVideoDurations = [13.167, 12.243];
 const heroVideoAdvanceLeadSeconds = 0.5;
+
+function useHomeRepeatReveal<TElement extends HTMLElement>() {
+  const [isRevealed, setIsRevealed] = useState(false);
+  const [isRevealObservable, setIsRevealObservable] = useState(false);
+  const revealRef = useRef<TElement | null>(null);
+
+  useEffect(() => {
+    const element = revealRef.current;
+    if (!element) return;
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) {
+      setIsRevealed(true);
+      return;
+    }
+
+    setIsRevealObservable(true);
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsRevealed(Boolean(entry?.isIntersecting));
+      },
+      { rootMargin: "0px 0px -14% 0px", threshold: 0 },
+    );
+
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, []);
+
+  return { isRevealObservable, isRevealed, revealRef };
+}
 
 type HeroVideoLayer = {
   sourceIndex: number;
@@ -164,7 +196,7 @@ export const navItems: NavGroup[] = [
     ],
   },
   {
-    label: "Resources",
+    label: "Community",
     summary: "콘텐츠 페이지는 준비중이며, 우선 AI-Core 메시지를 중심으로 정리합니다.",
     children: [
       {
@@ -255,6 +287,74 @@ export const industryImageCards = [
     href: "/industries/construction",
     src: "/assets/industries/construction-card.png",
     alt: "건설 현장을 검토하는 작업자",
+  },
+];
+
+const whatsNewFilters: WhatsNewFilter[] = ["All", "Blog", "News letter", "Technology"];
+const whatsNewPageSize = 3;
+
+const whatsNewItems: Array<{
+  title: string;
+  tag: WhatsNewTag;
+  href: string;
+  imageSrc: string;
+  imageAlt: string;
+  date: string;
+  meta?: string;
+}> = [
+  {
+    title: "제조 현장 데이터를 업무 화면으로 바꾸는 방법",
+    tag: "Blog",
+    href: "/community/blog",
+    imageSrc: "/assets/industries/manufacturing-card.png",
+    imageAlt: "자동화 로봇이 배치된 제조 공정",
+    date: "2026.05.29.",
+    meta: "산업 자동화",
+  },
+  {
+    title: "이번 달 산업 AI 도입 체크리스트",
+    tag: "News letter",
+    href: "/community/newsletter",
+    imageSrc: "/assets/industrial-ai-hero.png",
+    imageAlt: "산업 현장과 데이터 화면이 결합된 AI-Core 이미지",
+    date: "2026.05.22.",
+    meta: "Monthly letter",
+  },
+  {
+    title: "문서, 승인, 리포트를 연결하는 AI-Core 구조",
+    tag: "Technology",
+    href: "/community/technology",
+    imageSrc: "/assets/ai-core-erp-ui.png",
+    imageAlt: "AI-Core ERP 업무 화면",
+    date: "2026.05.16.",
+    meta: "Architecture",
+  },
+  {
+    title: "물류 운영 리포트가 매일 늦어지는 이유",
+    tag: "Blog",
+    href: "/community/blog",
+    imageSrc: "/assets/industries/logistics-card.png",
+    imageAlt: "컨베이어와 지게차가 움직이는 물류 창고",
+    date: "2026.05.08.",
+    meta: "Operations",
+  },
+  {
+    title: "반복 업무 자동화에 필요한 데이터 입력 설계",
+    tag: "Technology",
+    href: "/community/technology",
+    imageSrc: "/assets/ai-core-product-bg.png",
+    imageAlt: "AI-Core 제품 배경 화면",
+    date: "2026.04.30.",
+    meta: "Workflow",
+  },
+  {
+    title: "금융 문서 검토 자동화 트렌드 노트",
+    tag: "News letter",
+    href: "/community/newsletter",
+    imageSrc: "/assets/industries/finance-card.png",
+    imageAlt: "도시 전망의 금융 데이터 운영실",
+    date: "2026.04.24.",
+    meta: "AI insight",
   },
 ];
 
@@ -502,7 +602,7 @@ export function SiteFooter() {
       <nav aria-label="푸터 메뉴">
         <Link href="/products/data-driven">Data-Driven AI-Core</Link>
         <Link href="/products/automation">Automation AI-Core</Link>
-        <Link href="/community/newsletter">Resources</Link>
+        <Link href="/community/newsletter">Community</Link>
         <Link href="/company">Company</Link>
         <Link href="/contact">문의하기</Link>
       </nav>
@@ -1033,23 +1133,149 @@ export function SiteIndustryWordmarks() {
 }
 
 export function SiteIndustryImageSection() {
+  const {
+    isRevealObservable: isIndustryRevealObservable,
+    isRevealed: isIndustryRevealed,
+    revealRef: industryRevealRef,
+  } = useHomeRepeatReveal<HTMLElement>();
+
   return (
-    <section className="site-home-industries-section" aria-labelledby="site-home-industries-title">
+    <section
+      ref={industryRevealRef}
+      className={`site-home-industries-section${isIndustryRevealObservable ? " is-observable" : ""}${
+        isIndustryRevealed ? " is-revealed" : ""
+      }`}
+      aria-labelledby="site-home-industries-title"
+    >
       <div className="site-home-industries-wrap">
-        <h2 id="site-home-industries-title" className="site-home-industries-title">
+        <h2 id="site-home-industries-title" className="site-home-industries-title site-home-repeat-reveal">
           INDUSTRIES
         </h2>
         <div className="site-home-industries">
-          {industryImageCards.map((item) => (
-            <Link className="site-home-industry-card" href={item.href} key={item.name} aria-label={`${item.name} 산업 페이지로 이동`}>
+          {industryImageCards.map((item, index) => (
+            <Link
+              className="site-home-industry-card site-home-repeat-reveal"
+              href={item.href}
+              key={item.name}
+              aria-label={`${item.name} 산업 페이지로 이동`}
+              style={{ "--site-home-item-reveal-delay": `${150 + index * 120}ms` } as CSSProperties}
+            >
               <img src={item.src} alt={item.alt} loading="lazy" />
               <span className="site-home-industry-card-title">{item.name}</span>
-              <span className="site-home-industry-card-arrow" aria-hidden="true">
-                <ArrowRight size={24} strokeWidth={2.25} />
-              </span>
+              <span className="site-home-industry-card-arrow" aria-hidden="true" />
             </Link>
           ))}
         </div>
+      </div>
+    </section>
+  );
+}
+
+export function SiteWhatsNewSection() {
+  const {
+    isRevealObservable: isWhatsNewRevealObservable,
+    isRevealed: isWhatsNewRevealed,
+    revealRef: whatsNewRevealRef,
+  } = useHomeRepeatReveal<HTMLElement>();
+  const [activeFilter, setActiveFilter] = useState<WhatsNewFilter>("All");
+  const [activePage, setActivePage] = useState(1);
+  const filteredItems =
+    activeFilter === "All" ? whatsNewItems : whatsNewItems.filter((item) => item.tag === activeFilter);
+  const pageCount = Math.max(1, Math.ceil(filteredItems.length / whatsNewPageSize));
+  const pageStartIndex = (activePage - 1) * whatsNewPageSize;
+  const visibleItems = filteredItems.slice(pageStartIndex, pageStartIndex + whatsNewPageSize);
+
+  const changeFilter = (filter: WhatsNewFilter) => {
+    setActiveFilter(filter);
+    setActivePage(1);
+  };
+
+  return (
+    <section
+      ref={whatsNewRevealRef}
+      className={`site-whats-new-section${isWhatsNewRevealObservable ? " is-observable" : ""}${
+        isWhatsNewRevealed ? " is-revealed" : ""
+      }`}
+      aria-labelledby="site-whats-new-title"
+    >
+      <div className="site-whats-new-wrap">
+        <div className="site-whats-new-header">
+          <h2 id="site-whats-new-title" className="site-whats-new-title site-home-repeat-reveal">
+            <strong>What&apos;s</strong> New
+          </h2>
+          <div
+            className="site-whats-new-filters site-home-repeat-reveal"
+            aria-label="What's New 콘텐츠 필터"
+            style={{ "--site-home-item-reveal-delay": "120ms" } as CSSProperties}
+          >
+            {whatsNewFilters.map((filter) => (
+              <button
+                className={activeFilter === filter ? "is-active" : ""}
+                type="button"
+                aria-pressed={activeFilter === filter}
+                key={filter}
+                onClick={() => changeFilter(filter)}
+              >
+                {filter}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="site-whats-new-grid">
+          {visibleItems.map((item, index) => (
+            <Link
+              className="site-whats-new-card site-home-repeat-reveal"
+              href={item.href}
+              key={`${item.tag}-${item.title}`}
+              style={{ "--site-home-item-reveal-delay": `${210 + index * 120}ms` } as CSSProperties}
+            >
+              <span className="site-whats-new-image">
+                <img src={item.imageSrc} alt={item.imageAlt} loading="lazy" />
+              </span>
+              <span className="site-whats-new-meta">
+                <span className="site-whats-new-tag">{item.tag}</span>
+                {item.meta ? <span>{item.meta}</span> : null}
+              </span>
+              <strong>{item.title}</strong>
+              <time dateTime={item.date.replaceAll(".", "-").replace(/-$/, "")}>{item.date}</time>
+            </Link>
+          ))}
+        </div>
+        {pageCount > 1 ? (
+          <nav className="site-whats-new-pagination" aria-label="What's New 페이지">
+            <button
+              type="button"
+              aria-label="이전 페이지"
+              disabled={activePage === 1}
+              onClick={() => setActivePage((page) => Math.max(1, page - 1))}
+            >
+              <ChevronLeft size={18} aria-hidden="true" />
+            </button>
+            {Array.from({ length: pageCount }, (_, index) => {
+              const page = index + 1;
+              return (
+                <button
+                  className={activePage === page ? "is-active" : ""}
+                  type="button"
+                  aria-label={`${page}페이지`}
+                  aria-current={activePage === page ? "page" : undefined}
+                  key={page}
+                  onClick={() => setActivePage(page)}
+                >
+                  {page}
+                </button>
+              );
+            })}
+            <button
+              type="button"
+              aria-label="다음 페이지"
+              disabled={activePage === pageCount}
+              onClick={() => setActivePage((page) => Math.min(pageCount, page + 1))}
+            >
+              <ChevronRight size={18} aria-hidden="true" />
+            </button>
+          </nav>
+        ) : null}
       </div>
     </section>
   );
@@ -1077,6 +1303,126 @@ export function SiteTrustStrip() {
         {clientLogos.map((logo) => (
           <span key={logo.name}>{logo.name}</span>
         ))}
+      </div>
+    </section>
+  );
+}
+
+export function SiteWorkTransitionSection() {
+  const flowInputs = [
+    {
+      title: "문서",
+      text: "양식 수집",
+      className: "is-document",
+    },
+    {
+      title: "승인",
+      text: "흐름 정리",
+      className: "is-approval",
+    },
+    {
+      title: "데이터",
+      text: "기준화",
+      className: "is-data",
+    },
+  ];
+  const [isRevealed, setIsRevealed] = useState(false);
+  const [isRevealObservable, setIsRevealObservable] = useState(false);
+  const sectionRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) {
+      setIsRevealed(true);
+      return;
+    }
+
+    setIsRevealObservable(true);
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsRevealed(Boolean(entry?.isIntersecting));
+      },
+      { rootMargin: "0px 0px -16% 0px", threshold: 0 },
+    );
+
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <section
+      ref={sectionRef}
+      className={`site-work-transition-section${isRevealObservable ? " is-observable" : ""}${
+        isRevealed ? " is-revealed" : ""
+      }`}
+      aria-labelledby="site-work-transition-title"
+    >
+      <div className="site-work-transition-intro">
+        <div className="site-work-transition-copy">
+          <h2 id="site-work-transition-title">복잡한 현장 업무에는 맞춤형 AI 시스템이 필요합니다</h2>
+          <p>
+            회사마다 다른 문서 양식, 승인 흐름, 운영 데이터를 업무 구조에 맞게 정리하고 반복 처리를
+            AI-Core 시스템으로 연결합니다.
+          </p>
+        </div>
+        <div className="site-work-transition-media" aria-hidden="true">
+          <img src="/assets/industrial-ai-hero.png" alt="" loading="lazy" />
+        </div>
+      </div>
+      <div className="site-work-flow" aria-labelledby="site-work-flow-title">
+        <div className="site-work-flow-heading">
+          <h3 id="site-work-flow-title">업무의 출발점이 제품 구조로 이어집니다</h3>
+          <p>흩어진 업무 요소를 하나의 흐름으로 묶고, 필요한 제품 모듈로 자연스럽게 연결합니다.</p>
+        </div>
+        <div className="site-work-flow-map" aria-label="AI-Core 제품 연결 흐름">
+          <svg className="site-work-flow-path" viewBox="0 0 1240 330" aria-hidden="true" focusable="false">
+            <defs>
+              <linearGradient id="site-work-flow-gradient" x1="80" x2="1110" y1="70" y2="250" gradientUnits="userSpaceOnUse">
+                <stop offset="0" stopColor="#8fb0ff" />
+                <stop offset="0.46" stopColor="#2f6bff" />
+                <stop offset="1" stopColor="#0f1724" />
+              </linearGradient>
+            </defs>
+            <path
+              className="site-work-flow-path-shadow"
+              d="M118 74 C248 88 252 204 384 204 S555 72 688 124 S812 254 954 226 S1058 176 1128 198"
+            />
+            <path
+              className="site-work-flow-path-line"
+              d="M118 74 C248 88 252 204 384 204 S555 72 688 124 S812 254 954 226 S1058 176 1128 198"
+            />
+          </svg>
+          {flowInputs.map((item, index) => (
+            <div
+              className={`site-work-flow-node is-input ${item.className}`}
+              key={item.title}
+              style={{ "--site-flow-delay": `${430 + index * 180}ms` } as CSSProperties}
+            >
+              <small>{String(index + 1).padStart(2, "0")}</small>
+              <strong>{item.title}</strong>
+              <span>{item.text}</span>
+            </div>
+          ))}
+          <div
+            className="site-work-flow-node is-core"
+            style={{ "--site-flow-delay": `${430 + flowInputs.length * 180}ms` } as CSSProperties}
+          >
+            <small>AI-Core</small>
+            <strong>업무 구조화</strong>
+            <span>데이터 구조화 + 자동화 설계</span>
+          </div>
+          <div
+            className="site-work-flow-node is-products"
+            style={{ "--site-flow-delay": `${430 + (flowInputs.length + 1) * 180}ms` } as CSSProperties}
+          >
+            <small>Products</small>
+            <strong>Data-Driven / Automation</strong>
+            <span>필요한 모듈로 연결</span>
+          </div>
+        </div>
       </div>
     </section>
   );
@@ -1116,6 +1462,7 @@ export function SiteProductShowcase() {
       description:
         "문서, 승인 흐름, 운영 데이터를 기업 맞춤 ERP 구조로 연결해 업무 데이터를 관리하고 활용할 수 있게 합니다.",
       imageSrc: "/assets/ai-core-erp-ui.png",
+      ctaLabel: "Data-Driven",
       visualFirst: false,
     },
     {
@@ -1126,37 +1473,50 @@ export function SiteProductShowcase() {
       description:
         "확인, 분류, 정리, 보고처럼 매일 반복되는 업무를 작은 자동화 흐름으로 시작해 기업 업무 시스템으로 확장합니다.",
       imageSrc: "/assets/ai-core-erp-ui.png",
+      ctaLabel: "Automation",
       visualFirst: true,
     },
   ];
-  const [revealedProductRows, setRevealedProductRows] = useState<number[]>([]);
+  const [visibleProductRows, setVisibleProductRows] = useState<number[]>([]);
   const productRowRefs = useRef<Array<HTMLElement | null>>([]);
+  const {
+    isRevealObservable: isProductsHeaderRevealObservable,
+    isRevealed: isProductsHeaderRevealed,
+    revealRef: productsHeaderRevealRef,
+  } = useHomeRepeatReveal<HTMLDivElement>();
 
   useEffect(() => {
     const rows = productRowRefs.current.filter(Boolean) as HTMLElement[];
     if (rows.length === 0) return;
 
-    const revealRow = (index: number) => {
-      setRevealedProductRows((currentRows) =>
+    const showRow = (index: number) => {
+      setVisibleProductRows((currentRows) =>
         currentRows.includes(index) ? currentRows : [...currentRows, index],
       );
     };
 
+    const hideRow = (index: number) => {
+      setVisibleProductRows((currentRows) => currentRows.filter((rowIndex) => rowIndex !== index));
+    };
+
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) {
-      rows.forEach((_, index) => revealRow(index));
+      rows.forEach((_, index) => showRow(index));
       return;
     }
 
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
           const rowIndex = Number((entry.target as HTMLElement).dataset.productIndex);
-          revealRow(rowIndex);
-          observer.unobserve(entry.target);
+          if (!Number.isFinite(rowIndex)) return;
+          if (entry.isIntersecting && entry.intersectionRatio >= 0.28) {
+            showRow(rowIndex);
+            return;
+          }
+          hideRow(rowIndex);
         });
       },
-      { rootMargin: "0px 0px -12% 0px", threshold: 0.28 },
+      { rootMargin: "0px 0px -12% 0px", threshold: [0, 0.28] },
     );
 
     rows.forEach((row) => observer.observe(row));
@@ -1174,13 +1534,22 @@ export function SiteProductShowcase() {
       <h3>{item.title}</h3>
       <p className="site-product-showcase-lead">{item.lead}</p>
       <p>{item.description}</p>
+      <Link className="site-product-cta" href={item.href} aria-label={item.ariaLabel}>
+        {item.ctaLabel}
+        <ArrowRight size={17} aria-hidden="true" />
+      </Link>
     </div>
   );
 
   return (
     <div className="site-products-showcase">
-      <div className="site-products-header">
-        <h2 className="site-products-title">Products</h2>
+      <div
+        ref={productsHeaderRevealRef}
+        className={`site-products-header${isProductsHeaderRevealObservable ? " is-observable" : ""}${
+          isProductsHeaderRevealed ? " is-revealed" : ""
+        }`}
+      >
+        <h2 className="site-products-title site-home-repeat-reveal">Products</h2>
       </div>
       <div className="site-product-showcase-list">
         {productShowcases.map((item, index) => {
@@ -1190,7 +1559,7 @@ export function SiteProductShowcase() {
           return (
           <article
             className={`site-product-showcase ${item.visualFirst ? "is-visual-first" : ""} ${
-              revealedProductRows.includes(index) ? "is-revealed" : ""
+              visibleProductRows.includes(index) ? "is-revealed" : ""
             }`}
             data-product-index={index}
             key={item.title}

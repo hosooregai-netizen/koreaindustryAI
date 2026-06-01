@@ -6,6 +6,8 @@ import {
   SiteProductShowcase,
   SiteShell,
   SiteTrustStrip,
+  SiteWhatsNewSection,
+  SiteWorkTransitionSection,
 } from "@/components/site";
 
 export const metadata: Metadata = {
@@ -25,12 +27,14 @@ export default function SiteHomePage() {
           video
         />
         <SiteTrustStrip />
+        <SiteWorkTransitionSection />
 
         <section className="site-section site-product-section">
           <SiteProductShowcase />
         </section>
 
         <SiteIndustryImageSection />
+        <SiteWhatsNewSection />
 
         <SiteCtaBand
           title="기업의 문제, 자동화로 해결하세요."

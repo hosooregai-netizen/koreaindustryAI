@@ -63,7 +63,7 @@ test("planned site routes have page files and removed routes are gone", () => {
 test("header navigation exposes the site IA", () => {
   const navBlock = siteSource.match(/export const navItems[\s\S]*?export const industryWordmarks/)?.[0] ?? "";
 
-  for (const label of ["Product", "Industries", "Resources", "Company"]) {
+  for (const label of ["Product", "Industries", "Community", "Company"]) {
     assert.match(navBlock, new RegExp(`label: "${label}"`), `${label} should be present`);
   }
 
@@ -143,7 +143,7 @@ test("home hero uses the ordered landing video assets", () => {
   assert.doesNotMatch(siteHome, /secondary=\{\{ label: "AI-Core 보기"/);
 });
 
-test("home product showcase links only the product visual", () => {
+test("home product showcase links product visuals and copy CTAs", () => {
   const productBlock =
     siteSource.match(/export function SiteProductShowcase\(\) \{[\s\S]*?export function SiteToolCta/)?.[0] ?? "";
 
@@ -152,6 +152,9 @@ test("home product showcase links only the product visual", () => {
   assert.match(productBlock, /href: "\/products\/data-driven"/);
   assert.match(productBlock, /href: "\/products\/automation"/);
   assert.match(productBlock, /<Link\s+className=\{`site-product-visual[\s\S]*?href=\{item\.href\}/);
+  assert.match(productBlock, /<Link\s+className="site-product-cta"\s+href=\{item\.href\}/);
+  assert.match(productBlock, /ctaLabel: "Data-Driven"/);
+  assert.match(productBlock, /ctaLabel: "Automation"/);
 });
 
 test("site source does not include mojibake markers", () => {

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -18,6 +19,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
+      <head>
+        <Script id="site-scroll-restoration" strategy="beforeInteractive">
+          {`if ("scrollRestoration" in history) history.scrollRestoration = "manual";`}
+        </Script>
+      </head>
       <body>{children}</body>
     </html>
   );
