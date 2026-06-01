@@ -1043,7 +1043,10 @@ export function SiteIndustryImageSection() {
           {industryImageCards.map((item) => (
             <Link className="site-home-industry-card" href={item.href} key={item.name} aria-label={`${item.name} 산업 페이지로 이동`}>
               <img src={item.src} alt={item.alt} loading="lazy" />
-              <span>{item.name}</span>
+              <span className="site-home-industry-card-title">{item.name}</span>
+              <span className="site-home-industry-card-arrow" aria-hidden="true">
+                <ArrowRight size={24} strokeWidth={2.25} />
+              </span>
             </Link>
           ))}
         </div>
