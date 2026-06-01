@@ -8527,6 +8527,10 @@ html[data-site-hero-group="1"] .site-header.is-transparent.is-home-route .site-b
     animation: none;
   }
 
+  .site-final-cta-terminal-body p {
+    opacity: 1;
+  }
+
   .site-typewriter-text {
     clip-path: inset(0 0 0 0);
   }
