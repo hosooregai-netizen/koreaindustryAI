@@ -157,6 +157,22 @@ test("home product showcase links product visuals and copy CTAs", () => {
   assert.match(productBlock, /ctaLabel: "Automation"/);
 });
 
+test("home solution bridge uses overview cards instead of the old flow canvas", () => {
+  const solutionBlock =
+    siteSource.match(/export function SiteWorkTransitionSection\(\) \{[\s\S]*?export function SiteAiCoreShowcase/)?.[0] ??
+    "";
+
+  assert.match(solutionBlock, /solutionOverviewItems/);
+  assert.match(solutionBlock, /업무에 맞춘 AI-Core, 제품이 되는 구조까지 설계합니다/);
+  assert.match(solutionBlock, /업무 구조 정리/);
+  assert.match(solutionBlock, /AI-Core 설계/);
+  assert.match(solutionBlock, /제품 모듈 연결/);
+  assert.doesNotMatch(solutionBlock, />Overview</);
+  assert.doesNotMatch(solutionBlock, /현장 업무를 이해하는 방식부터 제품으로 확장되는 방식까지 한 번에 설계합니다/);
+  assert.doesNotMatch(solutionBlock, /site-work-flow/);
+  assert.doesNotMatch(solutionBlock, /industrial-ai-hero/);
+});
+
 test("site source does not include mojibake markers", () => {
   const files = [...collectTsxFiles("app"), ...collectTsxFiles("components")];
   const markers = ["�", "占", "?쒖", "硫"];

@@ -1310,21 +1310,21 @@ export function SiteTrustStrip() {
 }
 
 export function SiteWorkTransitionSection() {
-  const flowInputs = [
+  const solutionOverviewItems = [
     {
-      title: "문서",
-      text: "양식 수집",
-      className: "is-document",
+      number: "01",
+      title: "업무 구조 정리",
+      description: "흩어진 문서 양식, 승인 흐름, 운영 데이터를 실제 처리 단위로 정리합니다.",
     },
     {
-      title: "승인",
-      text: "흐름 정리",
-      className: "is-approval",
+      number: "02",
+      title: "AI-Core 설계",
+      description: "데이터 기준, 권한, 화면, 알림, 자동화 조건을 회사 업무 방식에 맞게 조립합니다.",
     },
     {
-      title: "데이터",
-      text: "기준화",
-      className: "is-data",
+      number: "03",
+      title: "제품 모듈 연결",
+      description: "정리된 구조를 Data-Driven과 Automation 제품으로 이어 실제 운영 화면으로 확장합니다.",
     },
   ];
   const [isRevealed, setIsRevealed] = useState(false);
@@ -1363,66 +1363,26 @@ export function SiteWorkTransitionSection() {
     >
       <div className="site-work-transition-intro">
         <div className="site-work-transition-copy">
-          <h2 id="site-work-transition-title">복잡한 현장 업무에는 맞춤형 AI 시스템이 필요합니다</h2>
+          <h2 id="site-work-transition-title">업무에 맞춘 AI-Core, 제품이 되는 구조까지 설계합니다</h2>
           <p>
-            회사마다 다른 문서 양식, 승인 흐름, 운영 데이터를 업무 구조에 맞게 정리하고 반복 처리를
-            AI-Core 시스템으로 연결합니다.
+            대한산업AI는 회사마다 다른 문서, 승인, 운영 데이터를 먼저 정리하고 반복 처리를 실제 제품 구조로
+            연결합니다.
           </p>
         </div>
-        <div className="site-work-transition-media" aria-hidden="true">
-          <img src="/assets/industrial-ai-hero.png" alt="" loading="lazy" />
-        </div>
       </div>
-      <div className="site-work-flow" aria-labelledby="site-work-flow-title">
-        <div className="site-work-flow-heading">
-          <h3 id="site-work-flow-title">업무의 출발점이 제품 구조로 이어집니다</h3>
-          <p>흩어진 업무 요소를 하나의 흐름으로 묶고, 필요한 제품 모듈로 자연스럽게 연결합니다.</p>
-        </div>
-        <div className="site-work-flow-map" aria-label="AI-Core 제품 연결 흐름">
-          <svg className="site-work-flow-path" viewBox="0 0 1240 330" aria-hidden="true" focusable="false">
-            <defs>
-              <linearGradient id="site-work-flow-gradient" x1="80" x2="1110" y1="70" y2="250" gradientUnits="userSpaceOnUse">
-                <stop offset="0" stopColor="#8fb0ff" />
-                <stop offset="0.46" stopColor="#2f6bff" />
-                <stop offset="1" stopColor="#0f1724" />
-              </linearGradient>
-            </defs>
-            <path
-              className="site-work-flow-path-shadow"
-              d="M118 74 C248 88 252 204 384 204 S555 72 688 124 S812 254 954 226 S1058 176 1128 198"
-            />
-            <path
-              className="site-work-flow-path-line"
-              d="M118 74 C248 88 252 204 384 204 S555 72 688 124 S812 254 954 226 S1058 176 1128 198"
-            />
-          </svg>
-          {flowInputs.map((item, index) => (
-            <div
-              className={`site-work-flow-node is-input ${item.className}`}
-              key={item.title}
-              style={{ "--site-flow-delay": `${430 + index * 180}ms` } as CSSProperties}
+      <div className="site-work-overview" aria-label="AI-Core 솔루션 설계 단계">
+        <div className="site-work-overview-grid">
+          {solutionOverviewItems.map((item, index) => (
+            <article
+              className="site-work-overview-card"
+              key={item.number}
+              style={{ "--site-overview-delay": `${260 + index * 150}ms` } as CSSProperties}
             >
-              <small>{String(index + 1).padStart(2, "0")}</small>
+              <small>{item.number}</small>
               <strong>{item.title}</strong>
-              <span>{item.text}</span>
-            </div>
+              <p>{item.description}</p>
+            </article>
           ))}
-          <div
-            className="site-work-flow-node is-core"
-            style={{ "--site-flow-delay": `${430 + flowInputs.length * 180}ms` } as CSSProperties}
-          >
-            <small>AI-Core</small>
-            <strong>업무 구조화</strong>
-            <span>데이터 구조화 + 자동화 설계</span>
-          </div>
-          <div
-            className="site-work-flow-node is-products"
-            style={{ "--site-flow-delay": `${430 + (flowInputs.length + 1) * 180}ms` } as CSSProperties}
-          >
-            <small>Products</small>
-            <strong>Data-Driven / Automation</strong>
-            <span>필요한 모듈로 연결</span>
-          </div>
         </div>
       </div>
     </section>
