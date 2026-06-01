@@ -1231,6 +1231,7 @@ export function SiteWhatsNewSection() {
             >
               <span className="site-whats-new-image">
                 <img src={item.imageSrc} alt={item.imageAlt} loading="lazy" />
+                <span className="site-whats-new-image-arrow" aria-hidden="true" />
               </span>
               <span className="site-whats-new-meta">
                 <span className="site-whats-new-tag">{item.tag}</span>
