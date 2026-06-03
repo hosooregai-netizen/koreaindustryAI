@@ -8559,3 +8559,24 @@ html .site-header.is-transparent.is-home-route[data-site-hero-group="1"] .site-b
     background: var(--site-black) !important;
   }
 }
+
+/* Keep subpage topbars aligned with the home topbar's white-background state. */
+.site-header:not(.is-home-route),
+.site-header:not(.is-home-route) .site-nav,
+.site-header:not(.is-home-route) .site-nav-links,
+.site-header:not(.is-home-route) .site-nav-group > a,
+.site-header:not(.is-home-route) .site-nav-group > button,
+.site-header:not(.is-home-route) .site-menu-button {
+  color: var(--site-black) !important;
+}
+
+.site-header:not(.is-home-route) .site-nav .site-nav-cta {
+  color: #ffffff !important;
+  border-color: var(--site-black) !important;
+  background: var(--site-black) !important;
+}
+
+.site-header:not(.is-home-route) .site-nav .site-nav-cta:hover {
+  color: var(--site-black) !important;
+  background: #ffffff !important;
+}
