@@ -8580,3 +8580,8 @@ html .site-header.is-transparent.is-home-route[data-site-hero-group="1"] .site-b
   color: var(--site-black) !important;
   background: #ffffff !important;
 }
+
+.site-header:not(.is-home-route) .site-nav-group.is-active > a,
+.site-header:not(.is-home-route) .site-nav-group.is-active > button {
+  background: transparent;
+}
