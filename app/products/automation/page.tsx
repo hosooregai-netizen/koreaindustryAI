@@ -3,17 +3,13 @@ import Link from "next/link";
 import type { CSSProperties } from "react";
 import {
   BarChart3,
-  Bell,
   CheckCircle2,
-  ClipboardCheck,
-  Database,
   FileText,
   Layers3,
   Search,
   ShieldCheck,
   Users,
   Workflow,
-  type LucideIcon,
 } from "lucide-react";
 import { SiteCtaBand, SiteShell } from "@/components/site";
 
@@ -64,49 +60,32 @@ const detailRows = [
   },
 ] as const;
 
-const featureCards: Array<{
-  title: string;
-  text: string;
-  icon: LucideIcon;
-  accent: "green" | "blue" | "purple" | "sky" | "amber" | "gray";
-}> = [
+const impactCards = [
   {
-    title: "업무 트리거",
-    text: "문서 등록, 일정 도래, 상태 변경, 요청 접수처럼 자동화가 시작되는 조건을 설정합니다.",
+    label: "작은 업무부터 실행",
+    value: "4",
+    unit: "단계 자동화",
+    text: "요청 접수, 분류, 정리, 보고처럼 반복되는 처리 단계를 자동화 흐름으로 먼저 구성합니다.",
     icon: Workflow,
-    accent: "green",
+    tone: "blue",
   },
   {
-    title: "분류와 추출",
-    text: "반복 문서와 운영 데이터에서 필요한 항목을 분류하고 추출합니다.",
-    icon: Search,
-    accent: "blue",
+    label: "사람 확인 분리",
+    value: "3",
+    unit: "개 확인",
+    text: "확인 필요, 승인, 반려와 수정 흐름을 자동 처리와 분리해 담당자가 판단할 지점을 남깁니다.",
+    icon: ShieldCheck,
+    tone: "purple",
   },
   {
-    title: "자동 정리",
-    text: "정해진 양식, 테이블, 보고 기준에 맞춰 데이터를 정리합니다.",
-    icon: Layers3,
-    accent: "purple",
+    label: "실행 이력 관리",
+    value: "1",
+    unit: "개 화면",
+    text: "담당자 확인, 실행 시간, 처리 결과와 예외 상태를 한 화면에서 확인할 수 있게 기록합니다.",
+    icon: BarChart3,
+    tone: "green",
   },
-  {
-    title: "승인 요청",
-    text: "확인이 필요한 결과만 담당자에게 전달하고 승인, 반려, 수정 흐름을 남깁니다.",
-    icon: ClipboardCheck,
-    accent: "sky",
-  },
-  {
-    title: "보고와 알림",
-    text: "처리 결과, 지연 항목, 확인 필요 상태를 보고서와 알림으로 전달합니다.",
-    icon: Bell,
-    accent: "amber",
-  },
-  {
-    title: "실행 이력",
-    text: "자동화 실행 시간, 담당자 확인, 변경 이력을 기록해 운영 상태를 추적합니다.",
-    icon: Database,
-    accent: "gray",
-  },
-];
+] as const;
 
 export default function AutomationPage() {
   return (
@@ -131,6 +110,10 @@ export default function AutomationPage() {
             </div>
           </div>
         </section>
+
+        <div className="site-product-sample-section">
+          <AutomationHeroSample />
+        </div>
 
         <section
           className="site-dd-section site-dd-card-section"
@@ -173,30 +156,29 @@ export default function AutomationPage() {
           ))}
         </section>
 
-        <section className="site-dd-section site-dd-feature-section" aria-labelledby="site-auto-feature-title">
-          <div className="site-dd-section-head">
-            <h2 id="site-auto-feature-title">Automation AI-Core 하나로, 반복 업무의 실행 과정을 연결합니다.</h2>
-            <p>조건 감지, AI 처리, 담당자 확인, 보고, 알림, 이력까지 필요한 기능을 기업 업무 방식에 맞춰 조립합니다.</p>
+        <section className="site-dd-section site-dd-impact-section" aria-labelledby="site-auto-impact-title">
+          <div className="site-dd-impact-head">
+            <h2 id="site-auto-impact-title">반복 업무 한계를 넘는 실행력</h2>
           </div>
-          <div className="site-dd-feature-grid">
-            {featureCards.map((card, index) => {
+          <div className="site-dd-impact-grid">
+            {impactCards.map((card, index) => {
               const Icon = card.icon;
 
               return (
                 <article
-                  className="site-dd-feature-card"
-                  data-accent={card.accent}
-                  key={card.title}
+                  className="site-dd-impact-card"
+                  data-tone={card.tone}
+                  key={card.label}
                   style={{ "--site-dd-delay": `${index * 70}ms` } as CSSProperties}
                 >
-                  <div className="site-dd-feature-visual">
-                    <div className="site-dd-feature-window">
-                      <Icon size={36} strokeWidth={2.4} aria-hidden="true" />
-                      <span />
-                      <span />
-                    </div>
+                  <div className="site-dd-impact-label">
+                    <Icon size={24} strokeWidth={2.4} aria-hidden="true" />
+                    <span>{card.label}</span>
                   </div>
-                  <h3>{card.title}</h3>
+                  <div className="site-dd-impact-value">
+                    <strong>{card.value}</strong>
+                    <span>{card.unit}</span>
+                  </div>
                   <p>{card.text}</p>
                 </article>
               );
@@ -207,6 +189,14 @@ export default function AutomationPage() {
         <SiteCtaBand title="기업의 문제, 자동화로 해결하세요." label="도입 문의" variant="final" />
       </main>
     </SiteShell>
+  );
+}
+
+function AutomationHeroSample() {
+  return (
+    <figure className="site-product-sample-frame site-product-sample-frame--auto">
+      <img src="/assets/ai-core-erp-ui.png" alt="AI-Core 업무 대시보드 샘플 화면" />
+    </figure>
   );
 }
 
@@ -229,14 +219,18 @@ function AutomationCardVisual({ kind }: { kind: (typeof automationCards)[number]
   if (kind === "review") {
     return (
       <div className="site-dd-card-visual site-auto-card-visual is-review" aria-hidden="true">
-        <div className="site-dd-output-tile">
-          <Bell size={34} />
-        </div>
-        <div className="site-dd-output-tile">
-          <ClipboardCheck size={36} />
-        </div>
-        <div className="site-dd-output-tile">
-          <Database size={34} />
+        <div className="site-auto-review-panel">
+          <div className="site-auto-review-head">
+            <strong>확인 필요</strong>
+            <span>2건</span>
+          </div>
+          <div className="site-auto-review-alert">누락 항목 확인</div>
+          <div className="site-auto-review-actions">
+            <span>승인</span>
+            <span>반려</span>
+            <span>수정</span>
+          </div>
+          <div className="site-auto-review-history">실행 이력 기록</div>
         </div>
       </div>
     );
@@ -305,6 +299,23 @@ function AutomationDetailVisual({ kind, index }: { kind: (typeof detailRows)[num
             <span>처리 중</span>
             <span>확인 필요</span>
             <span>완료</span>
+          </div>
+          <div className="site-auto-run-table">
+            <div>
+              <span>주문서 분류</span>
+              <b className="is-done">완료</b>
+              <small>09:12</small>
+            </div>
+            <div>
+              <span>보고서 생성</span>
+              <b className="is-progress">처리 중</b>
+              <small>09:20</small>
+            </div>
+            <div>
+              <span>누락 항목</span>
+              <b className="is-review">확인 필요</b>
+              <small>박담당</small>
+            </div>
           </div>
           <div className="site-auto-history">
             <span>

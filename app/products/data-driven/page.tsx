@@ -15,7 +15,6 @@ import {
   ShieldCheck,
   Users,
   Workflow,
-  type LucideIcon,
 } from "lucide-react";
 import { SiteCtaBand, SiteShell } from "@/components/site";
 
@@ -66,49 +65,32 @@ const detailRows = [
   },
 ] as const;
 
-const featureCards: Array<{
-  title: string;
-  text: string;
-  icon: LucideIcon;
-  accent: "green" | "blue" | "purple" | "sky" | "amber" | "gray";
-}> = [
+const impactCards = [
   {
-    title: "문서 수집",
-    text: "거래명세서, 보고서, 신청서, 사진 자료를 업무 데이터로 전환할 준비를 합니다.",
+    label: "입력부터 출력까지",
+    value: "3",
+    unit: "단계 연결",
+    text: "문서와 승인 흐름, 운영 데이터를 입력, 매핑, 출력 구조로 묶어 업무 화면까지 이어지게 합니다.",
     icon: FileText,
-    accent: "green",
+    tone: "blue",
   },
   {
-    title: "승인 흐름",
-    text: "검토자, 승인자, 반려 기준, 처리 상태를 회사의 실제 결재 방식에 맞게 구성합니다.",
-    icon: ClipboardCheck,
-    accent: "blue",
-  },
-  {
-    title: "ERP 매핑",
-    text: "고객, 현장, 품목, 계약, 문서 같은 기준 데이터와 연결합니다.",
-    icon: Database,
-    accent: "purple",
-  },
-  {
-    title: "AI 정리",
-    text: "문서에서 필요한 항목을 추출하고 분류해 사람이 확인할 수 있는 형태로 정리합니다.",
+    label: "업무 데이터 흐름",
+    value: "6",
+    unit: "개 흐름",
+    text: "수집, 승인, ERP 매핑, AI 정리, 보고, 알림 이력을 하나의 제품 흐름 안에서 다룹니다.",
     icon: Workflow,
-    accent: "sky",
+    tone: "purple",
   },
   {
-    title: "보고서와 대시보드",
-    text: "처리 현황, 누락 항목, 승인 상태, 운영 지표를 한 화면에서 확인합니다.",
-    icon: BarChart3,
-    accent: "amber",
+    label: "부서별 화면 기준",
+    value: "1",
+    unit: "개 기준",
+    text: "현장, 관리, 결재, 보고 담당자가 같은 데이터를 각자 필요한 화면에서 확인하도록 구성합니다.",
+    icon: Database,
+    tone: "green",
   },
-  {
-    title: "알림과 이력",
-    text: "처리 지연, 검토 요청, 데이터 변경 이력을 담당자에게 전달하고 기록합니다.",
-    icon: Bell,
-    accent: "gray",
-  },
-];
+] as const;
 
 export default function DataDrivenPage() {
   return (
@@ -133,6 +115,10 @@ export default function DataDrivenPage() {
             </div>
           </div>
         </section>
+
+        <div className="site-product-sample-section">
+          <DataDrivenHeroSample />
+        </div>
 
         <section className="site-dd-section site-dd-card-section" id="data-structure" aria-labelledby="site-dd-card-title">
           <div className="site-dd-section-head">
@@ -171,30 +157,29 @@ export default function DataDrivenPage() {
           ))}
         </section>
 
-        <section className="site-dd-section site-dd-feature-section" aria-labelledby="site-dd-feature-title">
-          <div className="site-dd-section-head">
-            <h2 id="site-dd-feature-title">Data-Driven AI-Core 하나로, 업무 데이터의 모든 과정을 연결합니다.</h2>
-            <p>입력, 정리, 검토, 화면, 보고, 알림까지 필요한 기능을 기업 업무 방식에 맞춰 조립합니다.</p>
+        <section className="site-dd-section site-dd-impact-section" aria-labelledby="site-dd-impact-title">
+          <div className="site-dd-impact-head">
+            <h2 id="site-dd-impact-title">업무 데이터 한계를 넘는 실행력</h2>
           </div>
-          <div className="site-dd-feature-grid">
-            {featureCards.map((card, index) => {
+          <div className="site-dd-impact-grid">
+            {impactCards.map((card, index) => {
               const Icon = card.icon;
 
               return (
                 <article
-                  className="site-dd-feature-card"
-                  data-accent={card.accent}
-                  key={card.title}
+                  className="site-dd-impact-card"
+                  data-tone={card.tone}
+                  key={card.label}
                   style={{ "--site-dd-delay": `${index * 70}ms` } as CSSProperties}
                 >
-                  <div className="site-dd-feature-visual">
-                    <div className="site-dd-feature-window">
-                      <Icon size={36} strokeWidth={2.4} aria-hidden="true" />
-                      <span />
-                      <span />
-                    </div>
+                  <div className="site-dd-impact-label">
+                    <Icon size={24} strokeWidth={2.4} aria-hidden="true" />
+                    <span>{card.label}</span>
                   </div>
-                  <h3>{card.title}</h3>
+                  <div className="site-dd-impact-value">
+                    <strong>{card.value}</strong>
+                    <span>{card.unit}</span>
+                  </div>
                   <p>{card.text}</p>
                 </article>
               );
@@ -202,9 +187,17 @@ export default function DataDrivenPage() {
           </div>
         </section>
 
-        <SiteCtaBand title="기업의 문제, 자동화로 해결하세요." label="도입 문의" variant="final" />
+        <SiteCtaBand title="데이터를 업무 화면에 연결하세요." label="도입 문의" variant="final" />
       </main>
     </SiteShell>
+  );
+}
+
+function DataDrivenHeroSample() {
+  return (
+    <figure className="site-product-sample-frame site-product-sample-frame--data">
+      <img src="/assets/ai-core-erp-ui.png" alt="AI-Core 업무 대시보드 샘플 화면" />
+    </figure>
   );
 }
 
