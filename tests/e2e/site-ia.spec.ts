@@ -563,11 +563,11 @@ test("desktop Product navigation exposes Data-Driven AI-Core and routes correctl
 
   await mainNav.getByRole("menuitem", { name: /Data-Driven AI-Core/ }).click();
   await expect(page).toHaveURL(/\/products\/data-driven$/);
-  await expect(page.getByRole("heading", { name: /현장 데이터를 기업 맞춤 ERP 구조로 연결합니다/ })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /현장 데이터 걱정 없이 AI 업무 시작/ })).toBeVisible();
   await expectNoHorizontalOverflow(page);
 });
 
-test("Product Automation item routes to the coming soon page", async ({ page }) => {
+test("Product Automation item routes to the Automation AI-Core page", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/");
 
@@ -576,7 +576,7 @@ test("Product Automation item routes to the coming soon page", async ({ page }) 
   await mainNav.getByRole("menuitem", { name: /Automation AI-Core/ }).click();
 
   await expect(page).toHaveURL(/\/products\/automation$/);
-  await expect(page.getByRole("heading", { name: /Automation AI-Core 페이지는 준비 중입니다/ })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /반복 업무 걱정 없이 AI 자동화 시작/ })).toBeVisible();
   await expectNoHorizontalOverflow(page);
 });
 
@@ -599,7 +599,7 @@ test("mobile menu exposes Data-Driven AI-Core and routes without horizontal over
   await aiCoreMenuItem.click();
 
   await expect(page).toHaveURL(/\/products\/data-driven$/);
-  await expect(page.getByRole("heading", { name: /Data-Driven AI-Core는 흩어진 업무 데이터를/ })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /현장 데이터 걱정 없이 AI 업무 시작/ })).toBeVisible();
   await expectNoHorizontalOverflow(page);
 });
 

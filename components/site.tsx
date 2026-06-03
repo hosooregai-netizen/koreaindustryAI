@@ -165,7 +165,7 @@ export const navItems: NavGroup[] = [
       {
         label: "Automation AI-Core",
         href: "/products/automation",
-        description: "반복 업무를 기업 자동화 흐름으로 전환하는 준비중 제품",
+        description: "반복 업무를 자동 처리 흐름으로 전환하는 제품",
       },
     ],
   },
@@ -1324,7 +1324,7 @@ export function SiteWorkTransitionSection() {
     {
       number: "03",
       title: "제품 모듈 연결",
-      description: "정리된 구조를 Data-Driven과 Automation 제품으로 이어 실제 운영 화면으로 확장합니다.",
+      description: "기업 맞춤 AI-Core를 통해 실제 솔루션으로 구현합니다.",
     },
   ];
   const [isRevealed, setIsRevealed] = useState(false);
@@ -1363,10 +1363,11 @@ export function SiteWorkTransitionSection() {
     >
       <div className="site-work-transition-intro">
         <div className="site-work-transition-copy">
-          <h2 id="site-work-transition-title">업무에 맞춘 AI-Core, 제품이 되는 구조까지 설계합니다</h2>
+          <h2 id="site-work-transition-title">기업에 맞춘 AI-Core 솔루션으로 기업 생산성을 혁신합니다.</h2>
           <p>
-            대한산업AI는 회사마다 다른 문서, 승인, 운영 데이터를 먼저 정리하고 반복 처리를 실제 제품 구조로
-            연결합니다.
+            기업의 생산성은 기업의 성장력입니다.
+            <br />
+            대한산업AI는 효율적인 자동화 프로세스로 반복 업무를 줄이고 더 빠른 의사결정과 실행을 돕습니다.
           </p>
         </div>
       </div>
@@ -1637,7 +1638,7 @@ export function SiteCtaBand({
   variant = "default",
 }: {
   title: string;
-  description: string;
+  description?: string;
   href?: string;
   label?: string;
   variant?: "default" | "final";
@@ -1693,7 +1694,7 @@ export function SiteCtaBand({
         <div className="site-final-cta-inner">
           <div className="site-final-cta-copy">
             <h2 id="site-final-cta-title">{renderTypingText(title, 120)}</h2>
-            <p>{renderTypingText(description, 1420)}</p>
+            {description ? <p>{renderTypingText(description, 1420)}</p> : null}
             <Link className="site-button site-button-primary" href={href}>
               {label}
               <ArrowRight size={18} />
@@ -1710,7 +1711,7 @@ export function SiteCtaBand({
       <div>
         <p className="site-eyebrow">5-Day Demo</p>
         <h2>{title}</h2>
-        <p>{description}</p>
+        {description ? <p>{description}</p> : null}
       </div>
       <Link className="site-button site-button-primary" href={href}>
         {label}

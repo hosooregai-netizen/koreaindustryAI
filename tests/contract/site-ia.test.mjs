@@ -163,7 +163,7 @@ test("home solution bridge uses overview cards instead of the old flow canvas", 
     "";
 
   assert.match(solutionBlock, /solutionOverviewItems/);
-  assert.match(solutionBlock, /업무에 맞춘 AI-Core, 제품이 되는 구조까지 설계합니다/);
+  assert.match(solutionBlock, /기업에 맞춘 AI-Core 솔루션으로 기업 생산성을 혁신합니다\./);
   assert.match(solutionBlock, /업무 구조 정리/);
   assert.match(solutionBlock, /AI-Core 설계/);
   assert.match(solutionBlock, /제품 모듈 연결/);
