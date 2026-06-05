@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import type { CSSProperties } from "react";
 import { BarChart3, Boxes, ClipboardCheck, Database, Gauge, MonitorCog, Workflow } from "lucide-react";
+import { IndustryScrollReveal } from "@/components/industry-scroll-reveal";
 import { SiteCtaBand, SiteShell } from "@/components/site";
 
 export const metadata: Metadata = {
@@ -17,7 +18,7 @@ const manufacturing = {
   imageAlt: "자동화 로봇이 배치된 제조 공정",
   systems: "ERP·MES·APS",
   automation: "공정/품질/설비 예측",
-  result: "생산 계획, 품질 이슈, 설비 상태를 예측 가능한 운영 화면으로 연결합니다.",
+  result: "생산 계획, 품질 이상, 설비 상태를 예측 가능한 운영 화면으로 연결합니다.",
 } as const;
 
 const overviewCards = [
@@ -28,13 +29,13 @@ const overviewCards = [
   },
   {
     number: "02",
-    title: "AI-Core 운영 설계",
-    text: "생산 기준, 품질 조건, 설비 상태, 알림, 보고 화면을 제조 업무 방식에 맞춰 설계합니다.",
+    title: "제조 운영 설계",
+    text: "생산 기준, 품질 조건, 설비 상태, 알림, 보고 화면을 제조 현장 방식에 맞춰 설계합니다.",
   },
   {
     number: "03",
-    title: "자동화 적용",
-    text: `${manufacturing.automation}을 업무 화면, 대시보드, 알림, 보고 흐름으로 구현합니다.`,
+    title: "예측 자동화",
+    text: `${manufacturing.automation}을 업무 화면, 대시보드, 알림, 보고 흐름으로 자동화합니다.`,
   },
   {
     number: "04",
@@ -74,6 +75,7 @@ export default function ManufacturingPage() {
   return (
     <SiteShell>
       <main className="site-industry-detail-page site-industry-manufacturing-page">
+        <IndustryScrollReveal />
         <section className="site-industry-hero" aria-labelledby="site-manufacturing-hero-title">
           <img src={manufacturing.image} alt={manufacturing.imageAlt} />
           <div className="site-industry-hero-shade" aria-hidden="true" />
@@ -108,7 +110,6 @@ export default function ManufacturingPage() {
             <h2 id="site-manufacturing-feature-title">
               <strong>{manufacturing.name}</strong> Key Feature
             </h2>
-            <p>{manufacturing.name} 업무에서 자주 연결되는 시스템과 자동화 범위를 AI-Core 적용 단위로 정리합니다.</p>
           </div>
 
           <div className="site-industry-signal-row" aria-label="제조 운영 연결 기준">
@@ -152,8 +153,7 @@ export default function ManufacturingPage() {
         </section>
 
         <SiteCtaBand
-          title="제조 업무, AI-Core로 연결하세요."
-          description="ERP, MES, APS 데이터를 기준으로 어떤 생산 흐름을 연결하고 어떤 반복 업무부터 자동화할지 함께 정리합니다."
+          title="제조 운영, AI-Core로 연결하세요."
           label="산업 업무 상담하기"
           variant="final"
         />

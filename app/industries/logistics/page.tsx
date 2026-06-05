@@ -1,18 +1,19 @@
 import type { Metadata } from "next";
 import type { CSSProperties } from "react";
 import { BarChart3, Boxes, ClipboardCheck, Database, Gauge, Workflow } from "lucide-react";
+import { IndustryScrollReveal } from "@/components/industry-scroll-reveal";
 import { SiteCtaBand, SiteShell } from "@/components/site";
 
 export const metadata: Metadata = {
-  title: "물류 운영 최적화 솔루션 | 대한산업AI",
+  title: "물류 운영 최적화 AI-Core 솔루션 | 대한산업AI",
   description: "입출고, 재고, 배차, 라우팅 흐름을 WMS, TMS, LMS 데이터와 연결해 물류 운영 판단을 돕는 AI-Core 솔루션입니다.",
 };
 
 const logistics = {
   name: "물류",
-  title: "물류 운영 최적화 솔루션",
+  title: "물류 운영 최적화 AI-Core 솔루션",
   description:
-    "물류의 속도는 고객 약속을 지키는 가장 현실적인 경쟁력입니다.\n대한산업AI는 WMS·TMS·LMS 데이터를 정리해 반복 확인을 줄이고 빠른 현장 판단을 돕습니다.",
+    "물류의 속도는 납기 약속을 지키는 가장 현실적인 경쟁력입니다.\n대한산업AI는 WMS·TMS·LMS 데이터를 정리해 반복 확인을 줄이고 빠른 현장 판단을 돕습니다.",
   image: "/assets/industries/logistics-card.png",
   imageAlt: "컨베이어와 지게차가 움직이는 물류 창고",
   systems: "WMS·TMS·LMS",
@@ -28,13 +29,13 @@ const overviewCards = [
   },
   {
     number: "02",
-    title: "AI-Core 운영 설계",
-    text: "권한, 승인 기준, 예측 기준, 알림, 보고 화면을 물류 업무 방식에 맞춰 설계합니다.",
+    title: "물류 운영 설계",
+    text: "배차 기준, 우선순위, 예외 알림, 보고 화면을 물류 업무 방식에 맞춰 설계합니다.",
   },
   {
     number: "03",
-    title: "자동화 적용",
-    text: `${logistics.automation}를 업무 화면, 대시보드, 알림, 보고 흐름으로 구현합니다.`,
+    title: "최적화 자동화",
+    text: `${logistics.automation}를 업무 화면, 대시보드, 알림, 보고 흐름으로 자동화합니다.`,
   },
   {
     number: "04",
@@ -74,6 +75,7 @@ export default function LogisticsPage() {
   return (
     <SiteShell>
       <main className="site-industry-detail-page site-industry-logistics-page">
+        <IndustryScrollReveal />
         <section className="site-industry-hero" aria-labelledby="site-logistics-hero-title">
           <img src={logistics.image} alt={logistics.imageAlt} />
           <div className="site-industry-hero-shade" aria-hidden="true" />
@@ -108,7 +110,6 @@ export default function LogisticsPage() {
             <h2 id="site-logistics-feature-title">
               <strong>{logistics.name}</strong> Key Feature
             </h2>
-            <p>{logistics.name} 업무에서 자주 연결되는 시스템과 자동화 범위를 AI-Core 적용 단위로 정리합니다.</p>
           </div>
 
           <div className="site-industry-signal-row" aria-label="물류 운영 연결 기준">
@@ -152,8 +153,7 @@ export default function LogisticsPage() {
         </section>
 
         <SiteCtaBand
-          title="물류 업무, AI-Core로 연결하세요."
-          description="WMS, TMS, LMS 데이터를 기준으로 어떤 운영 흐름을 연결하고 어떤 반복 업무부터 자동화할지 함께 정리합니다."
+          title="물류 운영, AI-Core로 연결하세요."
           label="산업 업무 상담하기"
           variant="final"
         />
