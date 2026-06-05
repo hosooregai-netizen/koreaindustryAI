@@ -2,11 +2,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import type { CSSProperties } from "react";
 import {
+  ArrowRight,
   BarChart3,
+  Bell,
   CheckCircle2,
   FileText,
-  Layers3,
-  Search,
   ShieldCheck,
   Users,
   Workflow,
@@ -15,75 +15,48 @@ import { SiteCtaBand, SiteShell } from "@/components/site";
 
 export const metadata: Metadata = {
   title: "Automation AI-Core | 대한산업AI",
-  description: "반복 업무를 자동 처리 흐름으로 구성하고 예외 확인과 실행 이력을 남기는 Automation AI-Core 상세 페이지입니다.",
+  description: "반복 업무를 줄이고 담당자가 중요한 판단에 집중하도록 돕는 Automation AI-Core 상세 페이지입니다.",
 };
 
 const automationCards = [
   {
-    title: "업무 감지",
-    text: "문서 도착, 상태 변경, 일정, 담당자 요청처럼 자동화가 시작되는 조건을 정리합니다.",
+    title: "업무 시작을 놓치지 않습니다",
+    text: "문서 도착, 상태 변경, 일정 도래를 기준으로 반복 업무가 자동으로 시작됩니다.",
     visual: "detect",
   },
   {
-    title: "자동 처리",
-    text: "분류, 추출, 정리, 보고서 생성처럼 반복되는 처리 단계를 자동 흐름으로 연결합니다.",
+    title: "반복 처리는 AI-Core가 가져갑니다",
+    text: "분류, 추출, 정리, 보고 초안처럼 매일 반복되는 작업 시간을 줄입니다.",
     visual: "process",
   },
   {
-    title: "예외 확인",
-    text: "자동 처리 결과 중 확인이 필요한 항목만 담당자에게 알리고 승인 또는 수정 이력을 남깁니다.",
+    title: "사람이 봐야 할 일만 남깁니다",
+    text: "애매한 건과 승인 필요한 일만 담당자에게 올려 판단 흐름을 분명하게 만듭니다.",
     visual: "review",
   },
 ] as const;
 
 const detailRows = [
   {
-    title: "작은 반복 업무부터 자동화 흐름을 만듭니다",
-    text: "처음부터 모든 업무를 자동화하지 않고, 매일 반복되며 기준이 분명한 업무 하나를 먼저 자동 처리 흐름으로 구성합니다.",
+    title: "반복 업무는 작게 시작해 빠르게 줄입니다",
+    text: "가장 많이 반복되는 업무 하나부터 자동화해 효과를 확인하고, 다음 업무로 확장합니다.",
     visual: "flow",
     reverse: false,
     terms: ["요청 접수", "분류", "정리", "보고"],
   },
   {
-    title: "예외와 승인은 사람 기준으로 남겨둡니다.",
-    text: "자동화가 처리할 수 있는 항목과 담당자가 확인해야 하는 항목을 분리해, 승인과 반려 기준이 흐려지지 않게 합니다.",
+    title: "AI가 처리하고, 사람은 중요한 것만 봅니다",
+    text: "조건이 맞는 일은 자동으로 넘기고, 애매하거나 승인 필요한 일만 담당자에게 올립니다.",
     visual: "layers",
     reverse: true,
     terms: ["자동 처리", "확인 필요", "승인/반려", "이력 기록"],
   },
   {
-    title: "실행 결과와 이력을 한 화면에서 확인합니다",
-    text: "어떤 업무가 자동 처리됐는지, 어디에서 예외가 발생했는지, 누가 확인했는지를 상태와 이력으로 남깁니다.",
+    title: "처리 결과는 바로 실행으로 이어집니다",
+    text: "진행 중인 자동화와 확인 필요한 일을 한 화면에서 보고, 지연과 누락을 줄입니다.",
     visual: "run",
     reverse: false,
     terms: ["대기", "처리 중", "확인 필요", "완료"],
-  },
-] as const;
-
-const impactCards = [
-  {
-    label: "작은 업무부터 실행",
-    value: "4",
-    unit: "단계 자동화",
-    text: "요청 접수, 분류, 정리, 보고처럼 반복되는 처리 단계를 자동화 흐름으로 먼저 구성합니다.",
-    icon: Workflow,
-    tone: "blue",
-  },
-  {
-    label: "사람 확인 분리",
-    value: "3",
-    unit: "개 확인",
-    text: "확인 필요, 승인, 반려와 수정 흐름을 자동 처리와 분리해 담당자가 판단할 지점을 남깁니다.",
-    icon: ShieldCheck,
-    tone: "purple",
-  },
-  {
-    label: "실행 이력 관리",
-    value: "1",
-    unit: "개 화면",
-    text: "담당자 확인, 실행 시간, 처리 결과와 예외 상태를 한 화면에서 확인할 수 있게 기록합니다.",
-    icon: BarChart3,
-    tone: "green",
   },
 ] as const;
 
@@ -95,10 +68,10 @@ export default function AutomationPage() {
           <div className="site-dd-hero-pattern" aria-hidden="true" />
           <div className="site-dd-hero-inner">
             <p className="site-dd-eyebrow">Automation AI-Core</p>
-            <h1 id="site-auto-hero-title">반복 업무 걱정 없이 AI 자동화 시작</h1>
+            <h1 id="site-auto-hero-title">반복 업무를 줄이고 실행 속도는 높입니다</h1>
             <p>
-              확인, 분류, 정리, 보고처럼 매일 반복되는 업무를 자동 처리 흐름으로 구성하고, 필요한 예외만
-              사람이 확인할 수 있게 합니다.
+              대한산업AI는 확인, 분류, 정리, 보고에 묶인 시간을 줄이고 담당자가 더 빠르게 결정하고 움직이게
+              돕습니다.
             </p>
             <div className="site-dd-hero-actions">
               <Link className="site-dd-button site-dd-button-primary" href="/contact">
@@ -121,8 +94,8 @@ export default function AutomationPage() {
           aria-labelledby="site-auto-card-title"
         >
           <div className="site-dd-section-head">
-            <h2 id="site-auto-card-title">반복 업무 흐름에 맞는 AI-Core 자동화 구성</h2>
-            <p>작은 반복 업무부터 시작해 조건, 실행, 확인까지 이어지는 자동화 흐름으로 정리합니다.</p>
+            <h2 id="site-auto-card-title">기업 반복 업무에 맞춘 AI-Core 자동화</h2>
+            <p>업무를 바꾸는 게 아니라, 지금 하던 흐름 위에 자동화를 얹어 바로 효과를 만듭니다.</p>
           </div>
           <div className="site-dd-data-grid">
             {automationCards.map((card, index) => (
@@ -156,37 +129,7 @@ export default function AutomationPage() {
           ))}
         </section>
 
-        <section className="site-dd-section site-dd-impact-section" aria-labelledby="site-auto-impact-title">
-          <div className="site-dd-impact-head">
-            <h2 id="site-auto-impact-title">반복 업무 한계를 넘는 실행력</h2>
-          </div>
-          <div className="site-dd-impact-grid">
-            {impactCards.map((card, index) => {
-              const Icon = card.icon;
-
-              return (
-                <article
-                  className="site-dd-impact-card"
-                  data-tone={card.tone}
-                  key={card.label}
-                  style={{ "--site-dd-delay": `${index * 70}ms` } as CSSProperties}
-                >
-                  <div className="site-dd-impact-label">
-                    <Icon size={24} strokeWidth={2.4} aria-hidden="true" />
-                    <span>{card.label}</span>
-                  </div>
-                  <div className="site-dd-impact-value">
-                    <strong>{card.value}</strong>
-                    <span>{card.unit}</span>
-                  </div>
-                  <p>{card.text}</p>
-                </article>
-              );
-            })}
-          </div>
-        </section>
-
-        <SiteCtaBand title="기업의 문제, 자동화로 해결하세요." label="도입 문의" variant="final" />
+        <SiteCtaBand title="반복 업무를 자동화로 줄이세요." label="도입 문의" variant="final" />
       </main>
     </SiteShell>
   );
@@ -203,14 +146,18 @@ function AutomationHeroSample() {
 function AutomationCardVisual({ kind }: { kind: (typeof automationCards)[number]["visual"] }) {
   if (kind === "process") {
     return (
-      <div className="site-dd-card-visual site-auto-card-visual is-process" aria-hidden="true">
-        <div className="site-auto-process-flow">
-          <span>시작 조건</span>
-          <strong>
-            <Workflow size={24} />
-            AI 처리
-          </strong>
-          <span>업무 결과</span>
+      <div className="site-dd-card-visual site-product-schematic-card site-auto-card-visual is-process" aria-hidden="true">
+        <div className="site-product-schematic-node">
+          <FileText size={20} />
+          <strong>반복 작업</strong>
+        </div>
+        <span className="site-product-schematic-arrow">
+          <ArrowRight size={18} />
+        </span>
+        <div className="site-product-schematic-node is-strong">
+          <Workflow size={22} />
+          <strong>AI-Core</strong>
+          <small>자동 처리</small>
         </div>
       </div>
     );
@@ -218,35 +165,37 @@ function AutomationCardVisual({ kind }: { kind: (typeof automationCards)[number]
 
   if (kind === "review") {
     return (
-      <div className="site-dd-card-visual site-auto-card-visual is-review" aria-hidden="true">
-        <div className="site-auto-review-panel">
-          <div className="site-auto-review-head">
-            <strong>확인 필요</strong>
-            <span>2건</span>
-          </div>
-          <div className="site-auto-review-alert">누락 항목 확인</div>
-          <div className="site-auto-review-actions">
-            <span>승인</span>
-            <span>반려</span>
-            <span>수정</span>
-          </div>
-          <div className="site-auto-review-history">실행 이력 기록</div>
+      <div className="site-dd-card-visual site-product-schematic-card site-auto-card-visual is-review" aria-hidden="true">
+        <div className="site-product-schematic-node is-strong">
+          <CheckCircle2 size={22} />
+          <strong>자동 처리</strong>
+        </div>
+        <span className="site-product-schematic-arrow">
+          <ArrowRight size={18} />
+        </span>
+        <div className="site-product-schematic-node is-alert">
+          <Users size={22} />
+          <strong>예외만 확인</strong>
+          <small>승인 / 반려</small>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="site-dd-card-visual site-auto-card-visual is-detect" aria-hidden="true">
-      <div className="site-auto-event-list">
+    <div className="site-dd-card-visual site-product-schematic-card site-auto-card-visual is-detect" aria-hidden="true">
+      <div className="site-product-source-grid">
         <span>문서 도착</span>
         <span>상태 변경</span>
         <span>일정 도래</span>
         <span>담당자 요청</span>
       </div>
-      <div className="site-auto-trigger-core">
-        <CheckCircle2 size={26} />
-        <strong>시작 조건</strong>
+      <span className="site-product-schematic-arrow">
+        <ArrowRight size={18} />
+      </span>
+      <div className="site-product-schematic-node is-strong">
+        <CheckCircle2 size={22} />
+        <strong>업무 시작</strong>
       </div>
     </div>
   );
@@ -260,37 +209,28 @@ function AutomationDetailVisual({ kind, index }: { kind: (typeof detailRows)[num
         style={{ "--site-dd-delay": `${index * 90}ms` } as CSSProperties}
         aria-hidden="true"
       >
-        <div className="site-auto-decision-panel">
-          <div className="site-auto-decision-head">
-            <strong>예외 확인 기준</strong>
-            <span>사람 판단 유지</span>
+        <div className="site-product-branch-map">
+          <div className="site-product-schematic-node is-core">
+            <Workflow size={24} />
+            AI 처리
           </div>
-          <div className="site-auto-decision-main">
-            <div className="site-auto-decision-card is-auto">
-              <CheckCircle2 size={23} />
-              <span>처리 가능</span>
-              <strong>자동 처리</strong>
-              <small>조건 일치</small>
-            </div>
-            <div className="site-auto-decision-divider">
-              <Workflow size={22} />
-            </div>
-            <div className="site-auto-decision-card is-review">
-              <Users size={23} />
-              <span>확인 필요</span>
-              <strong>담당자 확인</strong>
-              <small>예외 조건 감지</small>
-            </div>
+          <div className="site-product-branch-lines">
+            <span />
+            <span />
           </div>
-          <div className="site-auto-decision-log">
+          <div className="site-product-branch-results">
             <span>
-              <ShieldCheck size={17} />
-              승인 요청
+              <CheckCircle2 size={18} />
+              자동 완료
             </span>
             <span>
-              <FileText size={17} />
-              실행 이력 기록
+              <Users size={18} />
+              사람 확인
             </span>
+          </div>
+          <div className="site-product-schematic-footer">
+            <ShieldCheck size={18} />
+            승인과 반려는 담당자가 결정
           </div>
         </div>
       </div>
@@ -300,49 +240,39 @@ function AutomationDetailVisual({ kind, index }: { kind: (typeof detailRows)[num
   if (kind === "run") {
     return (
       <div
-        className="site-dd-detail-visual site-auto-run-visual"
+        className="site-dd-detail-visual site-auto-run-visual site-product-detail-schematic"
         style={{ "--site-dd-delay": `${index * 90}ms` } as CSSProperties}
         aria-hidden="true"
       >
-        <div className="site-auto-run-panel">
-          <strong>자동화 실행 현황</strong>
-          <p>확인 필요한 항목만 담당자에게 전달합니다.</p>
-          <div className="site-auto-status-row">
-            <span>대기</span>
-            <span>처리 중</span>
-            <span>확인 필요</span>
-            <span>완료</span>
+        <div className="site-product-wide-flow is-run">
+          <div className="site-product-schematic-node is-core">
+            <CheckCircle2 size={28} />
+            <strong>처리 결과</strong>
           </div>
-          <div className="site-auto-run-table">
-            <div>
-              <span>주문서 분류</span>
-              <b className="is-done">완료</b>
-              <small>09:12</small>
-            </div>
-            <div>
-              <span>보고서 생성</span>
-              <b className="is-progress">처리 중</b>
-              <small>09:20</small>
-            </div>
-            <div>
-              <span>누락 항목</span>
-              <b className="is-review">확인 필요</b>
-              <small>박담당</small>
-            </div>
-          </div>
-          <div className="site-auto-history">
-            <span>
-              <Users size={18} />
-              담당자 확인
-            </span>
-            <span>
-              <ShieldCheck size={18} />
-              승인 이력
-            </span>
+          <span className="site-product-schematic-arrow">
+            <ArrowRight size={20} />
+          </span>
+          <div className="site-product-output-row is-vertical">
             <span>
               <BarChart3 size={18} />
-              처리 결과
+              화면
             </span>
+            <span>
+              <Bell size={18} />
+              알림
+            </span>
+            <span>
+              <FileText size={18} />
+              보고
+            </span>
+          </div>
+          <span className="site-product-schematic-arrow">
+            <ArrowRight size={20} />
+          </span>
+          <div className="site-product-result-panel">
+            <strong>즉시 실행</strong>
+            <span>지연 감소</span>
+            <span>누락 방지</span>
           </div>
         </div>
       </div>
@@ -351,39 +281,33 @@ function AutomationDetailVisual({ kind, index }: { kind: (typeof detailRows)[num
 
   return (
     <div
-      className="site-dd-detail-visual is-flow"
+      className="site-dd-detail-visual is-flow site-product-detail-schematic"
       style={{ "--site-dd-delay": `${index * 90}ms` } as CSSProperties}
       aria-hidden="true"
     >
-      <div className="site-dd-flow-board site-auto-flow-board">
-        <div className="site-dd-flow-column">
-          <span>
-            <FileText size={18} />
-            요청 접수
-          </span>
-          <span>
-            <Search size={18} />
-            분류
-          </span>
-          <span>
-            <Layers3 size={18} />
-            정리
-          </span>
-          <span>
-            <BarChart3 size={18} />
-            보고
-          </span>
+      <div className="site-product-wide-flow">
+        <div className="site-product-result-panel is-start">
+          <strong>반복 업무 1개</strong>
+          <span>접수</span>
+          <span>분류</span>
+          <span>보고</span>
         </div>
-        <div className="site-dd-flow-core">
+        <span className="site-product-schematic-arrow">
+          <ArrowRight size={20} />
+        </span>
+        <div className="site-product-schematic-node is-core">
           <Workflow size={28} />
           <strong>AI-Core</strong>
-          <small>자동 처리 흐름</small>
+          <small>먼저 자동화</small>
         </div>
-        <div className="site-dd-flow-column is-output">
-          <span>상태 변경</span>
-          <span>담당자 알림</span>
-          <span>보고 생성</span>
-          <span>이력 기록</span>
+        <span className="site-product-schematic-arrow">
+          <ArrowRight size={20} />
+        </span>
+        <div className="site-product-result-panel">
+          <strong>다음 업무 확장</strong>
+          <span>정리</span>
+          <span>승인</span>
+          <span>알림</span>
         </div>
       </div>
     </div>

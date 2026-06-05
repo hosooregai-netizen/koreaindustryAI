@@ -6,89 +6,60 @@ import {
   BarChart3,
   Bell,
   Camera,
-  CheckCircle2,
   ClipboardCheck,
   Database,
   FileText,
   Layers3,
   Search,
   ShieldCheck,
-  Users,
   Workflow,
 } from "lucide-react";
 import { SiteCtaBand, SiteShell } from "@/components/site";
 
 export const metadata: Metadata = {
   title: "Data-Driven AI-Core | 대한산업AI",
-  description: "현장 데이터, 문서, 승인 흐름을 기업 맞춤 ERP 구조로 연결하는 Data-Driven AI-Core 상세 페이지입니다.",
+  description: "흩어진 현장 데이터를 업무 화면과 의사결정으로 연결하는 Data-Driven AI-Core 상세 페이지입니다.",
 };
 
 const dataCards = [
   {
-    title: "데이터 입력",
-    text: "문서, ERP, 사진, 승인, 운영 데이터를 업무 단위로 모읍니다.",
+    title: "흩어진 데이터를 모읍니다",
+    text: "문서, 사진, ERP, 승인 기록을 AI-Core가 쓸 수 있는 업무 데이터로 묶습니다.",
     visual: "input",
   },
   {
-    title: "데이터 매핑",
-    text: "회사별 용어, 문서 양식, 승인 기준을 ERP형 데이터 구조로 연결합니다.",
+    title: "회사 기준에 맞게 연결합니다",
+    text: "양식, 용어, 승인 방식이 달라도 기업의 실제 처리 방식에 맞춰 정리합니다.",
     visual: "mapping",
   },
   {
-    title: "업무 출력",
-    text: "정리된 데이터를 업무 화면, 보고서, 대시보드, 알림으로 보여줍니다.",
+    title: "화면과 보고서로 바로 씁니다",
+    text: "정리된 데이터가 업무 화면, 보고서, 알림으로 이어져 실행에 바로 쓰입니다.",
     visual: "output",
   },
 ] as const;
 
 const detailRows = [
   {
-    title: "데이터 정리 걱정 없이 업무에 집중하세요",
-    text: "문서와 운영 기록을 사람이 다시 옮겨 적지 않아도, 필요한 항목을 업무 화면에서 바로 확인할 수 있는 구조로 정리합니다.",
+    title: "현장 데이터가 바로 업무가 됩니다",
+    text: "문서와 사진을 다시 옮겨 적는 시간을 줄이고, 필요한 정보가 업무 화면에 바로 올라옵니다.",
     visual: "flow",
     reverse: false,
     terms: ["문서", "ERP", "사진", "승인", "운영 데이터"],
   },
   {
-    title: "복잡한 설정은 업무 기준으로 정리합니다.",
-    text: "권한, 입력 항목, 승인 조건, 보고 기준을 고객사의 실제 처리 방식에 맞춰 구성합니다.",
+    title: "복잡한 설정도 업무에 맞게 풀어줍니다",
+    text: "권한, 입력값, 승인 흐름, 보고 양식을 회사가 일하는 방식에 맞춰 정리합니다.",
     visual: "layers",
     reverse: true,
     terms: ["업무 기준", "권한", "승인 흐름", "보고 기준"],
   },
   {
-    title: "부서별 데이터도 하나의 기준으로 활용합니다",
-    text: "현장, 관리, 결재, 보고 담당자가 같은 데이터를 다른 화면에서 확인할 수 있게 역할별 화면을 구성합니다.",
+    title: "부서마다 다른 화면, 기준은 하나로 맞춥니다",
+    text: "현장, 관리, 결재, 보고 담당자가 각자 필요한 화면을 쓰면서도 같은 데이터를 기준으로 움직입니다.",
     visual: "team",
     reverse: false,
     terms: ["현장", "관리", "결재", "보고"],
-  },
-] as const;
-
-const impactCards = [
-  {
-    label: "입력부터 출력까지",
-    value: "3",
-    unit: "단계 연결",
-    text: "문서와 승인 흐름, 운영 데이터를 입력, 매핑, 출력 구조로 묶어 업무 화면까지 이어지게 합니다.",
-    icon: FileText,
-    tone: "blue",
-  },
-  {
-    label: "업무 데이터 흐름",
-    value: "6",
-    unit: "개 흐름",
-    text: "수집, 승인, ERP 매핑, AI 정리, 보고, 알림 이력을 하나의 제품 흐름 안에서 다룹니다.",
-    icon: Workflow,
-    tone: "purple",
-  },
-  {
-    label: "부서별 화면 기준",
-    value: "1",
-    unit: "개 기준",
-    text: "현장, 관리, 결재, 보고 담당자가 같은 데이터를 각자 필요한 화면에서 확인하도록 구성합니다.",
-    icon: Database,
-    tone: "green",
   },
 ] as const;
 
@@ -102,8 +73,7 @@ export default function DataDrivenPage() {
             <p className="site-dd-eyebrow">Data-Driven AI-Core</p>
             <h1 id="site-dd-hero-title">현장 데이터 걱정 없이 AI 업무 시작</h1>
             <p>
-              문서, 승인 흐름, 운영 데이터를 기업 맞춤 ERP 구조로 연결해 업무 화면과 보고서로 바로 활용할 수
-              있게 합니다.
+              대한산업AI는 문서, 승인, 운영 데이터를 AI-Core로 연결해 기업이 더 빠르게 보고 판단하게 합니다.
             </p>
             <div className="site-dd-hero-actions">
               <Link className="site-dd-button site-dd-button-primary" href="/contact">
@@ -123,7 +93,7 @@ export default function DataDrivenPage() {
         <section className="site-dd-section site-dd-card-section" id="data-structure" aria-labelledby="site-dd-card-title">
           <div className="site-dd-section-head">
             <h2 id="site-dd-card-title">기업 데이터 흐름에 맞는 AI-Core 구성</h2>
-            <p>흩어진 데이터는 그대로 두지 않고, 입력부터 화면까지 이어지는 업무 구조로 정리합니다.</p>
+            <p>흩어진 데이터를 다시 입력하지 않아도, 현장에서 보고까지 바로 이어지는 구조를 만듭니다.</p>
           </div>
           <div className="site-dd-data-grid">
             {dataCards.map((card, index) => (
@@ -157,37 +127,7 @@ export default function DataDrivenPage() {
           ))}
         </section>
 
-        <section className="site-dd-section site-dd-impact-section" aria-labelledby="site-dd-impact-title">
-          <div className="site-dd-impact-head">
-            <h2 id="site-dd-impact-title">업무 데이터 한계를 넘는 실행력</h2>
-          </div>
-          <div className="site-dd-impact-grid">
-            {impactCards.map((card, index) => {
-              const Icon = card.icon;
-
-              return (
-                <article
-                  className="site-dd-impact-card"
-                  data-tone={card.tone}
-                  key={card.label}
-                  style={{ "--site-dd-delay": `${index * 70}ms` } as CSSProperties}
-                >
-                  <div className="site-dd-impact-label">
-                    <Icon size={24} strokeWidth={2.4} aria-hidden="true" />
-                    <span>{card.label}</span>
-                  </div>
-                  <div className="site-dd-impact-value">
-                    <strong>{card.value}</strong>
-                    <span>{card.unit}</span>
-                  </div>
-                  <p>{card.text}</p>
-                </article>
-              );
-            })}
-          </div>
-        </section>
-
-        <SiteCtaBand title="데이터를 업무 화면에 연결하세요." label="도입 문의" variant="final" />
+        <SiteCtaBand title="현장 데이터를 AI-Core로 연결하세요." label="도입 문의" variant="final" />
       </main>
     </SiteShell>
   );
@@ -204,21 +144,19 @@ function DataDrivenHeroSample() {
 function DataCardVisual({ kind }: { kind: (typeof dataCards)[number]["visual"] }) {
   if (kind === "mapping") {
     return (
-      <div className="site-dd-card-visual is-mapping" aria-hidden="true">
-        <div className="site-dd-map-grid">
-          <span />
-          <span />
-          <span />
-          <span />
-          <span />
-          <span />
+      <div className="site-dd-card-visual site-product-schematic-card is-mapping" aria-hidden="true">
+        <div className="site-product-rule-stack">
+          <span>양식</span>
+          <span>용어</span>
+          <span>승인</span>
         </div>
-        <div className="site-dd-search-pill">
+        <span className="site-product-schematic-arrow">
+          <ArrowRight size={18} />
+        </span>
+        <div className="site-product-schematic-node is-strong">
           <Search size={22} />
-          <strong>데이터 기준 연결</strong>
-          <span>
-            <ArrowRight size={18} />
-          </span>
+          <strong>회사 기준</strong>
+          <small>업무 구조 연결</small>
         </div>
       </div>
     );
@@ -226,40 +164,59 @@ function DataCardVisual({ kind }: { kind: (typeof dataCards)[number]["visual"] }
 
   if (kind === "output") {
     return (
-      <div className="site-dd-card-visual is-output" aria-hidden="true">
-        <div className="site-dd-output-tile">
-          <FileText size={34} />
+      <div className="site-dd-card-visual site-product-schematic-card is-output" aria-hidden="true">
+        <div className="site-product-schematic-node is-strong">
+          <Database size={22} />
+          <strong>정리된 데이터</strong>
         </div>
-        <div className="site-dd-output-tile">
-          <BarChart3 size={38} />
-        </div>
-        <div className="site-dd-output-tile">
-          <Bell size={35} />
+        <span className="site-product-schematic-arrow">
+          <ArrowRight size={18} />
+        </span>
+        <div className="site-product-output-row">
+          <span>
+            <FileText size={20} />
+            화면
+          </span>
+          <span>
+            <BarChart3 size={20} />
+            보고서
+          </span>
+          <span>
+            <Bell size={20} />
+            알림
+          </span>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="site-dd-card-visual is-input" aria-hidden="true">
-      <span className="site-dd-orbit is-one" />
-      <span className="site-dd-orbit is-two" />
-      <div className="site-dd-core-mark">AI</div>
-      <span className="site-dd-orbit-icon is-file">
-        <FileText size={19} />
+    <div className="site-dd-card-visual site-product-schematic-card is-input" aria-hidden="true">
+      <div className="site-product-source-grid">
+        <span>
+          <FileText size={18} />
+          문서
+        </span>
+        <span>
+          <Camera size={18} />
+          사진
+        </span>
+        <span>
+          <Database size={18} />
+          ERP
+        </span>
+        <span>
+          <ClipboardCheck size={18} />
+          승인
+        </span>
+      </div>
+      <span className="site-product-schematic-arrow">
+        <ArrowRight size={18} />
       </span>
-      <span className="site-dd-orbit-icon is-camera">
-        <Camera size={18} />
-      </span>
-      <span className="site-dd-orbit-icon is-db">
-        <Database size={18} />
-      </span>
-      <span className="site-dd-orbit-icon is-check">
-        <CheckCircle2 size={18} />
-      </span>
-      <span className="site-dd-orbit-icon is-flow">
-        <Workflow size={18} />
-      </span>
+      <div className="site-product-schematic-node is-strong">
+        <Layers3 size={22} />
+        <strong>업무 데이터</strong>
+      </div>
     </div>
   );
 }
@@ -272,49 +229,28 @@ function DetailVisual({ kind, index }: { kind: (typeof detailRows)[number]["visu
         style={{ "--site-dd-delay": `${index * 90}ms` } as CSSProperties}
         aria-hidden="true"
       >
-        <div className="site-dd-config-panel">
-          <div className="site-dd-config-header">
-            <span>업무 기준</span>
-            <strong>처리 방식 설정</strong>
+        <div className="site-product-wide-flow is-settings">
+          <div className="site-product-stack-list">
+            <span>권한</span>
+            <span>입력값</span>
+            <span>승인</span>
+            <span>보고</span>
           </div>
-          <div className="site-dd-config-grid">
-            <div className="site-dd-config-list">
-              <div className="site-dd-config-row">
-                <ShieldCheck size={20} />
-                <span>권한</span>
-                <strong>부서별 승인</strong>
-              </div>
-              <div className="site-dd-config-row">
-                <ClipboardCheck size={20} />
-                <span>입력 항목</span>
-                <strong>필수값 8개</strong>
-              </div>
-              <div className="site-dd-config-row">
-                <Workflow size={20} />
-                <span>승인 조건</span>
-                <strong>금액 기준 분기</strong>
-              </div>
-              <div className="site-dd-config-row">
-                <FileText size={20} />
-                <span>보고 기준</span>
-                <strong>월간 집계</strong>
-              </div>
-            </div>
-            <div className="site-dd-config-preview">
-              <div className="site-dd-preview-head">
-                <span>현장 보고</span>
-                <strong>자동 정리됨</strong>
-              </div>
-              <div className="site-dd-preview-lines">
-                <span />
-                <span />
-                <span />
-              </div>
-              <div className="site-dd-preview-route">
-                <Database size={18} />
-                <span>AI-Core 기준 적용</span>
-              </div>
-            </div>
+          <span className="site-product-schematic-arrow">
+            <ArrowRight size={20} />
+          </span>
+          <div className="site-product-schematic-node is-core">
+            <Workflow size={28} />
+            <strong>회사 방식</strong>
+            <small>업무 기준 적용</small>
+          </div>
+          <span className="site-product-schematic-arrow">
+            <ArrowRight size={20} />
+          </span>
+          <div className="site-product-result-panel">
+            <strong>바로 사용</strong>
+            <span>화면</span>
+            <span>보고서</span>
           </div>
         </div>
       </div>
@@ -324,25 +260,33 @@ function DetailVisual({ kind, index }: { kind: (typeof detailRows)[number]["visu
   if (kind === "team") {
     return (
       <div
-        className="site-dd-detail-visual is-team"
+        className="site-dd-detail-visual is-team site-product-detail-schematic"
         style={{ "--site-dd-delay": `${index * 90}ms` } as CSSProperties}
         aria-hidden="true"
       >
-        <div className="site-dd-form-panel">
-          <strong>역할별 화면 구성</strong>
-          <p>같은 데이터, 다른 업무 화면</p>
-          <label>
-            담당 역할
-            <span>현장 관리자</span>
-          </label>
-          <label>
-            데이터 범위
-            <span>보고 / 결재 / 이력</span>
-          </label>
-          <div className="site-dd-role-row">
-            <Users size={20} />
-            <ShieldCheck size={20} />
-            <Bell size={20} />
+        <div className="site-product-role-map">
+          <div className="site-product-schematic-node is-core">
+            <Database size={28} />
+            <strong>같은 데이터</strong>
+          </div>
+          <div className="site-product-role-lines">
+            <span />
+            <span />
+            <span />
+          </div>
+          <div className="site-product-role-screens">
+            <span>
+              <Camera size={18} />
+              현장 화면
+            </span>
+            <span>
+              <ShieldCheck size={18} />
+              결재 화면
+            </span>
+            <span>
+              <BarChart3 size={18} />
+              보고 화면
+            </span>
           </div>
         </div>
       </div>
@@ -351,38 +295,31 @@ function DetailVisual({ kind, index }: { kind: (typeof detailRows)[number]["visu
 
   return (
     <div
-      className="site-dd-detail-visual is-flow"
+      className="site-dd-detail-visual is-flow site-product-detail-schematic"
       style={{ "--site-dd-delay": `${index * 90}ms` } as CSSProperties}
       aria-hidden="true"
     >
-      <div className="site-dd-flow-board">
-        <div className="site-dd-flow-column">
-          <span>
-            <FileText size={18} />
-            문서
-          </span>
-          <span>
-            <Database size={18} />
-            ERP
-          </span>
-          <span>
-            <Camera size={18} />
-            사진
-          </span>
-          <span>
-            <ClipboardCheck size={18} />
-            승인
-          </span>
+      <div className="site-product-wide-flow">
+        <div className="site-product-stack-list">
+          <span>문서</span>
+          <span>사진</span>
+          <span>ERP</span>
+          <span>승인</span>
         </div>
-        <div className="site-dd-flow-core">
+        <span className="site-product-schematic-arrow">
+          <ArrowRight size={20} />
+        </span>
+        <div className="site-product-schematic-node is-core">
           <Layers3 size={28} />
           <strong>AI-Core</strong>
-          <small>업무 기준 정렬</small>
+          <small>업무 데이터화</small>
         </div>
-        <div className="site-dd-flow-column is-output">
-          <span>업무 화면</span>
+        <span className="site-product-schematic-arrow">
+          <ArrowRight size={20} />
+        </span>
+        <div className="site-product-result-panel">
+          <strong>업무 화면</strong>
           <span>보고서</span>
-          <span>대시보드</span>
           <span>알림</span>
         </div>
       </div>

@@ -9717,12 +9717,19 @@ html .site-header.is-transparent.is-home-route[data-site-hero-group="1"] .site-b
 }
 
 .site-dd-data-card {
+  display: grid;
+  grid-template-rows: 260px auto auto;
+  align-content: start;
   min-width: 0;
   animation: site-dd-rise 620ms ease both;
   animation-delay: var(--site-dd-delay, 0ms);
 }
 
 .site-dd-data-card h3 {
+  display: flex;
+  min-height: 66px;
+  align-items: flex-start;
+  justify-content: center;
   margin: 24px 0 0;
   color: #000000;
   font-size: 26px;
@@ -9733,7 +9740,8 @@ html .site-header.is-transparent.is-home-route[data-site-hero-group="1"] .site-b
 
 .site-dd-data-card > p {
   max-width: 320px;
-  margin: 14px auto 0;
+  min-height: 54px;
+  margin: 0 auto;
   color: #344052;
   font-size: 16px;
   line-height: 1.65;
@@ -9744,7 +9752,9 @@ html .site-header.is-transparent.is-home-route[data-site-hero-group="1"] .site-b
 .site-dd-card-visual {
   position: relative;
   display: grid;
-  min-height: 260px;
+  width: 100%;
+  height: 260px;
+  min-height: 0;
   overflow: hidden;
   place-items: center;
   border: 1px solid rgba(113, 156, 222, 0.22);
@@ -9938,13 +9948,13 @@ html .site-header.is-transparent.is-home-route[data-site-hero-group="1"] .site-b
 
 .site-dd-detail-row {
   display: grid;
-  grid-template-columns: minmax(0, 0.88fr) minmax(420px, 1fr);
+  grid-template-columns: minmax(0, 1.05fr) minmax(420px, 0.95fr);
   gap: 52px;
   align-items: center;
 }
 
 .site-dd-detail-row.is-reverse {
-  grid-template-columns: minmax(420px, 1fr) minmax(0, 0.88fr);
+  grid-template-columns: minmax(420px, 0.95fr) minmax(0, 1.05fr);
 }
 
 .site-dd-detail-row.is-reverse .site-dd-detail-copy {
@@ -9957,7 +9967,7 @@ html .site-header.is-transparent.is-home-route[data-site-hero-group="1"] .site-b
 }
 
 .site-dd-detail-copy h2 {
-  max-width: 620px;
+  max-width: 760px;
   margin: 0;
   color: var(--site-dd-ink);
   font-size: 36px;
@@ -11484,7 +11494,333 @@ html .site-header.is-transparent.is-home-route[data-site-hero-group="1"] .site-b
   color: var(--site-product-main);
 }
 
+.site-product-schematic-card {
+  display: grid;
+  place-items: center;
+  grid-template-columns: auto 42px auto;
+  gap: 14px;
+  padding: 34px;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(var(--site-product-main-rgb), 0.12)),
+    #f8fbff;
+}
+
+.site-product-schematic-card.is-input,
+.site-product-schematic-card.is-output,
+.site-product-schematic-card.is-mapping,
+.site-product-schematic-card.site-auto-card-visual.is-detect,
+.site-product-schematic-card.site-auto-card-visual.is-process,
+.site-product-schematic-card.site-auto-card-visual.is-review {
+  display: grid;
+  place-items: center;
+  grid-template-columns: auto 42px auto;
+  gap: 14px;
+  padding: 34px;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(var(--site-product-main-rgb), 0.12)),
+    #f8fbff;
+}
+
+.site-product-schematic-card.site-auto-card-visual.is-process {
+  grid-template-columns: auto 42px auto;
+}
+
+.site-product-schematic-card .site-product-output-row {
+  width: 132px;
+  grid-template-columns: 1fr;
+}
+
+.site-product-schematic-node,
+.site-product-result-panel {
+  display: grid;
+  min-width: 136px;
+  min-height: 112px;
+  align-content: center;
+  justify-items: center;
+  gap: 8px;
+  padding: 18px;
+  border: 1px solid rgba(67, 107, 166, 0.14);
+  border-radius: 8px;
+  color: #172033;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 16px 34px rgba(37, 73, 126, 0.09);
+  text-align: center;
+}
+
+.site-product-schematic-node svg,
+.site-product-result-panel svg {
+  color: var(--site-product-main);
+}
+
+.site-product-schematic-node strong,
+.site-product-result-panel strong {
+  font-size: 17px;
+  font-weight: 900;
+  line-height: 1.24;
+  word-break: keep-all;
+}
+
+.site-product-schematic-node small {
+  color: #66758a;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.site-product-schematic-node.is-strong,
+.site-product-schematic-node.is-core {
+  color: #ffffff;
+  border-color: rgba(var(--site-product-main-rgb), 0.1);
+  background: var(--site-product-main-deep);
+  box-shadow: 0 20px 42px rgba(var(--site-product-main-rgb), 0.18);
+}
+
+.site-product-schematic-node.is-strong svg,
+.site-product-schematic-node.is-core svg,
+.site-product-schematic-node.is-strong small,
+.site-product-schematic-node.is-core small {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.site-product-schematic-node.is-alert {
+  color: var(--site-product-main-deep);
+  background: rgba(var(--site-product-main-rgb), 0.08);
+}
+
+.site-product-schematic-arrow {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border-radius: 999px;
+  color: var(--site-product-main-deep);
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: 0 12px 28px rgba(37, 73, 126, 0.1);
+}
+
+.site-product-source-grid,
+.site-product-rule-stack,
+.site-product-stack-list,
+.site-product-output-row,
+.site-product-role-screens,
+.site-product-branch-results {
+  display: grid;
+  gap: 10px;
+}
+
+.site-product-source-grid {
+  grid-template-columns: repeat(2, minmax(92px, 1fr));
+}
+
+.site-product-source-grid span,
+.site-product-rule-stack span,
+.site-product-stack-list span,
+.site-product-output-row span,
+.site-product-role-screens span,
+.site-product-branch-results span,
+.site-product-schematic-footer {
+  display: flex;
+  min-height: 42px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 13px;
+  border: 1px solid rgba(67, 107, 166, 0.13);
+  border-radius: 8px;
+  color: #25344a;
+  background: rgba(255, 255, 255, 0.9);
+  font-size: 14px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.site-product-rule-stack,
+.site-product-stack-list {
+  width: min(180px, 100%);
+}
+
+.site-product-output-row {
+  grid-template-columns: repeat(3, minmax(86px, 1fr));
+}
+
+.site-product-output-row.is-vertical {
+  grid-template-columns: 1fr;
+  width: min(180px, 100%);
+}
+
+.site-product-detail-schematic {
+  display: grid;
+  place-items: center;
+  padding: 34px;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(var(--site-product-main-rgb), 0.1)),
+    #f8fbff;
+}
+
+.site-dd-detail-visual.site-product-detail-schematic,
+.site-dd-detail-visual.is-team.site-product-detail-schematic,
+.site-dd-detail-visual.site-auto-run-visual.site-product-detail-schematic {
+  display: grid;
+  place-items: center;
+  padding: 34px;
+}
+
+.site-product-wide-flow {
+  display: grid;
+  width: min(100%, 650px);
+  grid-template-columns: minmax(130px, 0.85fr) 42px minmax(150px, 0.78fr) 42px minmax(140px, 0.85fr);
+  gap: 12px;
+  align-items: center;
+}
+
+.site-product-wide-flow.is-settings {
+  grid-template-columns: minmax(124px, 0.76fr) 42px minmax(154px, 0.92fr) 42px minmax(132px, 0.72fr);
+}
+
+.site-product-wide-flow.is-run {
+  grid-template-columns: minmax(150px, 0.86fr) 42px minmax(130px, 0.72fr) 42px minmax(140px, 0.8fr);
+}
+
+.site-product-result-panel {
+  min-height: 142px;
+  justify-items: stretch;
+}
+
+.site-product-result-panel strong {
+  margin-bottom: 2px;
+  text-align: center;
+}
+
+.site-product-result-panel span {
+  display: grid;
+  min-height: 30px;
+  place-items: center;
+  border-radius: 7px;
+  color: #46566c;
+  background: rgba(67, 107, 166, 0.08);
+  font-size: 13px;
+  font-weight: 850;
+}
+
+.site-product-role-map {
+  display: grid;
+  width: min(100%, 590px);
+  grid-template-columns: minmax(150px, 0.8fr) 62px minmax(220px, 1fr);
+  gap: 10px;
+  align-items: center;
+}
+
+.site-product-role-lines,
+.site-product-branch-lines {
+  display: grid;
+  gap: 16px;
+}
+
+.site-product-role-lines span,
+.site-product-branch-lines span {
+  display: block;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(var(--site-product-main-rgb), 0.46), transparent);
+}
+
+.site-product-role-screens span {
+  justify-content: flex-start;
+}
+
+.site-product-branch-map {
+  display: grid;
+  width: min(100%, 560px);
+  grid-template-columns: minmax(150px, 0.78fr) 64px minmax(210px, 1fr);
+  gap: 12px;
+  align-items: center;
+}
+
+.site-product-branch-map .site-product-schematic-node {
+  min-height: 148px;
+}
+
+.site-product-schematic-footer {
+  grid-column: 1 / -1;
+  margin-top: 6px;
+  color: var(--site-product-main-deep);
+  background: rgba(var(--site-product-main-rgb), 0.08);
+}
+
 @media (max-width: 760px) {
+  .site-product-schematic-card,
+  .site-product-schematic-card.is-input,
+  .site-product-schematic-card.is-output,
+  .site-product-schematic-card.is-mapping,
+  .site-product-schematic-card.site-auto-card-visual.is-detect,
+  .site-product-schematic-card.site-auto-card-visual.is-process,
+  .site-product-schematic-card.site-auto-card-visual.is-review {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 22px;
+  }
+
+  .site-product-schematic-card.site-auto-card-visual.is-process {
+    grid-template-columns: 1fr;
+  }
+
+  .site-product-schematic-arrow {
+    transform: rotate(90deg);
+  }
+
+  .site-product-source-grid {
+    width: 100%;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .site-product-source-grid span,
+  .site-product-rule-stack span,
+  .site-product-stack-list span,
+  .site-product-output-row span,
+  .site-product-role-screens span,
+  .site-product-branch-results span,
+  .site-product-schematic-footer {
+    min-height: 38px;
+    padding: 0 10px;
+    font-size: 13px;
+  }
+
+  .site-product-schematic-node,
+  .site-product-result-panel {
+    width: 100%;
+    min-width: 0;
+    min-height: 104px;
+  }
+
+  .site-product-output-row,
+  .site-product-output-row.is-vertical {
+    width: 100%;
+    grid-template-columns: 1fr;
+  }
+
+  .site-product-detail-schematic {
+    padding: 22px;
+  }
+
+  .site-product-wide-flow,
+  .site-product-wide-flow.is-settings,
+  .site-product-wide-flow.is-run,
+  .site-product-role-map,
+  .site-product-branch-map {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .site-product-rule-stack,
+  .site-product-stack-list,
+  .site-product-role-screens,
+  .site-product-branch-results {
+    width: 100%;
+  }
+
+  .site-product-role-lines,
+  .site-product-branch-lines {
+    display: none;
+  }
+
   .site-auto-card-visual.is-detect {
     grid-template-columns: 1fr;
     gap: 14px;
