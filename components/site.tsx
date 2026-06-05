@@ -45,8 +45,8 @@ type NavGroup = {
 type HeroVisualKind = "home" | "products" | "company" | "contact" | "community";
 type WhatsNewTag = "Blog" | "Newsletter" | "Technology";
 type WhatsNewFilter = "All" | WhatsNewTag;
-type NewsletterFilter = "All" | "AI-Core" | "?? ???" | "?? ????";
-type BlogFilter = "All" | "AI-Core" | "??" | "???" | "????";
+type NewsletterFilter = "All" | "AI-Core" | "산업 자동화" | "기술 업데이트";
+type BlogFilter = "All" | "AI-Core" | "산업" | "자동화" | "인사이트";
 type TechnologyFilter = "All" | "AI-Core" | "Architecture" | "Automation";
 type NewsletterSubscribeStatus = "idle" | "submitting" | "success";
 
@@ -292,9 +292,9 @@ export const industryImageCards = [
 
 const whatsNewFilters: WhatsNewFilter[] = ["All", "Blog", "Newsletter", "Technology"];
 const whatsNewPageSize = 3;
-const newsletterFilters: NewsletterFilter[] = ["All", "AI-Core", "?? ???", "?? ????"];
+const newsletterFilters: NewsletterFilter[] = ["All", "AI-Core", "산업 자동화", "기술 업데이트"];
 const newsletterPageSize = 9;
-const blogFilters: BlogFilter[] = ["All", "AI-Core", "??", "???", "????"];
+const blogFilters: BlogFilter[] = ["All", "AI-Core", "산업", "자동화", "인사이트"];
 const blogPageSize = 9;
 const technologyFilters: TechnologyFilter[] = ["All", "AI-Core", "Architecture", "Automation"];
 const technologyPageSize = 9;
