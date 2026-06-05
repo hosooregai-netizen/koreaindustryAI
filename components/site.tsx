@@ -1867,43 +1867,81 @@ export function SiteComingSoonPage({
 }
 
 export function SiteContactForm() {
-  const [submitted, setSubmitted] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
+  const [feedbackMessage, setFeedbackMessage] = useState("남겨주신 정보는 상담 검토와 회신 목적으로만 사용합니다.");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const formNoteClassName = `site-form-note${submitStatus === "success" ? " is-success" : ""}${
+    submitStatus === "error" ? " is-error" : ""
+  }`;
 
   return (
     <form
       className="site-contact-form"
-      onSubmit={(event) => {
+      onSubmit={async (event) => {
         event.preventDefault();
-        setSubmitted(true);
+        const form = event.currentTarget;
+        const payload = Object.fromEntries(new FormData(form).entries());
+
+        setIsSubmitting(true);
+        setSubmitStatus("idle");
+        setFeedbackMessage("문의 접수 중입니다.");
+
+        try {
+          const response = await fetch("/api/contact", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          });
+          const result = (await response.json().catch(() => null)) as { message?: string } | null;
+
+          if (!response.ok) {
+            throw new Error(result?.message ?? "문의 접수 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.");
+          }
+
+          form.reset();
+          setSubmitStatus("success");
+          setFeedbackMessage("문의가 접수되었습니다. 담당자가 확인 후 연락드리겠습니다.");
+        } catch (error) {
+          setSubmitStatus("error");
+          setFeedbackMessage(
+            error instanceof Error ? error.message : "문의 접수 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.",
+          );
+        } finally {
+          setIsSubmitting(false);
+        }
       }}
     >
       <div className="site-contact-form-intro">
         <p>지금 문의를 남겨주세요.</p>
         <p>업무 맥락을 확인한 뒤 적합한 AI-Core 구성과 상담 일정을 안내드리겠습니다.</p>
       </div>
+      <label className="site-contact-honeypot" aria-hidden="true">
+        웹사이트
+        <input name="website" tabIndex={-1} autoComplete="off" />
+      </label>
       <label>
         <span className="site-contact-field-label">
           성함 <span aria-hidden="true">*</span>
         </span>
-        <input name="name" required />
+        <input name="name" autoComplete="name" maxLength={80} required />
       </label>
       <label>
         <span className="site-contact-field-label">
           회사명 <span aria-hidden="true">*</span>
         </span>
-        <input name="company" required />
+        <input name="company" autoComplete="organization" maxLength={120} required />
       </label>
       <label>
         <span className="site-contact-field-label">
           업무용 이메일주소 <span aria-hidden="true">*</span>
         </span>
-        <input name="email" type="email" required />
+        <input name="email" type="email" autoComplete="email" maxLength={160} required />
       </label>
       <label>
         <span className="site-contact-field-label">
           휴대폰번호 <span aria-hidden="true">*</span>
         </span>
-        <input name="phone" type="tel" required />
+        <input name="phone" type="tel" autoComplete="tel" maxLength={40} required />
       </label>
       <label>
         대한산업AI를 어떻게 알게 되셨나요?
@@ -1951,16 +1989,17 @@ export function SiteContactForm() {
         <textarea
           name="message"
           rows={7}
+          maxLength={1800}
           placeholder="예: 매주 작성하는 보고서, 승인 흐름, 운영 데이터 정리처럼 자동화하고 싶은 업무를 적어주세요."
           required
         />
       </label>
-      <button className="site-button site-button-primary is-wide" type="submit">
+      <button className="site-button site-button-primary is-wide" type="submit" disabled={isSubmitting}>
         <Send size={17} />
-        문의 접수하기
+        {isSubmitting ? "전송 중..." : "문의 접수하기"}
       </button>
-      <p className={`site-form-note ${submitted ? "is-success" : ""}`}>
-        {submitted ? "문의가 접수되었습니다. 담당자가 확인 후 연락드리겠습니다." : "남겨주신 정보는 상담 검토와 회신 목적으로만 사용합니다."}
+      <p className={formNoteClassName} aria-live="polite">
+        {feedbackMessage}
       </p>
     </form>
   );

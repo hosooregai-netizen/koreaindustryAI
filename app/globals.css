@@ -12974,6 +12974,14 @@ html .site-header.is-transparent.is-home-route[data-site-hero-group="1"] .site-b
   align-items: baseline;
 }
 
+.site-contact-page .site-contact-honeypot {
+  position: absolute;
+  left: -100vw;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
 .site-contact-page .site-contact-form label span {
   color: #000000;
 }
@@ -13032,6 +13040,11 @@ html .site-header.is-transparent.is-home-route[data-site-hero-group="1"] .site-b
   box-shadow: none;
 }
 
+.site-contact-page .site-contact-form .site-button:disabled {
+  cursor: wait;
+  opacity: 0.72;
+}
+
 .site-contact-page .site-form-note {
   margin: -10px 0 0;
   color: #626873;
@@ -13042,6 +13055,10 @@ html .site-header.is-transparent.is-home-route[data-site-hero-group="1"] .site-b
 
 .site-contact-page .site-form-note.is-success {
   color: #147a54;
+}
+
+.site-contact-page .site-form-note.is-error {
+  color: #b42318;
 }
 
 @media (max-width: 1180px) {

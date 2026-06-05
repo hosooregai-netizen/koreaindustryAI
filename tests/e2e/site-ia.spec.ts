@@ -801,6 +801,12 @@ test("technology route shows featured story without filters or hero CTA", async 
 });
 
 test("contact form shows a success state", async ({ page }) => {
+  await page.route("**/api/contact", async (route) => {
+    await route.fulfill({
+      contentType: "application/json",
+      body: JSON.stringify({ ok: true }),
+    });
+  });
   await page.goto("/contact");
   await page.getByLabel(/성함/).fill("테스터");
   await page.getByLabel(/회사명/).fill("대한테스트");
