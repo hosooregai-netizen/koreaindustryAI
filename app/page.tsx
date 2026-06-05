@@ -11,7 +11,7 @@ import {
 } from "@/components/site";
 
 export const metadata: Metadata = {
-  title: "대한산업AI | AI-Core 산업 업무 자동화",
+  title: "대한산업 AI",
   description: "회사별 문서 양식, 승인 흐름, 운영 데이터를 반영해 실제 업무 방식에 맞는 AI-Core 시스템을 구성합니다.",
 };
 

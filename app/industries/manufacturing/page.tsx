@@ -4,7 +4,7 @@ import { IndustryScrollReveal } from "@/components/industry-scroll-reveal";
 import { SiteCtaBand, SiteShell } from "@/components/site";
 
 export const metadata: Metadata = {
-  title: "제조 생산성 AI-Core 솔루션 | 대한산업AI",
+  title: "대한산업 AI",
   description: "생산 계획, 공정, 품질, 설비 데이터를 ERP, MES, APS와 연결해 제조 의사결정과 실행을 돕는 AI-Core 솔루션입니다.",
 };
 

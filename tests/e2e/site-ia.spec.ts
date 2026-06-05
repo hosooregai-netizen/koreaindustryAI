@@ -419,6 +419,7 @@ test("home hero starts video transition before the active clip ends", async ({ p
 test("desktop Product navigation exposes Data-Driven AI-Core and routes correctly", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/");
+  await expect(page).toHaveTitle("대한산업 AI");
 
   await expect(page.getByRole("heading", { name: /현장의 데이터로 만드는 AI 시스템/ })).toBeVisible();
   await expectHomeHeroCopySingleLine(page);

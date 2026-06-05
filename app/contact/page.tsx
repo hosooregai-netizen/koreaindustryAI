@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { SiteContactForm, SiteShell } from "@/components/site";
 
 export const metadata: Metadata = {
-  title: "고객 문의 | 대한산업AI",
+  title: "대한산업 AI",
   description: "대한산업AI의 AI-Core 도입 상담 문의 폼입니다.",
 };
 

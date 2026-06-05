@@ -18,7 +18,7 @@ import {
 import { SiteCtaBand, SiteShell } from "@/components/site";
 
 export const metadata: Metadata = {
-  title: "Data-Driven AI-Core | 대한산업AI",
+  title: "대한산업 AI",
   description: "흩어진 현장 데이터를 업무 화면과 의사결정으로 연결하는 Data-Driven AI-Core 상세 페이지입니다.",
 };
 

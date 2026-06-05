@@ -4,7 +4,7 @@ import { IndustryScrollReveal } from "@/components/industry-scroll-reveal";
 import { SiteCtaBand, SiteShell } from "@/components/site";
 
 export const metadata: Metadata = {
-  title: "건설 문서 자동화 AI-Core 솔루션 | 대한산업AI",
+  title: "대한산업 AI",
   description: "도면, RFI, 제출 문서, 안전·품질 기록을 BIM, RFI, Submittal 흐름과 연결해 현장 문서 대응을 돕는 AI-Core 솔루션입니다.",
 };
 

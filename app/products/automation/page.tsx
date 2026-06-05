@@ -15,7 +15,7 @@ import {
 import { SiteCtaBand, SiteShell } from "@/components/site";
 
 export const metadata: Metadata = {
-  title: "Automation AI-Core | 대한산업AI",
+  title: "대한산업 AI",
   description: "반복 업무를 줄이고 담당자가 중요한 판단에 집중하도록 돕는 Automation AI-Core 상세 페이지입니다.",
 };
 

@@ -4,7 +4,7 @@ import { IndustryScrollReveal } from "@/components/industry-scroll-reveal";
 import { SiteCtaBand, SiteShell } from "@/components/site";
 
 export const metadata: Metadata = {
-  title: "물류 운영 최적화 AI-Core 솔루션 | 대한산업AI",
+  title: "대한산업 AI",
   description: "입출고, 재고, 배차, 라우팅 흐름을 WMS, TMS, LMS 데이터와 연결해 물류 운영 판단을 돕는 AI-Core 솔루션입니다.",
 };
 

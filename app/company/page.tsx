@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { SiteComingSoonPage } from "@/components/site";
 
 export const metadata: Metadata = {
-  title: "회사 소개 준비 중 | 대한산업AI",
+  title: "대한산업 AI",
   description: "대한산업AI 회사 소개 페이지는 준비 중입니다.",
 };
 

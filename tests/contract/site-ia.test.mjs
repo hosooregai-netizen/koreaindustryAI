@@ -61,6 +61,23 @@ test("planned site routes have page files and removed routes are gone", () => {
   }
 });
 
+test("site metadata titles use the brand-only browser title", () => {
+  for (const file of collectTsxFiles("app")) {
+    const source = readFileSync(join(root, file), "utf8");
+    const metadataBlocks = source.match(/export const metadata: Metadata = \{[\s\S]*?\n\};/g) ?? [];
+
+    for (const block of metadataBlocks) {
+      assert.match(block, /title:\s*"대한산업 AI"/, `${file} should use the brand-only metadata title`);
+    }
+
+    if (source.includes("generateMetadata")) {
+      assert.doesNotMatch(source, /title:\s*`/);
+      assert.doesNotMatch(source, /title:\s*".*\|/);
+      assert.match(source, /title:\s*"대한산업 AI"/, `${file} dynamic metadata should use the brand-only title`);
+    }
+  }
+});
+
 test("header navigation exposes the site IA", () => {
   const navBlock = siteSource.match(/export const navItems[\s\S]*?export const industryWordmarks/)?.[0] ?? "";
 

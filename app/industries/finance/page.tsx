@@ -4,7 +4,7 @@ import { IndustryScrollReveal } from "@/components/industry-scroll-reveal";
 import { SiteCtaBand, SiteShell } from "@/components/site";
 
 export const metadata: Metadata = {
-  title: "금융 업무 자동화 AI-Core 솔루션 | 대한산업AI",
+  title: "대한산업 AI",
   description: "RegTech, AML/KYC, FDS 데이터를 연결해 금융 검토·탐지·보고 업무 자동화를 돕는 AI-Core 솔루션입니다.",
 };
 

@@ -26,12 +26,12 @@ export async function generateMetadata({ params }: CommunityArticlePageProps): P
 
   if (!article) {
     return {
-      title: "Community | 대한산업AI",
+      title: "대한산업 AI",
     };
   }
 
   return {
-    title: `${article.title} | 대한산업AI`,
+    title: "대한산업 AI",
     description: article.description,
   };
 }
