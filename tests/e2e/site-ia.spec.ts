@@ -596,6 +596,32 @@ test("desktop Product navigation exposes Data-Driven AI-Core and routes correctl
   await expectNoHorizontalOverflow(page);
 });
 
+test("home scrolled dropdown item hover stays text-only", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/");
+  await page.evaluate(() => window.scrollTo(0, 720));
+  await expect(page.locator(".site-header")).toHaveClass(/is-scrolled/);
+
+  const communityGroup = page.locator(".site-nav-links .site-nav-group").filter({ hasText: "Community" }).first();
+  await communityGroup.locator(":scope > button").hover();
+  const blogItem = communityGroup.locator(".site-dropdown-item").filter({ hasText: "Blog" }).first();
+  await blogItem.hover();
+
+  const hoverStyle = await blogItem.evaluate((item) => {
+    const style = getComputedStyle(item);
+    return {
+      background: style.backgroundColor,
+      color: style.color,
+      minHeight: style.minHeight,
+      padding: style.padding,
+    };
+  });
+  expect(hoverStyle.background).toBe("rgba(0, 0, 0, 0)");
+  expect(hoverStyle.color).toBe("rgb(47, 107, 255)");
+  expect(hoverStyle.minHeight).toBe("0px");
+  expect(hoverStyle.padding).toBe("0px");
+});
+
 test("Product Automation item routes to the Automation AI-Core page", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/");

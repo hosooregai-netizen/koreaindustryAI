@@ -9508,6 +9508,54 @@ html .site-header.is-transparent.is-home-route[data-site-hero-group="1"] .site-b
   background: transparent;
 }
 
+/* Keep mega menu links from inheriting topbar link hover states. */
+.site-header .site-dropdown .site-dropdown-item,
+.site-header .site-dropdown a.site-dropdown-item,
+.site-header.is-scrolled .site-dropdown .site-dropdown-item,
+.site-header.is-scrolled .site-dropdown a.site-dropdown-item,
+.site-header:not(.is-home-route) .site-dropdown .site-dropdown-item,
+.site-header:not(.is-home-route) .site-dropdown a.site-dropdown-item {
+  min-height: 0;
+  justify-content: start;
+  padding: 0;
+  color: var(--site-black);
+  border-radius: 0;
+  background: transparent;
+}
+
+.site-header .site-dropdown .site-dropdown-item:hover,
+.site-header .site-dropdown .site-dropdown-item:focus-visible,
+.site-header .site-dropdown a.site-dropdown-item:hover,
+.site-header .site-dropdown a.site-dropdown-item:focus-visible,
+.site-header.is-scrolled .site-dropdown .site-dropdown-item:hover,
+.site-header.is-scrolled .site-dropdown .site-dropdown-item:focus-visible,
+.site-header.is-scrolled .site-dropdown a.site-dropdown-item:hover,
+.site-header.is-scrolled .site-dropdown a.site-dropdown-item:focus-visible,
+.site-header:not(.is-home-route) .site-dropdown .site-dropdown-item:hover,
+.site-header:not(.is-home-route) .site-dropdown .site-dropdown-item:focus-visible,
+.site-header:not(.is-home-route) .site-dropdown a.site-dropdown-item:hover,
+.site-header:not(.is-home-route) .site-dropdown a.site-dropdown-item:focus-visible {
+  color: var(--site-blue);
+  background: transparent;
+}
+
+.site-header.is-transparent.is-home-route .site-dropdown .site-dropdown-item,
+.site-header.is-transparent.is-home-route .site-dropdown a.site-dropdown-item,
+.site-header.is-transparent.is-home-route .site-dropdown .site-dropdown-item span {
+  color: currentColor;
+  background: transparent;
+  opacity: 1;
+}
+
+.site-header.is-transparent.is-home-route .site-dropdown .site-dropdown-item:hover,
+.site-header.is-transparent.is-home-route .site-dropdown .site-dropdown-item:focus-visible,
+.site-header.is-transparent.is-home-route .site-dropdown a.site-dropdown-item:hover,
+.site-header.is-transparent.is-home-route .site-dropdown a.site-dropdown-item:focus-visible {
+  color: currentColor;
+  background: transparent;
+  opacity: 0.72;
+}
+
 /* Data-Driven AI-Core page */
 .site-dd-page {
   --site-dd-ink: #09111f;
