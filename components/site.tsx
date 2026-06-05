@@ -224,8 +224,8 @@ export const navItems: NavGroup[] = [
   },
   {
     label: "Company",
-    href: "/company",
-    summary: "회사 신뢰와 상담 전환을 위한 최소 진입점을 둡니다.",
+    href: "/contact",
+    summary: "AI-Core 도입 상담 문의로 바로 연결합니다.",
     children: [
       {
         label: "문의하기",

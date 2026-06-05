@@ -70,6 +70,7 @@ test("header navigation exposes the site IA", () => {
 
   assert.doesNotMatch(navBlock, /label: "회사 소개"/);
   assert.match(siteSource, /<Link className="site-nav-cta" href="\/contact"/);
+  assert.match(navBlock, /label: "Company"[\s\S]*?href: "\/contact"/);
   assert.match(navBlock, /label: "Data-Driven AI-Core"/);
   assert.match(navBlock, /href: "\/products\/data-driven"/);
   assert.match(navBlock, /label: "Automation AI-Core"/);

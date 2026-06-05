@@ -673,6 +673,16 @@ test("desktop contact CTA routes to contact page", async ({ page }) => {
   await expectNoHorizontalOverflow(page);
 });
 
+test("desktop Company navigation routes directly to contact page", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/");
+
+  await page.getByLabel("주요 메뉴").getByRole("link", { name: "Company" }).click();
+  await expect(page).toHaveURL(/\/contact$/);
+  await expect(page.getByRole("heading", { name: /산업 AI 전문가에게 문의하기/ })).toBeVisible();
+  await expectNoHorizontalOverflow(page);
+});
+
 test("newsletter route shows featured story and card grid", async ({ page }) => {
   await page.goto("/community/newsletter");
   await expect(page.getByRole("heading", { name: "Newsletter", exact: true })).toBeVisible();
