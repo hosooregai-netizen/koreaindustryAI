@@ -4,15 +4,15 @@ import { Building2, ClipboardCheck, FileText, Gauge, Layers3, Workflow } from "l
 import { SiteCtaBand, SiteShell } from "@/components/site";
 
 export const metadata: Metadata = {
-  title: "건설 운영 자동화 | 대한산업AI",
-  description: "BIM, RFI, Submittal 기반 건설 업무와 규제, 안전, 품질 문서 자동화를 AI-Core로 연결하는 산업 상세 페이지입니다.",
+  title: "건설 문서 자동화 솔루션 | 대한산업AI",
+  description: "도면, RFI, 제출 문서, 안전·품질 기록을 BIM, RFI, Submittal 흐름과 연결해 현장 리스크 대응을 돕는 AI-Core 솔루션입니다.",
 };
 
 const construction = {
   name: "건설",
-  label: "AI 기반 산업 운영 자동화",
-  title: "건설 운영 자동화",
-  description: "BIM·RFI·Submittal 기반 업무와 규제/안전/품질 문서 자동화를 AI-Core로 연결합니다.",
+  title: "건설 문서 자동화 솔루션",
+  description:
+    "건설 현장의 신뢰는 문서와 승인 흐름이 놓치지 않고 이어질 때 만들어집니다.\n대한산업AI는 BIM·RFI·Submittal 흐름을 정리해 문서 누락을 줄이고 승인·보고 실행을 돕습니다.",
   image: "/assets/industries/construction-card.png",
   imageAlt: "건설 현장을 검토하는 작업자",
   systems: "BIM·RFI·Submittal",
@@ -78,7 +78,6 @@ export default function ConstructionPage() {
           <img src={construction.image} alt={construction.imageAlt} />
           <div className="site-industry-hero-shade" aria-hidden="true" />
           <div className="site-industry-hero-copy">
-            <p>{construction.label}</p>
             <h1 id="site-construction-hero-title">{construction.title}</h1>
             <span>{construction.description}</span>
           </div>

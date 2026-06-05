@@ -4,15 +4,15 @@ import { BarChart3, Boxes, ClipboardCheck, Database, Gauge, MonitorCog, Workflow
 import { SiteCtaBand, SiteShell } from "@/components/site";
 
 export const metadata: Metadata = {
-  title: "제조 운영 자동화 | 대한산업AI",
-  description: "ERP, MES, APS 기반 제조 업무와 공정, 품질, 설비 예측을 AI-Core로 연결하는 산업 상세 페이지입니다.",
+  title: "제조 생산성 AI-Core 솔루션 | 대한산업AI",
+  description: "생산 계획, 공정, 품질, 설비 데이터를 ERP, MES, APS와 연결해 제조 의사결정과 실행을 돕는 AI-Core 솔루션입니다.",
 };
 
 const manufacturing = {
   name: "제조",
-  label: "AI 기반 산업 운영 자동화",
-  title: "제조 운영 자동화",
-  description: "ERP·MES·APS 기반 업무와 공정/품질/설비 예측을 AI-Core로 연결합니다.",
+  title: "제조 생산성 AI-Core 솔루션",
+  description:
+    "제조의 생산성은 계획과 현장이 같은 속도로 움직일 때 높아집니다.\n대한산업AI는 ERP·MES·APS 데이터를 정리해 반복 점검을 줄이고 빠른 생산 의사결정을 돕습니다.",
   image: "/assets/industries/manufacturing-card.png",
   imageAlt: "자동화 로봇이 배치된 제조 공정",
   systems: "ERP·MES·APS",
@@ -78,7 +78,6 @@ export default function ManufacturingPage() {
           <img src={manufacturing.image} alt={manufacturing.imageAlt} />
           <div className="site-industry-hero-shade" aria-hidden="true" />
           <div className="site-industry-hero-copy">
-            <p>{manufacturing.label}</p>
             <h1 id="site-manufacturing-hero-title">{manufacturing.title}</h1>
             <span>{manufacturing.description}</span>
           </div>

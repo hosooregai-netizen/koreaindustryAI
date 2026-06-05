@@ -4,15 +4,15 @@ import { BarChart3, ClipboardCheck, Database, Gauge, ShieldCheck, Workflow } fro
 import { SiteCtaBand, SiteShell } from "@/components/site";
 
 export const metadata: Metadata = {
-  title: "금융 운영 자동화 | 대한산업AI",
-  description: "RegTech, AML/KYC, FDS 기반 금융 업무와 내부통제, 증권 시스템을 AI-Core로 연결하는 산업 상세 페이지입니다.",
+  title: "금융 내부통제 AI-Core 솔루션 | 대한산업AI",
+  description: "고객확인, 이상거래 탐지, 규제 대응, 내부통제 기록을 RegTech, AML/KYC, FDS와 연결해 금융 대응과 보고를 돕는 AI-Core 솔루션입니다.",
 };
 
 const finance = {
   name: "금융",
-  label: "AI 기반 산업 운영 자동화",
-  title: "금융 운영 자동화",
-  description: "RegTech·AML/KYC·FDS 기반 업무와 내부통제/증권 시스템을 AI-Core로 연결합니다.",
+  title: "금융 내부통제 AI-Core 솔루션",
+  description:
+    "금융의 신뢰는 검토와 통제가 빠르고 정확하게 기록될 때 지켜집니다.\n대한산업AI는 RegTech·AML/KYC·FDS 흐름을 정리해 반복 검토를 줄이고 빠른 대응·보고를 돕습니다.",
   image: "/assets/industries/finance-card.png",
   imageAlt: "도시 전망의 금융 데이터 운영실",
   systems: "RegTech·AML/KYC·FDS",
@@ -78,7 +78,6 @@ export default function FinancePage() {
           <img src={finance.image} alt={finance.imageAlt} />
           <div className="site-industry-hero-shade" aria-hidden="true" />
           <div className="site-industry-hero-copy">
-            <p>{finance.label}</p>
             <h1 id="site-finance-hero-title">{finance.title}</h1>
             <span>{finance.description}</span>
           </div>

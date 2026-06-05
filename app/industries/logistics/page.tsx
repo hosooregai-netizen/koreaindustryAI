@@ -4,15 +4,15 @@ import { BarChart3, Boxes, ClipboardCheck, Database, Gauge, Workflow } from "luc
 import { SiteCtaBand, SiteShell } from "@/components/site";
 
 export const metadata: Metadata = {
-  title: "물류 운영 자동화 | 대한산업AI",
-  description: "WMS, TMS, LMS 기반 물류 업무와 배차, 라우팅, 창고 최적화를 AI-Core로 연결하는 산업 상세 페이지입니다.",
+  title: "물류 운영 최적화 솔루션 | 대한산업AI",
+  description: "입출고, 재고, 배차, 라우팅 흐름을 WMS, TMS, LMS 데이터와 연결해 물류 운영 판단을 돕는 AI-Core 솔루션입니다.",
 };
 
 const logistics = {
   name: "물류",
-  label: "AI 기반 산업 운영 자동화",
-  title: "물류 운영 자동화",
-  description: "WMS·TMS·LMS 기반 업무와 배차/라우팅/창고 최적화를 AI-Core로 연결합니다.",
+  title: "물류 운영 최적화 솔루션",
+  description:
+    "물류의 속도는 고객 약속을 지키는 가장 현실적인 경쟁력입니다.\n대한산업AI는 WMS·TMS·LMS 데이터를 정리해 반복 확인을 줄이고 빠른 현장 판단을 돕습니다.",
   image: "/assets/industries/logistics-card.png",
   imageAlt: "컨베이어와 지게차가 움직이는 물류 창고",
   systems: "WMS·TMS·LMS",
@@ -78,7 +78,6 @@ export default function LogisticsPage() {
           <img src={logistics.image} alt={logistics.imageAlt} />
           <div className="site-industry-hero-shade" aria-hidden="true" />
           <div className="site-industry-hero-copy">
-            <p>{logistics.label}</p>
             <h1 id="site-logistics-hero-title">{logistics.title}</h1>
             <span>{logistics.description}</span>
           </div>

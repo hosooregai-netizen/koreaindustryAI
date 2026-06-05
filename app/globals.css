@@ -10920,7 +10920,7 @@ html .site-header.is-transparent.is-home-route[data-site-hero-group="1"] .site-b
 .site-industry-hero-copy {
   position: relative;
   z-index: 2;
-  width: min(100%, 960px);
+  width: min(100%, 1180px);
   padding: 128px 32px 86px;
   text-align: center;
 }
@@ -10945,12 +10945,13 @@ html .site-header.is-transparent.is-home-route[data-site-hero-group="1"] .site-b
 
 .site-industry-hero-copy span {
   display: block;
-  max-width: 760px;
+  max-width: 1120px;
   margin: 22px auto 0;
   color: rgba(255, 255, 255, 0.78);
   font-size: 18px;
   font-weight: 650;
   line-height: 1.7;
+  white-space: pre-line;
   word-break: keep-all;
 }
 
