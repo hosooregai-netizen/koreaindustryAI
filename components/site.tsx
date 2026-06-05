@@ -14,6 +14,7 @@ import {
   Layers3,
   Menu,
   MonitorCog,
+  Search,
   Send,
   ShieldCheck,
   Sparkles,
@@ -44,6 +45,8 @@ type NavGroup = {
 type HeroVisualKind = "home" | "products" | "company" | "contact" | "community";
 type WhatsNewTag = "Blog" | "Newsletter" | "Technology";
 type WhatsNewFilter = "All" | WhatsNewTag;
+type NewsletterFilter = "All" | "AI-Core" | "?? ???" | "?? ????";
+type NewsletterSubscribeStatus = "idle" | "submitting" | "success";
 
 const heroVideoSources = [
   "/assets/hero-landing-intro.mp4",
@@ -287,6 +290,8 @@ export const industryImageCards = [
 
 const whatsNewFilters: WhatsNewFilter[] = ["All", "Blog", "Newsletter", "Technology"];
 const whatsNewPageSize = 3;
+const newsletterFilters: NewsletterFilter[] = ["All", "AI-Core", "?? ???", "?? ????"];
+const newsletterPageSize = 9;
 
 const whatsNewItems: Array<{
   title: string;
@@ -381,6 +386,40 @@ export const clientLogos = [
   {
     name: "마켓컬리",
     src: "/assets/logos/market-kurly.png",
+  },
+];
+
+const newsletterItems: Array<{
+  title: string;
+  category: Exclude<NewsletterFilter, "All">;
+  imageSrc: string;
+  imageAlt: string;
+  date: string;
+  meta: string;
+}> = [
+  {
+    title: "이번 달 산업 AI 도입 체크리스트",
+    category: "AI-Core",
+    imageSrc: "/assets/industrial-ai-hero.png",
+    imageAlt: "산업 현장과 데이터 화면이 결합된 AI-Core 이미지",
+    date: "2026.05.22.",
+    meta: "Monthly letter",
+  },
+  {
+    title: "반복 업무 자동화를 시작하기 전 확인할 질문",
+    category: "산업 자동화",
+    imageSrc: "/assets/industries/manufacturing-card.png",
+    imageAlt: "자동화 로봇이 배치된 제조 공정",
+    date: "2026.05.10.",
+    meta: "Automation note",
+  },
+  {
+    title: "문서와 승인 흐름을 연결하는 AI-Core 업데이트",
+    category: "기술 업데이트",
+    imageSrc: "/assets/ai-core-erp-ui.png",
+    imageAlt: "AI-Core ERP 업무 화면",
+    date: "2026.04.26.",
+    meta: "Product update",
   },
 ];
 
@@ -1274,6 +1313,272 @@ export function SiteWhatsNewSection() {
         ) : null}
       </div>
     </section>
+  );
+}
+
+export function SiteNewsletterPage() {
+  const [activeFilter, setActiveFilter] = useState<NewsletterFilter>("All");
+  const [activePage, setActivePage] = useState(1);
+  const [query, setQuery] = useState("");
+  const [isSubscribeModalOpen, setIsSubscribeModalOpen] = useState(false);
+  const [subscribeStatus, setSubscribeStatus] = useState<NewsletterSubscribeStatus>("idle");
+  const modalRef = useRef<HTMLDivElement | null>(null);
+  const nameInputRef = useRef<HTMLInputElement | null>(null);
+  const submitTimeoutRef = useRef<number | null>(null);
+
+  const normalizedQuery = query.trim().toLowerCase();
+  const filteredItems = newsletterItems.filter((item) => {
+    const matchesFilter = activeFilter === "All" || item.category === activeFilter;
+    const searchableText = `${item.title} ${item.category} ${item.meta}`.toLowerCase();
+    const matchesQuery = normalizedQuery.length === 0 || searchableText.includes(normalizedQuery);
+
+    return matchesFilter && matchesQuery;
+  });
+  const pageCount = Math.max(1, Math.ceil(filteredItems.length / newsletterPageSize));
+  const pageStartIndex = (activePage - 1) * newsletterPageSize;
+  const visibleItems = filteredItems.slice(pageStartIndex, pageStartIndex + newsletterPageSize);
+
+  const changeFilter = (filter: NewsletterFilter) => {
+    setActiveFilter(filter);
+    setActivePage(1);
+  };
+
+  const closeSubscribeModal = () => {
+    setIsSubscribeModalOpen(false);
+    setSubscribeStatus("idle");
+  };
+
+  useEffect(() => {
+    setActivePage(1);
+  }, [query]);
+
+  useEffect(() => {
+    if (!isSubscribeModalOpen) return;
+
+    const timeout = window.setTimeout(() => nameInputRef.current?.focus(), 0);
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        closeSubscribeModal();
+        return;
+      }
+
+      if (event.key !== "Tab" || !modalRef.current) return;
+
+      const focusableElements = [
+        ...modalRef.current.querySelectorAll<HTMLElement>(
+          'button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+        ),
+      ];
+      if (focusableElements.length === 0) return;
+
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+      const activeElement = document.activeElement;
+
+      if (event.shiftKey && activeElement === firstElement) {
+        event.preventDefault();
+        lastElement?.focus();
+        return;
+      }
+
+      if (!event.shiftKey && activeElement === lastElement) {
+        event.preventDefault();
+        firstElement?.focus();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.clearTimeout(timeout);
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isSubscribeModalOpen]);
+
+  useEffect(
+    () => () => {
+      if (submitTimeoutRef.current !== null) {
+        window.clearTimeout(submitTimeoutRef.current);
+      }
+    },
+    [],
+  );
+
+  const submitSubscription = (event: SyntheticEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setSubscribeStatus("submitting");
+
+    if (submitTimeoutRef.current !== null) {
+      window.clearTimeout(submitTimeoutRef.current);
+    }
+
+    submitTimeoutRef.current = window.setTimeout(() => {
+      setSubscribeStatus("success");
+      submitTimeoutRef.current = null;
+    }, 420);
+  };
+
+  return (
+    <SiteShell>
+      <main className="site-newsletter-page">
+        <section className="site-community-hero site-newsletter-hero" aria-labelledby="site-newsletter-hero-title">
+          <img src="/assets/industrial-ai-hero.png" alt="" aria-hidden="true" />
+          <span className="site-community-hero-shade" aria-hidden="true" />
+          <div className="site-community-hero-copy">
+            <h1 id="site-newsletter-hero-title">Newsletter</h1>
+            <button className="site-button site-button-primary" type="button" onClick={() => setIsSubscribeModalOpen(true)}>
+              소식받기
+            </button>
+          </div>
+        </section>
+
+        <section className="site-whats-new-section site-community-list-section" aria-labelledby="site-newsletter-list-title">
+          <div className="site-whats-new-wrap">
+            <h2 id="site-newsletter-list-title" className="site-sr-only">
+              Newsletter 콘텐츠 목록
+            </h2>
+            <div className="site-community-controls">
+              <div className="site-whats-new-filters site-community-filter-pills" aria-label="Newsletter 콘텐츠 필터">
+                {newsletterFilters.map((filter) => (
+                  <button
+                    className={activeFilter === filter ? "is-active" : ""}
+                    type="button"
+                    aria-pressed={activeFilter === filter}
+                    key={filter}
+                    onClick={() => changeFilter(filter)}
+                  >
+                    {filter}
+                  </button>
+                ))}
+              </div>
+              <label className="site-community-search">
+                <span className="site-sr-only">검색어</span>
+                <input
+                  type="search"
+                  value={query}
+                  placeholder="검색어를 입력하세요."
+                  onChange={(event) => setQuery(event.currentTarget.value)}
+                />
+                <button type="button" aria-label="Newsletter 검색 실행" onClick={() => setActivePage(1)}>
+                  <Search size={20} aria-hidden="true" />
+                </button>
+              </label>
+            </div>
+
+            {visibleItems.length > 0 ? (
+              <div className="site-whats-new-grid">
+                {visibleItems.map((item) => (
+                  <article className="site-whats-new-card site-community-card" key={item.title} tabIndex={0}>
+                    <span className="site-whats-new-image">
+                      <img src={item.imageSrc} alt={item.imageAlt} loading="lazy" />
+                      <span className="site-whats-new-image-arrow" aria-hidden="true" />
+                    </span>
+                    <span className="site-whats-new-meta">
+                      <span className="site-whats-new-tag">Newsletter</span>
+                      <span>{item.category}</span>
+                      <span>{item.meta}</span>
+                    </span>
+                    <strong>{item.title}</strong>
+                    <time dateTime={item.date.replaceAll(".", "-").replace(/-$/, "")}>{item.date}</time>
+                  </article>
+                ))}
+              </div>
+            ) : (
+              <div className="site-community-empty" role="status">
+                검색 결과가 없습니다.
+              </div>
+            )}
+
+            {pageCount > 1 ? (
+              <nav className="site-whats-new-pagination" aria-label="Newsletter 페이지">
+                <button
+                  type="button"
+                  aria-label="이전 페이지"
+                  disabled={activePage === 1}
+                  onClick={() => setActivePage((page) => Math.max(1, page - 1))}
+                >
+                  <ChevronLeft size={18} aria-hidden="true" />
+                </button>
+                {Array.from({ length: pageCount }, (_, index) => {
+                  const page = index + 1;
+                  return (
+                    <button
+                      className={activePage === page ? "is-active" : ""}
+                      type="button"
+                      aria-label={`${page}페이지`}
+                      aria-current={activePage === page ? "page" : undefined}
+                      key={page}
+                      onClick={() => setActivePage(page)}
+                    >
+                      {page}
+                    </button>
+                  );
+                })}
+                <button
+                  type="button"
+                  aria-label="다음 페이지"
+                  disabled={activePage === pageCount}
+                  onClick={() => setActivePage((page) => Math.min(pageCount, page + 1))}
+                >
+                  <ChevronRight size={18} aria-hidden="true" />
+                </button>
+              </nav>
+            ) : null}
+          </div>
+        </section>
+      </main>
+
+      {isSubscribeModalOpen ? (
+        <div className="site-modal-backdrop" role="presentation" onMouseDown={closeSubscribeModal}>
+          <div
+            ref={modalRef}
+            className="site-modal site-newsletter-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="site-newsletter-modal-title"
+            onMouseDown={(event) => event.stopPropagation()}
+          >
+            <button className="site-modal-close" type="button" aria-label="구독 모달 닫기" onClick={closeSubscribeModal}>
+              <X size={18} aria-hidden="true" />
+            </button>
+            <p className="site-eyebrow">Newsletter</p>
+            <h2 id="site-newsletter-modal-title">산업 AI 소식을 받아보세요.</h2>
+            <p>AI-Core 업데이트와 산업 자동화 인사이트를 가볍게 받아볼 수 있도록 준비하고 있습니다.</p>
+            <form className="site-newsletter-form" onSubmit={submitSubscription}>
+              <label>
+                이름
+                <input ref={nameInputRef} name="name" placeholder="홍길동" required />
+              </label>
+              <label>
+                이메일
+                <input name="email" type="email" placeholder="hello@example.com" required />
+              </label>
+              <label>
+                회사명
+                <input name="company" placeholder="대한산업AI" />
+              </label>
+              <label>
+                관심 주제
+                <select name="interest" defaultValue="">
+                  <option value="">선택해주세요</option>
+                  <option>AI-Core</option>
+                  <option>산업 자동화</option>
+                  <option>기술 업데이트</option>
+                </select>
+              </label>
+              <button className="site-button site-button-primary" type="submit" disabled={subscribeStatus === "submitting"}>
+                {subscribeStatus === "submitting" ? "신청 중" : "구독 신청"}
+              </button>
+              <p className={`site-form-note ${subscribeStatus === "success" ? "is-success" : ""}`} role="status">
+                {subscribeStatus === "success"
+                  ? "구독 신청이 완료되었습니다."
+                  : "입력하신 정보는 뉴스레터 발송 준비에만 사용합니다."}
+              </p>
+            </form>
+          </div>
+        </div>
+      ) : null}
+    </SiteShell>
   );
 }
 
