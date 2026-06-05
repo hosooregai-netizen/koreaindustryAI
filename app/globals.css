@@ -11207,7 +11207,7 @@ html .site-header.is-transparent.is-home-route[data-site-hero-group="1"] .site-b
 .site-industry-overview {
   max-width: none;
   width: 100%;
-  padding-top: 236px;
+  padding-top: 157px;
   padding-bottom: 295px;
 }
 
@@ -11417,7 +11417,7 @@ html .site-header.is-transparent.is-home-route[data-site-hero-group="1"] .site-b
 .site-industry-structure {
   width: min(100%, 1600px);
   margin: 0 auto;
-  padding: 208px 56px 248px;
+  padding: 208px 56px 165px;
   color: #151b24;
   text-align: center;
   background: #ffffff;
@@ -11620,13 +11620,13 @@ html .site-header.is-transparent.is-home-route[data-site-hero-group="1"] .site-b
   }
 
   .site-industry-overview {
-    padding-top: 188px;
+    padding-top: 125px;
     padding-bottom: 236px;
   }
 
   .site-industry-structure {
     padding-top: 168px;
-    padding-bottom: 196px;
+    padding-bottom: 131px;
   }
 
   .site-industry-feature-grid {
@@ -11708,11 +11708,11 @@ html .site-header.is-transparent.is-home-route[data-site-hero-group="1"] .site-b
   }
 
   .site-industry-overview {
-    padding: 132px 18px 190px;
+    padding: 88px 18px 190px;
   }
 
   .site-industry-structure {
-    padding: 116px 18px 132px;
+    padding: 116px 18px 88px;
   }
 
   .site-industry-section-head {
