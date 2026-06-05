@@ -11788,10 +11788,24 @@ html .site-header.is-transparent.is-home-route[data-site-hero-group="1"] .site-b
 }
 
 .site-contact-copy {
+  position: relative;
   display: flex;
   min-height: 760px;
   flex-direction: column;
   padding-top: 18px;
+  isolation: isolate;
+}
+
+.site-contact-copy::before {
+  position: absolute;
+  z-index: -1;
+  top: -26px;
+  left: -28px;
+  width: min(720px, calc(100% + 28px));
+  height: 365px;
+  border-radius: 8px;
+  background: #f8fafc;
+  content: "";
 }
 
 .site-contact-copy h1 {
@@ -11822,52 +11836,51 @@ html .site-header.is-transparent.is-home-route[data-site-hero-group="1"] .site-b
 }
 
 .site-contact-hint {
-  max-width: 620px;
-  margin: 34px 0 0;
-  padding-left: 16px;
-  border-left: 2px solid #2f73ff;
-  color: #4f5663;
-  font-size: 16px;
-  font-weight: 700;
-  line-height: 1.75;
+  max-width: 640px;
+  margin: 32px 0 0;
+  padding: 16px 20px;
+  color: #515a67;
+  border: 1px solid #e7ecf3;
+  border-radius: 8px;
+  background: #ffffff;
+  font-size: 15px;
+  font-weight: 650;
+  line-height: 1.7;
   word-break: keep-all;
 }
 
 .site-contact-steps {
   display: flex;
   flex-wrap: wrap;
-  gap: 14px;
+  width: min(100%, 640px);
+  gap: 8px 0;
   align-items: center;
-  margin: auto 0 0;
-  padding: 0;
-  color: #050505;
+  margin: 26px 0 0;
+  padding: 16px 0 0;
+  color: #2f3742;
+  border-top: 1px solid #e7ecf3;
   list-style: none;
 }
 
 .site-contact-steps::before {
-  display: block;
-  width: 26px;
-  height: 1px;
-  margin-right: 100%;
-  margin-bottom: 14px;
-  background: #050505;
-  content: "";
+  display: none;
 }
 
 .site-contact-steps li {
   display: inline-flex;
   align-items: center;
-  gap: 14px;
-  font-size: 15px;
+  gap: 9px;
+  font-size: 14px;
   font-weight: 700;
   line-height: 1.4;
   white-space: nowrap;
 }
 
 .site-contact-steps li:not(:last-child)::after {
-  color: #050505;
+  margin: 0 12px;
+  color: #a5adba;
   content: "›";
-  font-size: 20px;
+  font-size: 15px;
   font-weight: 500;
   line-height: 1;
 }
@@ -12011,7 +12024,7 @@ html .site-header.is-transparent.is-home-route[data-site-hero-group="1"] .site-b
   }
 
   .site-contact-steps {
-    margin-top: 72px;
+    margin-top: 34px;
   }
 
   .site-contact-page .site-contact-form {
@@ -12046,25 +12059,28 @@ html .site-header.is-transparent.is-home-route[data-site-hero-group="1"] .site-b
 
   .site-contact-hint {
     margin-top: 24px;
+    padding: 14px 16px;
     font-size: 14px;
     line-height: 1.68;
   }
 
   .site-contact-steps {
-    gap: 10px;
-    margin-top: 48px;
+    gap: 8px 0;
+    margin-top: 20px;
+    padding-top: 14px;
   }
 
   .site-contact-steps::before {
-    margin-bottom: 10px;
+    display: none;
   }
 
   .site-contact-steps li {
-    font-size: 13px;
+    font-size: 12px;
   }
 
   .site-contact-steps li:not(:last-child)::after {
-    font-size: 17px;
+    margin: 0 8px;
+    font-size: 13px;
   }
 
   .site-contact-page .site-contact-form {
