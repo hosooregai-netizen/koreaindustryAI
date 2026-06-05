@@ -613,23 +613,26 @@ test("home omits industry wordmarks and shows industry image cards", async ({ pa
   await expectNoHorizontalOverflow(page);
 });
 
-test("Community and Industries route to coming soon pages", async ({ page }) => {
+test("Community and Industries routes expose current pages", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/");
 
   const mainNav = page.getByLabel("주요 메뉴");
   await mainNav.getByRole("button", { name: "Community" }).hover();
-  await expect(mainNav.getByRole("menuitem", { name: /News Letter/ })).toBeVisible();
+  await expect(mainNav.getByRole("menuitem", { name: /Newsletter/ })).toBeVisible();
   await expect(mainNav.getByRole("menuitem", { name: /Blog/ })).toBeVisible();
+  await expect(mainNav.getByRole("menuitem", { name: /News$/ })).toHaveCount(0);
   await mainNav.getByRole("menuitem", { name: /Technology/ }).click();
   await expect(page).toHaveURL(/\/community\/technology$/);
-  await expect(page.getByRole("heading", { name: /기술 콘텐츠 페이지는 준비 중입니다/ })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Technology", exact: true })).toBeVisible();
+  await expect(page.locator(".site-whats-new-card")).toHaveCount(3);
 
   await page.goto("/");
   await mainNav.getByRole("button", { name: "Industries" }).hover();
-  await mainNav.getByRole("menuitem", { name: /건설/ }).click();
-  await expect(page).toHaveURL(/\/industries\/construction$/);
-  await expect(page.getByRole("heading", { name: /건설 산업 페이지는 준비 중입니다/ })).toBeVisible();
+  await mainNav.getByRole("menuitem", { name: /금융/ }).click();
+  await expect(page).toHaveURL(/\/industries\/finance$/);
+  await expect(page.getByRole("heading", { name: /금융 운영 자동화/ })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Overview" })).toBeVisible();
   await expectNoHorizontalOverflow(page);
 });
 
@@ -643,9 +646,39 @@ test("desktop contact CTA routes to contact page", async ({ page }) => {
   await expectNoHorizontalOverflow(page);
 });
 
-test("newsletter route is a coming soon page", async ({ page }) => {
+test("newsletter route shows content list and subscription modal", async ({ page }) => {
   await page.goto("/community/newsletter");
-  await expect(page.getByRole("heading", { name: /뉴스레터 페이지는 준비 중입니다/ })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Newsletter", exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "소식받기" })).toBeVisible();
+  await expect(page.locator(".site-whats-new-card")).toHaveCount(3);
+  await page.getByRole("button", { name: "소식받기" }).click();
+  await expect(page.getByRole("dialog", { name: /산업 AI 소식을 받아보세요/ })).toBeVisible();
+  await page.getByLabel("이름").fill("홍길동");
+  await page.getByLabel("이메일").fill("hello@example.com");
+  await page.getByRole("button", { name: "구독 신청" }).click();
+  await expect(page.getByText("구독 신청이 완료되었습니다.")).toBeVisible();
+  await expectNoHorizontalOverflow(page);
+});
+
+test("blog route shows content list and scroll CTA", async ({ page }) => {
+  await page.goto("/community/blog");
+  await expect(page.getByRole("heading", { name: "Blog", exact: true })).toBeVisible();
+  await expect(page.getByRole("link", { name: "블로그 이동하기" })).toBeVisible();
+  await expect(page.locator(".site-whats-new-card")).toHaveCount(3);
+  await expect(page.getByRole("button", { name: "AI-Core" })).toBeVisible();
+  await page.getByRole("link", { name: "블로그 이동하기" }).click();
+  await expect(page).toHaveURL(/\/community\/blog#site-blog-list$/);
+  await expectNoHorizontalOverflow(page);
+});
+
+test("technology route shows content list without hero CTA", async ({ page }) => {
+  await page.goto("/community/technology");
+  await expect(page.getByRole("heading", { name: "Technology", exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "소식받기" })).toHaveCount(0);
+  await expect(page.getByRole("link", { name: "블로그 이동하기" })).toHaveCount(0);
+  await expect(page.locator(".site-whats-new-card")).toHaveCount(3);
+  await expect(page.getByRole("button", { name: "Architecture" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Automation" })).toBeVisible();
   await expectNoHorizontalOverflow(page);
 });
 
