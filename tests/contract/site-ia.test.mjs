@@ -66,6 +66,7 @@ test("header navigation exposes the site IA", () => {
     assert.match(navBlock, new RegExp(`label: "${label}"`), `${label} should be present`);
   }
 
+  assert.doesNotMatch(navBlock, /label: "회사 소개"/);
   assert.match(siteSource, /<Link className="site-nav-cta" href="\/contact"/);
   assert.match(navBlock, /label: "Data-Driven AI-Core"/);
   assert.match(navBlock, /href: "\/products\/data-driven"/);

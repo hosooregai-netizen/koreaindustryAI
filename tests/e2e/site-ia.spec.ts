@@ -60,6 +60,7 @@ async function getTopbarMetrics(page: import("@playwright/test").Page) {
       background: getComputedStyle(header).backgroundColor,
       brandColor: getComputedStyle(brand).color,
       brandMarkBackground: getComputedStyle(brandMark).backgroundColor,
+      brandMarkBackgroundImage: getComputedStyle(brandMark).backgroundImage,
       header: rect(header),
       brand: rect(brand),
       menuButton: rect(menuButton),
@@ -86,7 +87,7 @@ async function expectTopbarChangesBackgroundWithoutResizing(page: import("@playw
   expect(scrolled.className).toContain("is-scrolled");
   expect(top.background).not.toEqual(scrolled.background);
   expect(top.brandColor).not.toEqual(scrolled.brandColor);
-  expect(top.brandMarkBackground).not.toEqual(scrolled.brandMarkBackground);
+  expect(top.brandMarkBackgroundImage).not.toEqual(scrolled.brandMarkBackgroundImage);
   expect(scrolled.header).toEqual(top.header);
   expect(scrolled.brand).toEqual(top.brand);
   expect(scrolled.menuButton).toEqual(top.menuButton);
@@ -117,6 +118,7 @@ async function getTransparentTopbarColors(page: import("@playwright/test").Page)
       brandLabel: getComputedStyle(brandLabel).color,
       brandMark: getComputedStyle(brandMark).color,
       brandMarkBackground: getComputedStyle(brandMark).backgroundColor,
+      brandMarkBackgroundImage: getComputedStyle(brandMark).backgroundImage,
       brandMarkBorder: getComputedStyle(brandMark).borderColor,
       brandMarkLine: getComputedStyle(brandMarkLine).backgroundColor,
       nav: navControls.map((element) => getComputedStyle(element).color),
@@ -349,6 +351,8 @@ function topbarColorsMatch(
   group: string,
   expectedColor: string,
 ) {
+  const expectedWordmark = group === "0" ? "koreaindustry-wordmark-white.png" : "koreaindustry-wordmark-black.png";
+
   return (
     colors.group === group &&
     colors.headerGroup === group &&
@@ -356,7 +360,8 @@ function topbarColorsMatch(
     colors.brand === expectedColor &&
     colors.brandLabel === expectedColor &&
     colors.brandMark === expectedColor &&
-    colors.brandMarkBackground === expectedColor &&
+    colors.brandMarkBackground === "rgba(0, 0, 0, 0)" &&
+    colors.brandMarkBackgroundImage.includes(expectedWordmark) &&
     colors.brandMarkBorder === expectedColor &&
     colors.brandMarkLine === expectedColor &&
     colors.nav.every((color) => color === expectedColor) &&
@@ -375,12 +380,6 @@ test("home hero fills the initial viewport on desktop and mobile", async ({ page
     await page.goto("/");
     await expectHomeHeroFillsInitialViewport(page);
     await expect(page.getByRole("heading", { name: /현장의 데이터로 만드는 AI 시스템/ })).toBeVisible();
-    if (viewport.width > 760) await expectHomeHeroCopySingleLine(page);
-    await page.locator(".site-hero-video.is-active").dispatchEvent("ended");
-    await expect(page.locator(".site-hero-copy.is-retiring")).toHaveCount(1);
-    expect((await getHeroCopyMotion(page)).transform).not.toBe("none");
-    await expect(page.locator(".site-hero-copy.is-retiring")).toHaveCount(0);
-    await expect(page.getByRole("heading", { name: /반복 업무를 자동으로 처리하는 AI 시스템/ })).toBeVisible();
     if (viewport.width > 760) await expectHomeHeroCopySingleLine(page);
   }
 });
@@ -488,7 +487,8 @@ test("desktop Product navigation exposes Data-Driven AI-Core and routes correctl
   expect(groupTwoTopbar.brand).toBe(groupTwoTopbar.header);
   expect(groupTwoTopbar.brandLabel).toBe(groupTwoTopbar.header);
   expect(groupTwoTopbar.brandMark).toBe(groupTwoTopbar.header);
-  expect(groupTwoTopbar.brandMarkBackground).toBe(groupTwoTopbar.header);
+  expect(groupTwoTopbar.brandMarkBackground).toBe("rgba(0, 0, 0, 0)");
+  expect(groupTwoTopbar.brandMarkBackgroundImage).toContain("koreaindustry-wordmark-black.png");
   expect(groupTwoTopbar.brandMarkBorder).toBe(groupTwoTopbar.header);
   expect(groupTwoTopbar.brandMarkLine).toBe(groupTwoTopbar.header);
   expect(groupTwoTopbar.nav.every((color) => color === groupTwoTopbar.header)).toBe(true);
@@ -530,11 +530,13 @@ test("desktop Product navigation exposes Data-Driven AI-Core and routes correctl
     if (waitMs > 0) await page.waitForTimeout(waitMs);
     expectHeroVideoBoxToStayStable(await getActiveHeroVideoMotion(page), initialHeroVideoMotion);
   }
-  await expect(page.locator(".site-client-logo img")).toHaveCount(14);
+  await expect(page.locator(".site-client-logo img")).toHaveCount(18);
   await expect(page.locator('.site-client-logo img[alt="한국종합안전(주)"]')).toHaveCount(1);
   await expect(page.locator('.site-client-logo img[alt="금융결제원"]')).toHaveCount(1);
+  await expect(page.locator('.site-client-logo img[alt="다우데이타"]')).toHaveCount(1);
   await expect(page.locator('.site-client-logo img[alt="대신자산운용"]')).toHaveCount(1);
   await expect(page.locator('.site-client-logo img[alt="NH투자증권"]')).toHaveCount(1);
+  await expect(page.locator('.site-client-logo img[alt="LINE FRIENDS"]')).toHaveCount(1);
   await expect(page.locator('.site-client-logo img[alt="뽀득"]')).toHaveCount(0);
   await expect(page.locator('.site-client-logo img[alt="Ownist"]')).toHaveCount(0);
   await expect(page.locator('.site-client-logo img[alt="INSIDERS"]')).toHaveCount(0);
@@ -610,6 +612,11 @@ test("home omits industry wordmarks and shows industry image cards", async ({ pa
   await expect(page.locator(".site-industry-wordmarks")).toHaveCount(0);
   await expect(page.locator(".site-home-industries-title")).toHaveText("INDUSTRIES");
   await expect(page.locator(".site-home-industry-card")).toHaveCount(4);
+  const whatsNew = page.locator(".site-whats-new-section");
+  await expect(whatsNew.locator(".site-whats-new-tag")).toHaveCount(3);
+  await expect(whatsNew.getByText("Monthly letter", { exact: true })).toHaveCount(0);
+  await whatsNew.getByRole("button", { name: "다음 페이지" }).click();
+  await expect(whatsNew.getByText("AI insight", { exact: true })).toHaveCount(0);
   await expectNoHorizontalOverflow(page);
 });
 
@@ -625,7 +632,9 @@ test("Community and Industries routes expose current pages", async ({ page }) =>
   await mainNav.getByRole("menuitem", { name: /Technology/ }).click();
   await expect(page).toHaveURL(/\/community\/technology$/);
   await expect(page.getByRole("heading", { name: "Technology", exact: true })).toBeVisible();
-  await expect(page.locator(".site-whats-new-card")).toHaveCount(3);
+  await expect(page.locator(".site-community-hero")).toHaveCount(0);
+  await expect(page.locator(".site-community-featured-card")).toHaveCount(1);
+  await expect(page.locator(".site-community-card")).toHaveCount(2);
 
   await page.goto("/");
   await mainNav.getByRole("button", { name: "Industries" }).hover();
@@ -642,52 +651,55 @@ test("desktop contact CTA routes to contact page", async ({ page }) => {
 
   await page.getByLabel("주요 메뉴").getByRole("link", { name: "문의하기" }).click();
   await expect(page).toHaveURL(/\/contact$/);
-  await expect(page.getByRole("heading", { name: /자동화하고 싶은 업무/ })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /산업 AI 전문가에게 문의하기/ })).toBeVisible();
   await expectNoHorizontalOverflow(page);
 });
 
-test("newsletter route shows content list and subscription modal", async ({ page }) => {
+test("newsletter route shows featured story and card grid", async ({ page }) => {
   await page.goto("/community/newsletter");
   await expect(page.getByRole("heading", { name: "Newsletter", exact: true })).toBeVisible();
-  await expect(page.getByRole("button", { name: "소식받기" })).toBeVisible();
-  await expect(page.locator(".site-whats-new-card")).toHaveCount(3);
-  await page.getByRole("button", { name: "소식받기" }).click();
-  await expect(page.getByRole("dialog", { name: /산업 AI 소식을 받아보세요/ })).toBeVisible();
-  await page.getByLabel("이름").fill("홍길동");
-  await page.getByLabel("이메일").fill("hello@example.com");
-  await page.getByRole("button", { name: "구독 신청" }).click();
-  await expect(page.getByText("구독 신청이 완료되었습니다.")).toBeVisible();
+  await expect(page.getByText("AI-Core 업데이트와 산업 자동화 인사이트")).toBeVisible();
+  await expect(page.getByRole("button", { name: "소식받기" })).toHaveCount(0);
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await expect(page.locator(".site-community-tags")).toHaveCount(0);
+  await expect(page.locator(".site-community-featured-card")).toHaveCount(1);
+  await expect(page.locator(".site-community-card")).toHaveCount(2);
   await expectNoHorizontalOverflow(page);
 });
 
-test("blog route shows content list and scroll CTA", async ({ page }) => {
+test("blog route shows featured story without filters or CTA", async ({ page }) => {
   await page.goto("/community/blog");
   await expect(page.getByRole("heading", { name: "Blog", exact: true })).toBeVisible();
-  await expect(page.getByRole("link", { name: "블로그 이동하기" })).toBeVisible();
-  await expect(page.locator(".site-whats-new-card")).toHaveCount(3);
-  await expect(page.getByRole("button", { name: "AI-Core" })).toBeVisible();
-  await page.getByRole("link", { name: "블로그 이동하기" }).click();
-  await expect(page).toHaveURL(/\/community\/blog#site-blog-list$/);
+  await expect(page.getByText("산업 AI와 업무 자동화 기록")).toBeVisible();
+  await expect(page.getByRole("link", { name: "블로그 이동하기" })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "AI-Core" })).toHaveCount(0);
+  await expect(page.locator(".site-community-tags")).toHaveCount(0);
+  await expect(page.locator(".site-community-featured-card")).toHaveCount(1);
+  await expect(page.locator(".site-community-card")).toHaveCount(2);
   await expectNoHorizontalOverflow(page);
 });
 
-test("technology route shows content list without hero CTA", async ({ page }) => {
+test("technology route shows featured story without filters or hero CTA", async ({ page }) => {
   await page.goto("/community/technology");
   await expect(page.getByRole("heading", { name: "Technology", exact: true })).toBeVisible();
   await expect(page.getByRole("button", { name: "소식받기" })).toHaveCount(0);
   await expect(page.getByRole("link", { name: "블로그 이동하기" })).toHaveCount(0);
-  await expect(page.locator(".site-whats-new-card")).toHaveCount(3);
-  await expect(page.getByRole("button", { name: "Architecture" })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Automation" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Architecture" })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Automation" })).toHaveCount(0);
+  await expect(page.locator(".site-community-tags")).toHaveCount(0);
+  await expect(page.locator(".site-community-featured-card")).toHaveCount(1);
+  await expect(page.locator(".site-community-card")).toHaveCount(2);
   await expectNoHorizontalOverflow(page);
 });
 
 test("contact form shows a success state", async ({ page }) => {
   await page.goto("/contact");
-  await page.getByLabel("회사명").fill("대한테스트");
-  await page.getByLabel("담당자명").fill("테스터");
-  await page.getByLabel("연락처").fill("test@example.com");
-  await page.getByLabel("관심 영역").selectOption("Data-Driven AI-Core");
+  await page.getByLabel(/성함/).fill("테스터");
+  await page.getByLabel(/회사명/).fill("대한테스트");
+  await page.getByLabel(/업무용 이메일주소/).fill("test@example.com");
+  await page.getByLabel(/휴대폰번호/).fill("010-1234-5678");
+  await page.getByLabel(/어떤 솔루션에 관심이 있으신가요/).selectOption("Data-Driven AI-Core");
+  await page.getByLabel(/문의내용/).fill("반복 보고 업무 자동화 상담을 요청합니다.");
   await page.getByRole("button", { name: /문의 접수하기/ }).click();
   await expect(page.getByText("문의가 접수되었습니다. 담당자가 확인 후 연락드리겠습니다.")).toBeVisible();
   await expectNoHorizontalOverflow(page);

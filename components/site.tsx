@@ -14,7 +14,6 @@ import {
   Layers3,
   Menu,
   MonitorCog,
-  Search,
   Send,
   ShieldCheck,
   Sparkles,
@@ -45,10 +44,14 @@ type NavGroup = {
 type HeroVisualKind = "home" | "products" | "company" | "contact" | "community";
 type WhatsNewTag = "Blog" | "Newsletter" | "Technology";
 type WhatsNewFilter = "All" | WhatsNewTag;
-type NewsletterFilter = "All" | "AI-Core" | "산업 자동화" | "기술 업데이트";
-type BlogFilter = "All" | "AI-Core" | "산업" | "자동화" | "인사이트";
-type TechnologyFilter = "All" | "AI-Core" | "Architecture" | "Automation";
-type NewsletterSubscribeStatus = "idle" | "submitting" | "success";
+
+type CommunityContentItem = {
+  title: string;
+  imageSrc: string;
+  imageAlt: string;
+  date: string;
+  summary: string;
+};
 
 const heroVideoSources = [
   "/assets/hero-landing-intro.mp4",
@@ -176,7 +179,7 @@ export const navItems: NavGroup[] = [
   },
   {
     label: "Industries",
-    summary: "산업별 적용 페이지는 준비중이며, 현재는 문의로 먼저 검토합니다.",
+    summary: "산업별 업무 흐름에 맞춰 AI-Core 적용 가능성을 정리합니다.",
     children: [
       {
         label: "건설",
@@ -227,14 +230,9 @@ export const navItems: NavGroup[] = [
     summary: "회사 신뢰와 상담 전환을 위한 최소 진입점을 둡니다.",
     children: [
       {
-        label: "회사 소개",
-        href: "/company",
-        description: "법인 신뢰와 작업 방식 준비중",
-      },
-      {
         label: "문의하기",
         href: "/contact",
-        description: "자주 묻는 질문과 문의하기 폼",
+        description: "AI-Core 도입 상담 문의 폼",
       },
     ],
   },
@@ -292,12 +290,7 @@ export const industryImageCards = [
 
 const whatsNewFilters: WhatsNewFilter[] = ["All", "Blog", "Newsletter", "Technology"];
 const whatsNewPageSize = 3;
-const newsletterFilters: NewsletterFilter[] = ["All", "AI-Core", "산업 자동화", "기술 업데이트"];
-const newsletterPageSize = 9;
-const blogFilters: BlogFilter[] = ["All", "AI-Core", "산업", "자동화", "인사이트"];
-const blogPageSize = 9;
-const technologyFilters: TechnologyFilter[] = ["All", "AI-Core", "Architecture", "Automation"];
-const technologyPageSize = 9;
+const communityPageSize = 9;
 
 const whatsNewItems: Array<{
   title: string;
@@ -382,6 +375,10 @@ export const clientLogos = [
     src: "/assets/logos/kftc.png",
   },
   {
+    name: "다우데이타",
+    src: "/assets/logos/daou-data.png",
+  },
+  {
     name: "대신자산운용",
     src: "/assets/logos/daishin.png",
   },
@@ -390,110 +387,84 @@ export const clientLogos = [
     src: "/assets/logos/nh-investment.png",
   },
   {
+    name: "LINE FRIENDS",
+    src: "/assets/logos/line-friends.png",
+  },
+  {
     name: "마켓컬리",
     src: "/assets/logos/market-kurly.png",
   },
 ];
 
-const newsletterItems: Array<{
-  title: string;
-  category: Exclude<NewsletterFilter, "All">;
-  imageSrc: string;
-  imageAlt: string;
-  date: string;
-  meta: string;
-}> = [
+const newsletterItems: CommunityContentItem[] = [
   {
     title: "이번 달 산업 AI 도입 체크리스트",
-    category: "AI-Core",
     imageSrc: "/assets/industrial-ai-hero.png",
     imageAlt: "산업 현장과 데이터 화면이 결합된 AI-Core 이미지",
     date: "2026.05.22.",
-    meta: "Monthly letter",
+    summary: "AI-Core 도입 전 확인해야 할 업무 데이터, 반복 업무, 담당자 흐름을 한 번에 점검합니다.",
   },
   {
     title: "반복 업무 자동화를 시작하기 전 확인할 질문",
-    category: "산업 자동화",
     imageSrc: "/assets/industries/manufacturing-card.png",
     imageAlt: "자동화 로봇이 배치된 제조 공정",
     date: "2026.05.10.",
-    meta: "Automation note",
+    summary: "자동화 대상을 고르기 전에 업무 기준, 입력 데이터, 예외 처리를 어떻게 정리할지 살펴봅니다.",
   },
   {
     title: "문서와 승인 흐름을 연결하는 AI-Core 업데이트",
-    category: "기술 업데이트",
     imageSrc: "/assets/ai-core-erp-ui.png",
     imageAlt: "AI-Core ERP 업무 화면",
     date: "2026.04.26.",
-    meta: "Product update",
+    summary: "문서 검토와 승인 이력을 하나의 업무 화면으로 연결하는 AI-Core 업데이트 방향을 정리합니다.",
   },
 ];
 
-const blogItems: Array<{
-  title: string;
-  category: Exclude<BlogFilter, "All">;
-  imageSrc: string;
-  imageAlt: string;
-  date: string;
-  meta: string;
-}> = [
+const blogItems: CommunityContentItem[] = [
   {
     title: "제조 현장 데이터를 업무 화면으로 바꾸는 방법",
-    category: "AI-Core",
     imageSrc: "/assets/industries/manufacturing-card.png",
     imageAlt: "자동화 로봇이 배치된 제조 공정",
     date: "2026.05.29.",
-    meta: "산업 자동화",
+    summary: "제조 현장에서 흩어진 공정 데이터를 입력, 확인, 보고가 가능한 업무 화면으로 전환하는 방식을 소개합니다.",
   },
   {
     title: "물류 운영 리포트가 매일 늦어지는 이유",
-    category: "산업",
     imageSrc: "/assets/industries/logistics-card.png",
     imageAlt: "컨베이어와 지게차가 움직이는 물류 창고",
     date: "2026.05.08.",
-    meta: "Operations",
+    summary: "입출고와 배차 데이터가 늦게 모일 때 운영 리포트가 어떻게 지연되는지 업무 흐름 기준으로 봅니다.",
   },
   {
     title: "반복 업무 자동화는 어떤 업무부터 시작해야 할까",
-    category: "자동화",
     imageSrc: "/assets/ai-core-product-bg.png",
     imageAlt: "AI-Core 제품 배경 화면",
     date: "2026.04.18.",
-    meta: "인사이트",
+    summary: "작게 시작해도 효과가 보이는 자동화 업무를 고르는 기준과 우선순위를 정리합니다.",
   },
 ];
 
-const technologyItems: Array<{
-  title: string;
-  category: Exclude<TechnologyFilter, "All">;
-  imageSrc: string;
-  imageAlt: string;
-  date: string;
-  meta: string;
-}> = [
+const technologyItems: CommunityContentItem[] = [
   {
     title: "문서, 승인, 리포트를 연결하는 AI-Core 구조",
-    category: "Architecture",
     imageSrc: "/assets/ai-core-erp-ui.png",
     imageAlt: "AI-Core ERP 업무 화면",
     date: "2026.05.16.",
-    meta: "AI-Core",
+    summary: "문서 입력, 승인 기준, 리포트 생성을 하나의 흐름으로 묶는 AI-Core의 기본 구조를 설명합니다.",
   },
   {
     title: "반복 업무 자동화에 필요한 데이터 입력 설계",
-    category: "Automation",
     imageSrc: "/assets/ai-core-product-bg.png",
     imageAlt: "AI-Core 제품 배경 화면",
     date: "2026.04.30.",
-    meta: "Workflow",
+    summary: "자동화가 안정적으로 동작하려면 어떤 입력 항목과 예외 기준을 먼저 정해야 하는지 정리합니다.",
   },
   {
     title: "업무 화면과 알림을 조립하는 AI-Core 운영 레이어",
-    category: "AI-Core",
     imageSrc: "/assets/industrial-ai-hero.png",
     imageAlt: "산업 현장과 데이터 화면이 결합된 AI-Core 이미지",
     date: "2026.04.12.",
-    meta: "Architecture",
+    summary: "현장 데이터가 업무 화면, 알림, 보고로 이어지는 운영 레이어의 역할을 살펴봅니다.",
   },
 ];
 
@@ -1343,7 +1314,6 @@ export function SiteWhatsNewSection() {
               </span>
               <span className="site-whats-new-meta">
                 <span className="site-whats-new-tag">{item.tag}</span>
-                {item.meta ? <span>{item.meta}</span> : null}
               </span>
               <strong>{item.title}</strong>
               <time dateTime={item.date.replaceAll(".", "-").replace(/-$/, "")}>{item.date}</time>
@@ -1390,181 +1360,77 @@ export function SiteWhatsNewSection() {
   );
 }
 
-export function SiteNewsletterPage() {
-  const [activeFilter, setActiveFilter] = useState<NewsletterFilter>("All");
+const formatCommunityDateTime = (date: string) => date.replaceAll(".", "-").replace(/-$/, "");
+
+function SiteCommunityContentPage({
+  pageClassName,
+  title,
+  description,
+  items,
+}: {
+  pageClassName: string;
+  title: string;
+  description: string;
+  items: CommunityContentItem[];
+}) {
   const [activePage, setActivePage] = useState(1);
-  const [query, setQuery] = useState("");
-  const [isSubscribeModalOpen, setIsSubscribeModalOpen] = useState(false);
-  const [subscribeStatus, setSubscribeStatus] = useState<NewsletterSubscribeStatus>("idle");
-  const modalRef = useRef<HTMLDivElement | null>(null);
-  const nameInputRef = useRef<HTMLInputElement | null>(null);
-  const submitTimeoutRef = useRef<number | null>(null);
-
-  const normalizedQuery = query.trim().toLowerCase();
-  const filteredItems = newsletterItems.filter((item) => {
-    const matchesFilter = activeFilter === "All" || item.category === activeFilter;
-    const searchableText = `${item.title} ${item.category} ${item.meta}`.toLowerCase();
-    const matchesQuery = normalizedQuery.length === 0 || searchableText.includes(normalizedQuery);
-
-    return matchesFilter && matchesQuery;
-  });
-  const pageCount = Math.max(1, Math.ceil(filteredItems.length / newsletterPageSize));
-  const pageStartIndex = (activePage - 1) * newsletterPageSize;
-  const visibleItems = filteredItems.slice(pageStartIndex, pageStartIndex + newsletterPageSize);
-
-  const changeFilter = (filter: NewsletterFilter) => {
-    setActiveFilter(filter);
-    setActivePage(1);
-  };
-
-  const closeSubscribeModal = () => {
-    setIsSubscribeModalOpen(false);
-    setSubscribeStatus("idle");
-  };
-
-  useEffect(() => {
-    setActivePage(1);
-  }, [query]);
-
-  useEffect(() => {
-    if (!isSubscribeModalOpen) return;
-
-    const timeout = window.setTimeout(() => nameInputRef.current?.focus(), 0);
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        closeSubscribeModal();
-        return;
-      }
-
-      if (event.key !== "Tab" || !modalRef.current) return;
-
-      const focusableElements = [
-        ...modalRef.current.querySelectorAll<HTMLElement>(
-          'button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
-        ),
-      ];
-      if (focusableElements.length === 0) return;
-
-      const firstElement = focusableElements[0];
-      const lastElement = focusableElements[focusableElements.length - 1];
-      const activeElement = document.activeElement;
-
-      if (event.shiftKey && activeElement === firstElement) {
-        event.preventDefault();
-        lastElement?.focus();
-        return;
-      }
-
-      if (!event.shiftKey && activeElement === lastElement) {
-        event.preventDefault();
-        firstElement?.focus();
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => {
-      window.clearTimeout(timeout);
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [isSubscribeModalOpen]);
-
-  useEffect(
-    () => () => {
-      if (submitTimeoutRef.current !== null) {
-        window.clearTimeout(submitTimeoutRef.current);
-      }
-    },
-    [],
-  );
-
-  const submitSubscription = (event: SyntheticEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setSubscribeStatus("submitting");
-
-    if (submitTimeoutRef.current !== null) {
-      window.clearTimeout(submitTimeoutRef.current);
-    }
-
-    submitTimeoutRef.current = window.setTimeout(() => {
-      setSubscribeStatus("success");
-      submitTimeoutRef.current = null;
-    }, 420);
-  };
+  const pageCount = Math.max(1, Math.ceil(items.length / communityPageSize));
+  const pageStartIndex = (activePage - 1) * communityPageSize;
+  const visibleItems = items.slice(pageStartIndex, pageStartIndex + communityPageSize);
+  const featuredItem = visibleItems[0];
+  const cardItems = visibleItems.slice(1);
+  const titleId = `site-community-${title.toLowerCase()}-title`;
+  const listTitleId = `site-community-${title.toLowerCase()}-list-title`;
 
   return (
     <SiteShell>
-      <main className="site-newsletter-page">
-        <section className="site-community-hero site-newsletter-hero" aria-labelledby="site-newsletter-hero-title">
-          <img src="/assets/industrial-ai-hero.png" alt="" aria-hidden="true" />
-          <span className="site-community-hero-shade" aria-hidden="true" />
-          <div className="site-community-hero-copy">
-            <h1 id="site-newsletter-hero-title">Newsletter</h1>
-            <button className="site-button site-button-primary" type="button" onClick={() => setIsSubscribeModalOpen(true)}>
-              소식받기
-            </button>
+      <main className={`site-community-page ${pageClassName}`}>
+        <section className="site-community-intro" aria-labelledby={titleId}>
+          <div className="site-community-shell">
+            <h1 id={titleId}>{title}</h1>
+            <p>{description}</p>
           </div>
         </section>
 
-        <section className="site-whats-new-section site-community-list-section" aria-labelledby="site-newsletter-list-title">
-          <div className="site-whats-new-wrap">
-            <h2 id="site-newsletter-list-title" className="site-sr-only">
-              Newsletter 콘텐츠 목록
+        <section className="site-community-content" aria-labelledby={listTitleId}>
+          <div className="site-community-shell">
+            <h2 id={listTitleId} className="site-sr-only">
+              {title} 콘텐츠 목록
             </h2>
-            <div className="site-community-controls">
-              <div className="site-whats-new-filters site-community-filter-pills" aria-label="Newsletter 콘텐츠 필터">
-                {newsletterFilters.map((filter) => (
-                  <button
-                    className={activeFilter === filter ? "is-active" : ""}
-                    type="button"
-                    aria-pressed={activeFilter === filter}
-                    key={filter}
-                    onClick={() => changeFilter(filter)}
-                  >
-                    {filter}
-                  </button>
-                ))}
-              </div>
-              <label className="site-community-search">
-                <span className="site-sr-only">검색어</span>
-                <input
-                  type="search"
-                  value={query}
-                  placeholder="검색어를 입력하세요."
-                  onChange={(event) => setQuery(event.currentTarget.value)}
-                />
-                <button type="button" aria-label="Newsletter 검색 실행" onClick={() => setActivePage(1)}>
-                  <Search size={20} aria-hidden="true" />
-                </button>
-              </label>
-            </div>
 
-            {visibleItems.length > 0 ? (
-              <div className="site-whats-new-grid">
-                {visibleItems.map((item) => (
-                  <article className="site-whats-new-card site-community-card" key={item.title} tabIndex={0}>
-                    <span className="site-whats-new-image">
-                      <img src={item.imageSrc} alt={item.imageAlt} loading="lazy" />
-                      <span className="site-whats-new-image-arrow" aria-hidden="true" />
-                    </span>
-                    <span className="site-whats-new-meta">
-                      <span className="site-whats-new-tag">Newsletter</span>
-                      <span>{item.category}</span>
-                      <span>{item.meta}</span>
-                    </span>
-                    <strong>{item.title}</strong>
-                    <time dateTime={item.date.replaceAll(".", "-").replace(/-$/, "")}>{item.date}</time>
-                  </article>
-                ))}
-              </div>
+            {featuredItem ? (
+              <article className="site-community-featured-card" tabIndex={0}>
+                <span className="site-community-featured-image">
+                  <img src={featuredItem.imageSrc} alt={featuredItem.imageAlt} />
+                </span>
+                <div className="site-community-featured-copy">
+                  <h3>{featuredItem.title}</h3>
+                  <p>{featuredItem.summary}</p>
+                  <time dateTime={formatCommunityDateTime(featuredItem.date)}>{featuredItem.date}</time>
+                </div>
+              </article>
             ) : (
               <div className="site-community-empty" role="status">
-                검색 결과가 없습니다.
+                준비된 콘텐츠가 없습니다.
               </div>
             )}
 
+            {cardItems.length > 0 ? (
+              <div className="site-community-grid">
+                {cardItems.map((item) => (
+                  <article className="site-community-card" key={item.title} tabIndex={0}>
+                    <span className="site-community-card-image">
+                      <img src={item.imageSrc} alt={item.imageAlt} loading="lazy" />
+                    </span>
+                    <h3>{item.title}</h3>
+                    <time dateTime={formatCommunityDateTime(item.date)}>{item.date}</time>
+                  </article>
+                ))}
+              </div>
+            ) : null}
+
             {pageCount > 1 ? (
-              <nav className="site-whats-new-pagination" aria-label="Newsletter 페이지">
+              <nav className="site-whats-new-pagination site-community-pagination" aria-label={`${title} 페이지`}>
                 <button
                   type="button"
                   aria-label="이전 페이지"
@@ -1601,340 +1467,40 @@ export function SiteNewsletterPage() {
           </div>
         </section>
       </main>
-
-      {isSubscribeModalOpen ? (
-        <div className="site-modal-backdrop" role="presentation" onMouseDown={closeSubscribeModal}>
-          <div
-            ref={modalRef}
-            className="site-modal site-newsletter-modal"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="site-newsletter-modal-title"
-            onMouseDown={(event) => event.stopPropagation()}
-          >
-            <button className="site-modal-close" type="button" aria-label="구독 모달 닫기" onClick={closeSubscribeModal}>
-              <X size={18} aria-hidden="true" />
-            </button>
-            <p className="site-eyebrow">Newsletter</p>
-            <h2 id="site-newsletter-modal-title">산업 AI 소식을 받아보세요.</h2>
-            <p>AI-Core 업데이트와 산업 자동화 인사이트를 가볍게 받아볼 수 있도록 준비하고 있습니다.</p>
-            <form className="site-newsletter-form" onSubmit={submitSubscription}>
-              <label>
-                이름
-                <input ref={nameInputRef} name="name" placeholder="홍길동" required />
-              </label>
-              <label>
-                이메일
-                <input name="email" type="email" placeholder="hello@example.com" required />
-              </label>
-              <label>
-                회사명
-                <input name="company" placeholder="대한산업AI" />
-              </label>
-              <label>
-                관심 주제
-                <select name="interest" defaultValue="">
-                  <option value="">선택해주세요</option>
-                  <option>AI-Core</option>
-                  <option>산업 자동화</option>
-                  <option>기술 업데이트</option>
-                </select>
-              </label>
-              <button className="site-button site-button-primary" type="submit" disabled={subscribeStatus === "submitting"}>
-                {subscribeStatus === "submitting" ? "신청 중" : "구독 신청"}
-              </button>
-              <p className={`site-form-note ${subscribeStatus === "success" ? "is-success" : ""}`} role="status">
-                {subscribeStatus === "success"
-                  ? "구독 신청이 완료되었습니다."
-                  : "입력하신 정보는 뉴스레터 발송 준비에만 사용합니다."}
-              </p>
-            </form>
-          </div>
-        </div>
-      ) : null}
     </SiteShell>
+  );
+}
+
+export function SiteNewsletterPage() {
+  return (
+    <SiteCommunityContentPage
+      pageClassName="site-newsletter-page"
+      title="Newsletter"
+      description="AI-Core 업데이트와 산업 자동화 인사이트"
+      items={newsletterItems}
+    />
   );
 }
 
 export function SiteBlogPage() {
-  const [activeFilter, setActiveFilter] = useState<BlogFilter>("All");
-  const [activePage, setActivePage] = useState(1);
-  const [query, setQuery] = useState("");
-
-  const normalizedQuery = query.trim().toLowerCase();
-  const filteredItems = blogItems.filter((item) => {
-    const matchesFilter = activeFilter === "All" || item.category === activeFilter || item.meta === activeFilter;
-    const searchableText = `${item.title} ${item.category} ${item.meta}`.toLowerCase();
-    const matchesQuery = normalizedQuery.length === 0 || searchableText.includes(normalizedQuery);
-
-    return matchesFilter && matchesQuery;
-  });
-  const pageCount = Math.max(1, Math.ceil(filteredItems.length / blogPageSize));
-  const pageStartIndex = (activePage - 1) * blogPageSize;
-  const visibleItems = filteredItems.slice(pageStartIndex, pageStartIndex + blogPageSize);
-
-  const changeFilter = (filter: BlogFilter) => {
-    setActiveFilter(filter);
-    setActivePage(1);
-  };
-
-  useEffect(() => {
-    setActivePage(1);
-  }, [query]);
-
   return (
-    <SiteShell>
-      <main className="site-blog-page">
-        <section className="site-community-hero site-blog-hero" aria-labelledby="site-blog-hero-title">
-          <img src="/assets/industries/logistics-card.png" alt="" aria-hidden="true" />
-          <span className="site-community-hero-shade" aria-hidden="true" />
-          <div className="site-community-hero-copy">
-            <h1 id="site-blog-hero-title">Blog</h1>
-            <a className="site-button site-button-primary" href="#site-blog-list">
-              블로그 이동하기
-            </a>
-          </div>
-        </section>
-
-        <section
-          id="site-blog-list"
-          className="site-whats-new-section site-community-list-section"
-          aria-labelledby="site-blog-list-title"
-        >
-          <div className="site-whats-new-wrap">
-            <h2 id="site-blog-list-title" className="site-sr-only">
-              Blog 콘텐츠 목록
-            </h2>
-            <div className="site-community-controls">
-              <div className="site-whats-new-filters site-community-filter-pills" aria-label="Blog 콘텐츠 필터">
-                {blogFilters.map((filter) => (
-                  <button
-                    className={activeFilter === filter ? "is-active" : ""}
-                    type="button"
-                    aria-pressed={activeFilter === filter}
-                    key={filter}
-                    onClick={() => changeFilter(filter)}
-                  >
-                    {filter}
-                  </button>
-                ))}
-              </div>
-              <label className="site-community-search">
-                <span className="site-sr-only">검색어</span>
-                <input
-                  type="search"
-                  value={query}
-                  placeholder="검색어를 입력하세요."
-                  onChange={(event) => setQuery(event.currentTarget.value)}
-                />
-                <button type="button" aria-label="Blog 검색 실행" onClick={() => setActivePage(1)}>
-                  <Search size={20} aria-hidden="true" />
-                </button>
-              </label>
-            </div>
-
-            {visibleItems.length > 0 ? (
-              <div className="site-whats-new-grid">
-                {visibleItems.map((item) => (
-                  <article className="site-whats-new-card site-community-card" key={item.title} tabIndex={0}>
-                    <span className="site-whats-new-image">
-                      <img src={item.imageSrc} alt={item.imageAlt} loading="lazy" />
-                      <span className="site-whats-new-image-arrow" aria-hidden="true" />
-                    </span>
-                    <span className="site-whats-new-meta">
-                      <span className="site-whats-new-tag">Blog</span>
-                      <span>{item.category}</span>
-                      <span>{item.meta}</span>
-                    </span>
-                    <strong>{item.title}</strong>
-                    <time dateTime={item.date.replaceAll(".", "-").replace(/-$/, "")}>{item.date}</time>
-                  </article>
-                ))}
-              </div>
-            ) : (
-              <div className="site-community-empty" role="status">
-                검색 결과가 없습니다.
-              </div>
-            )}
-
-            {pageCount > 1 ? (
-              <nav className="site-whats-new-pagination" aria-label="Blog 페이지">
-                <button
-                  type="button"
-                  aria-label="이전 페이지"
-                  disabled={activePage === 1}
-                  onClick={() => setActivePage((page) => Math.max(1, page - 1))}
-                >
-                  <ChevronLeft size={18} aria-hidden="true" />
-                </button>
-                {Array.from({ length: pageCount }, (_, index) => {
-                  const page = index + 1;
-                  return (
-                    <button
-                      className={activePage === page ? "is-active" : ""}
-                      type="button"
-                      aria-label={`${page}페이지`}
-                      aria-current={activePage === page ? "page" : undefined}
-                      key={page}
-                      onClick={() => setActivePage(page)}
-                    >
-                      {page}
-                    </button>
-                  );
-                })}
-                <button
-                  type="button"
-                  aria-label="다음 페이지"
-                  disabled={activePage === pageCount}
-                  onClick={() => setActivePage((page) => Math.min(pageCount, page + 1))}
-                >
-                  <ChevronRight size={18} aria-hidden="true" />
-                </button>
-              </nav>
-            ) : null}
-          </div>
-        </section>
-      </main>
-    </SiteShell>
+    <SiteCommunityContentPage
+      pageClassName="site-blog-page"
+      title="Blog"
+      description="산업 AI와 업무 자동화 기록"
+      items={blogItems}
+    />
   );
 }
 
 export function SiteTechnologyPage() {
-  const [activeFilter, setActiveFilter] = useState<TechnologyFilter>("All");
-  const [activePage, setActivePage] = useState(1);
-  const [query, setQuery] = useState("");
-
-  const normalizedQuery = query.trim().toLowerCase();
-  const filteredItems = technologyItems.filter((item) => {
-    const matchesFilter = activeFilter === "All" || item.category === activeFilter || item.meta === activeFilter;
-    const searchableText = `${item.title} ${item.category} ${item.meta}`.toLowerCase();
-    const matchesQuery = normalizedQuery.length === 0 || searchableText.includes(normalizedQuery);
-
-    return matchesFilter && matchesQuery;
-  });
-  const pageCount = Math.max(1, Math.ceil(filteredItems.length / technologyPageSize));
-  const pageStartIndex = (activePage - 1) * technologyPageSize;
-  const visibleItems = filteredItems.slice(pageStartIndex, pageStartIndex + technologyPageSize);
-
-  const changeFilter = (filter: TechnologyFilter) => {
-    setActiveFilter(filter);
-    setActivePage(1);
-  };
-
-  useEffect(() => {
-    setActivePage(1);
-  }, [query]);
-
   return (
-    <SiteShell>
-      <main className="site-technology-page">
-        <section className="site-community-hero site-technology-hero" aria-labelledby="site-technology-hero-title">
-          <img src="/assets/ai-core-erp-ui.png" alt="" aria-hidden="true" />
-          <span className="site-community-hero-shade" aria-hidden="true" />
-          <div className="site-community-hero-copy">
-            <h1 id="site-technology-hero-title">Technology</h1>
-          </div>
-        </section>
-
-        <section
-          className="site-whats-new-section site-community-list-section"
-          aria-labelledby="site-technology-list-title"
-        >
-          <div className="site-whats-new-wrap">
-            <h2 id="site-technology-list-title" className="site-sr-only">
-              Technology 콘텐츠 목록
-            </h2>
-            <div className="site-community-controls">
-              <div className="site-whats-new-filters site-community-filter-pills" aria-label="Technology 콘텐츠 필터">
-                {technologyFilters.map((filter) => (
-                  <button
-                    className={activeFilter === filter ? "is-active" : ""}
-                    type="button"
-                    aria-pressed={activeFilter === filter}
-                    key={filter}
-                    onClick={() => changeFilter(filter)}
-                  >
-                    {filter}
-                  </button>
-                ))}
-              </div>
-              <label className="site-community-search">
-                <span className="site-sr-only">검색어</span>
-                <input
-                  type="search"
-                  value={query}
-                  placeholder="검색어를 입력하세요."
-                  onChange={(event) => setQuery(event.currentTarget.value)}
-                />
-                <button type="button" aria-label="Technology 검색 실행" onClick={() => setActivePage(1)}>
-                  <Search size={20} aria-hidden="true" />
-                </button>
-              </label>
-            </div>
-
-            {visibleItems.length > 0 ? (
-              <div className="site-whats-new-grid">
-                {visibleItems.map((item) => (
-                  <article className="site-whats-new-card site-community-card" key={item.title} tabIndex={0}>
-                    <span className="site-whats-new-image">
-                      <img src={item.imageSrc} alt={item.imageAlt} loading="lazy" />
-                      <span className="site-whats-new-image-arrow" aria-hidden="true" />
-                    </span>
-                    <span className="site-whats-new-meta">
-                      <span className="site-whats-new-tag">Technology</span>
-                      <span>{item.category}</span>
-                      <span>{item.meta}</span>
-                    </span>
-                    <strong>{item.title}</strong>
-                    <time dateTime={item.date.replaceAll(".", "-").replace(/-$/, "")}>{item.date}</time>
-                  </article>
-                ))}
-              </div>
-            ) : (
-              <div className="site-community-empty" role="status">
-                검색 결과가 없습니다.
-              </div>
-            )}
-
-            {pageCount > 1 ? (
-              <nav className="site-whats-new-pagination" aria-label="Technology 페이지">
-                <button
-                  type="button"
-                  aria-label="이전 페이지"
-                  disabled={activePage === 1}
-                  onClick={() => setActivePage((page) => Math.max(1, page - 1))}
-                >
-                  <ChevronLeft size={18} aria-hidden="true" />
-                </button>
-                {Array.from({ length: pageCount }, (_, index) => {
-                  const page = index + 1;
-                  return (
-                    <button
-                      className={activePage === page ? "is-active" : ""}
-                      type="button"
-                      aria-label={`${page}페이지`}
-                      aria-current={activePage === page ? "page" : undefined}
-                      key={page}
-                      onClick={() => setActivePage(page)}
-                    >
-                      {page}
-                    </button>
-                  );
-                })}
-                <button
-                  type="button"
-                  aria-label="다음 페이지"
-                  disabled={activePage === pageCount}
-                  onClick={() => setActivePage((page) => Math.min(pageCount, page + 1))}
-                >
-                  <ChevronRight size={18} aria-hidden="true" />
-                </button>
-              </nav>
-            ) : null}
-          </div>
-        </section>
-      </main>
-    </SiteShell>
+    <SiteCommunityContentPage
+      pageClassName="site-technology-page"
+      title="Technology"
+      description="AI-Core 구조와 자동화 아키텍처"
+      items={technologyItems}
+    />
   );
 }
 
@@ -2419,35 +1985,82 @@ export function SiteContactForm() {
         setSubmitted(true);
       }}
     >
+      <div className="site-contact-form-intro">
+        <p>지금 문의를 남겨주세요.</p>
+        <p>업무 맥락을 확인한 뒤 적합한 AI-Core 구성과 상담 일정을 안내드리겠습니다.</p>
+      </div>
       <label>
-        회사명
-        <input name="company" placeholder="대한산업AI 도입 검토 기업" required />
+        <span className="site-contact-field-label">
+          성함 <span aria-hidden="true">*</span>
+        </span>
+        <input name="name" required />
       </label>
       <label>
-        담당자명
-        <input name="name" placeholder="홍길동" required />
+        <span className="site-contact-field-label">
+          회사명 <span aria-hidden="true">*</span>
+        </span>
+        <input name="company" required />
       </label>
       <label>
-        연락처
-        <input name="contact" placeholder="이메일 또는 전화번호" required />
+        <span className="site-contact-field-label">
+          업무용 이메일주소 <span aria-hidden="true">*</span>
+        </span>
+        <input name="email" type="email" required />
       </label>
       <label>
-        관심 영역
+        <span className="site-contact-field-label">
+          휴대폰번호 <span aria-hidden="true">*</span>
+        </span>
+        <input name="phone" type="tel" required />
+      </label>
+      <label>
+        대한산업AI를 어떻게 알게 되셨나요?
+        <select name="source" defaultValue="">
+          <option value="" disabled>
+            선택해 주세요.
+          </option>
+          <option>검색</option>
+          <option>소개</option>
+          <option>뉴스레터</option>
+          <option>행사 또는 세미나</option>
+          <option>기타</option>
+        </select>
+      </label>
+      <label>
+        도입 검토 상황을 알려주세요.
+        <select name="adoptionStage" defaultValue="">
+          <option value="" disabled>
+            선택해 주세요.
+          </option>
+          <option>검토 전입니다</option>
+          <option>내부 검토 중입니다</option>
+          <option>비교 검토 중입니다</option>
+          <option>도입 범위를 확정하고 있습니다</option>
+        </select>
+      </label>
+      <label>
+        <span className="site-contact-field-label">
+          어떤 솔루션에 관심이 있으신가요? <span aria-hidden="true">*</span>
+        </span>
         <select name="interest" defaultValue="" required>
           <option value="" disabled>
-            선택해주세요
+            선택해 주세요.
           </option>
           <option>Data-Driven AI-Core</option>
           <option>Automation AI-Core</option>
           <option>산업별 적용</option>
+          <option>아직 모르겠습니다</option>
         </select>
       </label>
       <label className="is-wide">
-        시현해보고 싶은 업무
+        <span className="site-contact-field-label">
+          문의내용 <span aria-hidden="true">*</span>
+        </span>
         <textarea
           name="message"
-          rows={5}
-          placeholder="예: 현장 사진과 서명 기록을 기반으로 안전 보고서를 자동 작성하고 싶습니다."
+          rows={7}
+          placeholder="예: 매주 작성하는 보고서, 승인 흐름, 운영 데이터 정리처럼 자동화하고 싶은 업무를 적어주세요."
+          required
         />
       </label>
       <button className="site-button site-button-primary is-wide" type="submit">
@@ -2455,7 +2068,7 @@ export function SiteContactForm() {
         문의 접수하기
       </button>
       <p className={`site-form-note ${submitted ? "is-success" : ""}`}>
-        {submitted ? "문의가 접수되었습니다. 담당자가 확인 후 연락드리겠습니다." : "입력하신 내용은 5일 시현 범위 검토에 사용합니다."}
+        {submitted ? "문의가 접수되었습니다. 담당자가 확인 후 연락드리겠습니다." : "남겨주신 정보는 상담 검토와 회신 목적으로만 사용합니다."}
       </p>
     </form>
   );
