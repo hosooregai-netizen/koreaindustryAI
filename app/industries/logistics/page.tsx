@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import type { CSSProperties } from "react";
-import { BarChart3, Boxes, ClipboardCheck, Database, Gauge, Workflow } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { IndustryScrollReveal } from "@/components/industry-scroll-reveal";
 import { SiteCtaBand, SiteShell } from "@/components/site";
 
@@ -48,28 +48,20 @@ const featureCards = [
   {
     key: "Key Feature 01",
     title: "연결 시스템",
-    icon: Database,
     bullets: ["WMS·TMS·LMS 운영 데이터 연결", "입출고, 배차, 창고 상태 통합 관리", "현장 기록과 시스템 데이터를 같은 기준으로 정리"],
   },
   {
     key: "Key Feature 02",
     title: "자동화 범위",
-    icon: Workflow,
     bullets: ["배차와 라우팅 기준 자동 정리", "창고 운영 상태와 재고 흐름 최적화", "반복 보고와 담당자 알림 자동화"],
   },
   {
     key: "Key Feature 03",
     title: "운영 결과",
-    icon: Gauge,
     bullets: ["입출고, 이동, 배차 흐름 추적", "예외 상황과 지연 항목 빠른 확인", "물류 운영 의사결정을 위한 대시보드 구성"],
   },
 ] as const;
 
-const signalItems = [
-  { label: "입출고", value: "WMS", icon: Boxes },
-  { label: "배차", value: "TMS", icon: ClipboardCheck },
-  { label: "운영 지표", value: "LMS", icon: BarChart3 },
-] as const;
 
 export default function LogisticsPage() {
   return (
@@ -110,26 +102,18 @@ export default function LogisticsPage() {
             <h2 id="site-logistics-feature-title">
               <strong>{logistics.name}</strong> Key Feature
             </h2>
-          </div>
-
-          <div className="site-industry-signal-row" aria-label="물류 운영 연결 기준">
-            {signalItems.map((item) => {
-              const Icon = item.icon;
-
-              return (
-                <div className="site-industry-signal" key={item.label}>
-                  <Icon size={22} aria-hidden="true" />
-                  <span>{item.label}</span>
-                  <strong>{item.value}</strong>
-                </div>
-              );
-            })}
+            <div className="site-industry-feature-nav" aria-hidden="true">
+              <span>
+                <ChevronLeft size={27} strokeWidth={2.4} />
+              </span>
+              <span>
+                <ChevronRight size={27} strokeWidth={2.4} />
+              </span>
+            </div>
           </div>
 
           <div className="site-industry-feature-grid">
             {featureCards.map((card, index) => {
-              const Icon = card.icon;
-
               return (
                 <article
                   className="site-industry-feature-card"
@@ -137,10 +121,7 @@ export default function LogisticsPage() {
                   style={{ "--site-industry-delay": `${index * 90}ms` } as CSSProperties}
                 >
                   <span>{card.key}</span>
-                  <div className="site-industry-feature-title">
-                    <Icon size={28} aria-hidden="true" />
-                    <h3>{card.title}</h3>
-                  </div>
+                  <h3>{card.title}</h3>
                   <ul>
                     {card.bullets.map((bullet) => (
                       <li key={bullet}>{bullet}</li>

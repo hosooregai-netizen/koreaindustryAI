@@ -6,7 +6,6 @@ const revealGroups = [
   { selector: ".site-industry-section-head", delay: 0, stagger: 0, motion: "rise" },
   { selector: ".site-industry-overview-card", delay: 120, stagger: 110, motion: "lift" },
   { selector: ".site-industry-feature-head", delay: 0, stagger: 0, motion: "rise" },
-  { selector: ".site-industry-signal", delay: 90, stagger: 75, motion: "slide" },
   { selector: ".site-industry-feature-card", delay: 120, stagger: 110, motion: "step" },
   { selector: ".site-final-cta", delay: 0, stagger: 0, motion: "settle" },
 ] as const;

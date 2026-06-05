@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import type { CSSProperties } from "react";
-import { BarChart3, Boxes, ClipboardCheck, Database, Gauge, MonitorCog, Workflow } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { IndustryScrollReveal } from "@/components/industry-scroll-reveal";
 import { SiteCtaBand, SiteShell } from "@/components/site";
 
@@ -48,28 +48,20 @@ const featureCards = [
   {
     key: "Key Feature 01",
     title: "연결 시스템",
-    icon: Database,
     bullets: ["ERP·MES·APS 운영 데이터 연결", "생산 계획, 작업 지시, 설비 상태 통합 관리", "현장 기록과 기준 데이터를 같은 구조로 정리"],
   },
   {
     key: "Key Feature 02",
     title: "자동화 범위",
-    icon: Workflow,
     bullets: ["공정 흐름과 작업 기준 자동 정리", "품질 이슈와 설비 상태 예측", "반복 점검과 생산 보고 자동화"],
   },
   {
     key: "Key Feature 03",
     title: "운영 결과",
-    icon: Gauge,
     bullets: ["생산 계획과 진행 상태 추적", "품질 이상과 설비 리스크 빠른 확인", "제조 운영 의사결정을 위한 대시보드 구성"],
   },
 ] as const;
 
-const signalItems = [
-  { label: "기준 데이터", value: "ERP", icon: Boxes },
-  { label: "공정 실행", value: "MES", icon: MonitorCog },
-  { label: "생산 계획", value: "APS", icon: BarChart3 },
-] as const;
 
 export default function ManufacturingPage() {
   return (
@@ -110,26 +102,18 @@ export default function ManufacturingPage() {
             <h2 id="site-manufacturing-feature-title">
               <strong>{manufacturing.name}</strong> Key Feature
             </h2>
-          </div>
-
-          <div className="site-industry-signal-row" aria-label="제조 운영 연결 기준">
-            {signalItems.map((item) => {
-              const Icon = item.icon;
-
-              return (
-                <div className="site-industry-signal" key={item.label}>
-                  <Icon size={22} aria-hidden="true" />
-                  <span>{item.label}</span>
-                  <strong>{item.value}</strong>
-                </div>
-              );
-            })}
+            <div className="site-industry-feature-nav" aria-hidden="true">
+              <span>
+                <ChevronLeft size={27} strokeWidth={2.4} />
+              </span>
+              <span>
+                <ChevronRight size={27} strokeWidth={2.4} />
+              </span>
+            </div>
           </div>
 
           <div className="site-industry-feature-grid">
             {featureCards.map((card, index) => {
-              const Icon = card.icon;
-
               return (
                 <article
                   className="site-industry-feature-card"
@@ -137,10 +121,7 @@ export default function ManufacturingPage() {
                   style={{ "--site-industry-delay": `${index * 90}ms` } as CSSProperties}
                 >
                   <span>{card.key}</span>
-                  <div className="site-industry-feature-title">
-                    <Icon size={28} aria-hidden="true" />
-                    <h3>{card.title}</h3>
-                  </div>
+                  <h3>{card.title}</h3>
                   <ul>
                     {card.bullets.map((bullet) => (
                       <li key={bullet}>{bullet}</li>

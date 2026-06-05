@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import type { CSSProperties } from "react";
-import { BarChart3, ClipboardCheck, Database, Gauge, ShieldCheck, Workflow } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { IndustryScrollReveal } from "@/components/industry-scroll-reveal";
 import { SiteCtaBand, SiteShell } from "@/components/site";
 
@@ -48,28 +48,20 @@ const featureCards = [
   {
     key: "Key Feature 01",
     title: "연결 시스템",
-    icon: Database,
     bullets: ["RegTech·AML/KYC·FDS 업무 데이터 연결", "고객확인, 이상거래 탐지, 보고 업무 상태 통합 관리", "심사 문서와 처리 이력을 같은 구조로 정리"],
   },
   {
     key: "Key Feature 02",
     title: "자동화 범위",
-    icon: Workflow,
     bullets: ["규제 기준과 검토 항목 자동 정리", "AML/KYC 검토 항목과 FDS 이상 신호 분류", "반복 보고와 담당자 알림 자동화"],
   },
   {
     key: "Key Feature 03",
     title: "운영 결과",
-    icon: Gauge,
     bullets: ["검토, 탐지, 보고 흐름 추적", "확인 필요 항목과 처리 상태 빠른 파악", "금융 업무 자동화를 위한 대시보드 구성"],
   },
 ] as const;
 
-const signalItems = [
-  { label: "규제 대응", value: "RegTech", icon: ShieldCheck },
-  { label: "고객확인", value: "AML/KYC", icon: ClipboardCheck },
-  { label: "이상탐지", value: "FDS", icon: BarChart3 },
-] as const;
 
 export default function FinancePage() {
   return (
@@ -110,26 +102,18 @@ export default function FinancePage() {
             <h2 id="site-finance-feature-title">
               <strong>{finance.name}</strong> Key Feature
             </h2>
-          </div>
-
-          <div className="site-industry-signal-row" aria-label="금융 운영 연결 기준">
-            {signalItems.map((item) => {
-              const Icon = item.icon;
-
-              return (
-                <div className="site-industry-signal" key={item.label}>
-                  <Icon size={22} aria-hidden="true" />
-                  <span>{item.label}</span>
-                  <strong>{item.value}</strong>
-                </div>
-              );
-            })}
+            <div className="site-industry-feature-nav" aria-hidden="true">
+              <span>
+                <ChevronLeft size={27} strokeWidth={2.4} />
+              </span>
+              <span>
+                <ChevronRight size={27} strokeWidth={2.4} />
+              </span>
+            </div>
           </div>
 
           <div className="site-industry-feature-grid">
             {featureCards.map((card, index) => {
-              const Icon = card.icon;
-
               return (
                 <article
                   className="site-industry-feature-card"
@@ -137,10 +121,7 @@ export default function FinancePage() {
                   style={{ "--site-industry-delay": `${index * 90}ms` } as CSSProperties}
                 >
                   <span>{card.key}</span>
-                  <div className="site-industry-feature-title">
-                    <Icon size={28} aria-hidden="true" />
-                    <h3>{card.title}</h3>
-                  </div>
+                  <h3>{card.title}</h3>
                   <ul>
                     {card.bullets.map((bullet) => (
                       <li key={bullet}>{bullet}</li>
