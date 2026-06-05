@@ -11751,27 +11751,10 @@ html .site-header.is-transparent.is-home-route[data-site-hero-group="1"] .site-b
 }
 
 .site-contact-copy {
-  position: relative;
   display: flex;
   min-height: 760px;
   flex-direction: column;
   padding-top: 18px;
-  isolation: isolate;
-}
-
-.site-contact-copy::before {
-  position: absolute;
-  z-index: -1;
-  top: -34px;
-  left: -32px;
-  width: min(730px, calc(100% + 36px));
-  height: 500px;
-  border-radius: 8px;
-  background:
-    linear-gradient(135deg, rgba(47, 115, 255, 0.045), rgba(255, 255, 255, 0) 52%),
-    linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
-  box-shadow: inset 0 0 0 1px rgba(226, 232, 240, 0.75);
-  content: "";
 }
 
 .site-contact-copy h1 {
@@ -11813,42 +11796,6 @@ html .site-header.is-transparent.is-home-route[data-site-hero-group="1"] .site-b
   font-weight: 650;
   line-height: 1.76;
   word-break: keep-all;
-}
-
-.site-contact-steps {
-  display: flex;
-  flex-wrap: wrap;
-  width: min(100%, 640px);
-  gap: 6px 0;
-  align-items: center;
-  margin: 20px 0 0;
-  padding: 0;
-  color: #5f6673;
-  border-top: 0;
-  list-style: none;
-}
-
-.site-contact-steps::before {
-  display: none;
-}
-
-.site-contact-steps li {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 13px;
-  font-weight: 700;
-  line-height: 1.4;
-  white-space: nowrap;
-}
-
-.site-contact-steps li:not(:last-child)::after {
-  margin: 0 9px;
-  color: #c3c9d2;
-  content: "›";
-  font-size: 13px;
-  font-weight: 500;
-  line-height: 1;
 }
 
 .site-contact-page .site-contact-form {
@@ -11989,10 +11936,6 @@ html .site-header.is-transparent.is-home-route[data-site-hero-group="1"] .site-b
     font-size: 46px;
   }
 
-  .site-contact-steps {
-    margin-top: 24px;
-  }
-
   .site-contact-page .site-contact-form {
     width: 100%;
   }
@@ -12028,25 +11971,6 @@ html .site-header.is-transparent.is-home-route[data-site-hero-group="1"] .site-b
     padding: 0;
     font-size: 14px;
     line-height: 1.68;
-  }
-
-  .site-contact-steps {
-    gap: 7px 0;
-    margin-top: 16px;
-    padding-top: 0;
-  }
-
-  .site-contact-steps::before {
-    display: none;
-  }
-
-  .site-contact-steps li {
-    font-size: 12px;
-  }
-
-  .site-contact-steps li:not(:last-child)::after {
-    margin: 0 6px;
-    font-size: 12px;
   }
 
   .site-contact-page .site-contact-form {

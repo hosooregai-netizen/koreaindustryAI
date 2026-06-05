@@ -28,12 +28,6 @@ export default function ContactPage() {
             <p className="site-contact-hint">
               상담 전 자료가 완벽하지 않아도 괜찮습니다. 현재 쓰는 문서, 시스템, 반복 업무만 편하게 적어주세요.
             </p>
-            <ol className="site-contact-steps" aria-label="문의 진행 단계">
-              <li>문의 접수</li>
-              <li>내용 검토</li>
-              <li>상담 일정 안내</li>
-              <li>맞춤형 제안</li>
-            </ol>
           </div>
           <SiteContactForm />
         </section>
