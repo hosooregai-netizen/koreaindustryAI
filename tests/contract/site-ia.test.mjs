@@ -18,7 +18,6 @@ const plannedRoutes = [
   "app/community/newsletter/page.tsx",
   "app/community/blog/page.tsx",
   "app/community/technology/page.tsx",
-  "app/community/news/page.tsx",
   "app/company/page.tsx",
   "app/contact/page.tsx",
 ];

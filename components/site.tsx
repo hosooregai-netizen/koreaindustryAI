@@ -42,7 +42,7 @@ type NavGroup = {
 };
 
 type HeroVisualKind = "home" | "products" | "company" | "contact" | "community";
-type WhatsNewTag = "Blog" | "News letter" | "Technology";
+type WhatsNewTag = "Blog" | "Newsletter" | "Technology";
 type WhatsNewFilter = "All" | WhatsNewTag;
 
 const heroVideoSources = [
@@ -197,12 +197,12 @@ export const navItems: NavGroup[] = [
   },
   {
     label: "Community",
-    summary: "콘텐츠 페이지는 준비중이며, 우선 AI-Core 메시지를 중심으로 정리합니다.",
+    summary: "Newsletter, Blog, Technology 콘텐츠를 통해 AI-Core 소식을 정리합니다.",
     children: [
       {
-        label: "News Letter",
+        label: "Newsletter",
         href: "/community/newsletter",
-        description: "산업 AI 인사이트를 받을 준비중 진입점",
+        description: "산업 AI 인사이트를 구독하는 진입점",
       },
       {
         label: "Blog",
@@ -213,11 +213,6 @@ export const navItems: NavGroup[] = [
         label: "Technology",
         href: "/community/technology",
         description: "AI-Core 기술 구성과 자동화 아키텍처 글을 준비 중입니다",
-      },
-      {
-        label: "News",
-        href: "/community/news",
-        description: "대한산업AI 소식과 업데이트를 준비 중입니다",
       },
     ],
   },
@@ -290,7 +285,7 @@ export const industryImageCards = [
   },
 ];
 
-const whatsNewFilters: WhatsNewFilter[] = ["All", "Blog", "News letter", "Technology"];
+const whatsNewFilters: WhatsNewFilter[] = ["All", "Blog", "Newsletter", "Technology"];
 const whatsNewPageSize = 3;
 
 const whatsNewItems: Array<{
@@ -313,7 +308,7 @@ const whatsNewItems: Array<{
   },
   {
     title: "이번 달 산업 AI 도입 체크리스트",
-    tag: "News letter",
+    tag: "Newsletter",
     href: "/community/newsletter",
     imageSrc: "/assets/industrial-ai-hero.png",
     imageAlt: "산업 현장과 데이터 화면이 결합된 AI-Core 이미지",
@@ -349,7 +344,7 @@ const whatsNewItems: Array<{
   },
   {
     title: "금융 문서 검토 자동화 트렌드 노트",
-    tag: "News letter",
+    tag: "Newsletter",
     href: "/community/newsletter",
     imageSrc: "/assets/industries/finance-card.png",
     imageAlt: "도시 전망의 금융 데이터 운영실",
