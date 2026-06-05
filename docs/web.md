@@ -75,10 +75,11 @@
 ### Community
 
 - 상태: 준비중
-- 목적: 콘텐츠, 기술 글, 뉴스 진입점.
+- 목적: Newsletter, Blog, Technology 콘텐츠 진입점.
 - 현재 처리: 탑바 클릭 시 준비중 stub 페이지로 이동.
+- 제외: 별도 `News` 페이지는 운영하지 않는다.
 
-#### News Letter
+#### Newsletter
 
 - 라우트: `/community/newsletter`
 - 상태: 준비중
@@ -95,12 +96,6 @@
 - 라우트: `/community/technology`
 - 상태: 준비중
 - 의도: AI-Core 기술 구성과 자동화 아키텍처 글.
-
-#### News
-
-- 라우트: `/community/news`
-- 상태: 준비중
-- 의도: 대한산업AI 소식과 업데이트.
 
 ### Company
 
