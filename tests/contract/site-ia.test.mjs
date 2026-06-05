@@ -77,8 +77,9 @@ test("header navigation exposes the site IA", () => {
   assert.match(navBlock, /href: "\/products\/automation"/);
   assert.match(navBlock, /label: "건설"/);
   assert.match(navBlock, /href: "\/industries\/construction"/);
-  assert.match(navBlock, /label: "Technology"/);
-  assert.match(navBlock, /href: "\/community\/technology"/);
+  assert.match(navBlock, /label: "Newsletter"[\s\S]*?href: "\/community\/newsletter"/);
+  assert.match(navBlock, /label: "Blog"[\s\S]*?href: "\/community\/blog"/);
+  assert.match(navBlock, /label: "Technology"[\s\S]*?href: "\/community\/technology"/);
   assert.match(navBlock, /label: "문의하기"/);
   assert.match(navBlock, /href: "\/contact"/);
 
@@ -97,10 +98,17 @@ test("header navigation exposes the site IA", () => {
   }
 });
 
-test("dropdowns include shared image and group summary, not modal flags", () => {
-  assert.match(siteSource, /site-dropdown-media/);
-  assert.match(siteSource, /site-dropdown-summary/);
-  assert.match(siteSource, /\/assets\/industrial-ai-hero\.png/);
+test("dropdowns use text-only mega menu columns, not image previews or modal flags", () => {
+  assert.match(siteSource, /site-dropdown-overview/);
+  assert.match(siteSource, /site-dropdown-item/);
+  assert.doesNotMatch(siteSource, /group\.summary/);
+  assert.doesNotMatch(siteSource, /<p>\{group\.summary\}<\/p>/);
+  assert.doesNotMatch(siteSource, /dropdownVariant/);
+  assert.doesNotMatch(siteSource, /site-dropdown-product-grid/);
+  assert.doesNotMatch(siteSource, /site-dropdown-product-card/);
+  assert.doesNotMatch(siteSource, /site-dropdown-preview/);
+  assert.doesNotMatch(siteSource, /getLatestCommunityNavChild/);
+  assert.doesNotMatch(siteSource, /data-fallback-src/);
   assert.doesNotMatch(siteSource, /modal: true/);
   assert.doesNotMatch(siteSource, /SiteComingSoonModal/);
 });
@@ -108,11 +116,14 @@ test("dropdowns include shared image and group summary, not modal flags", () => 
 test("community mock articles expose generated covers and detail slugs", () => {
   for (const asset of [
     "newsletter-ai-core-workflow.png",
+    "newsletter-logistics-sla-exceptions.png",
     "newsletter-report-checklist.png",
     "newsletter-approval-flow.png",
+    "blog-finance-review-trail.png",
     "blog-manufacturing-dashboard.png",
     "blog-logistics-report.png",
     "blog-automation-priority.png",
+    "technology-document-data-pipeline.png",
     "technology-ai-core-architecture.png",
     "technology-data-inputs.png",
     "technology-operations-layer.png",
@@ -122,6 +133,9 @@ test("community mock articles expose generated covers and detail slugs", () => {
   }
 
   assert.match(communitySource, /href: `\/community\/\$\{article\.section\}\/\$\{article\.slug\}`/);
+  assert.match(communitySource, /slug: "logistics-sla-exception-note"/);
+  assert.match(communitySource, /slug: "finance-review-trail-automation"/);
+  assert.match(communitySource, /slug: "document-data-pipeline-design"/);
   assert.match(communitySource, /slug: "manufacturing-dashboard"/);
 });
 
@@ -140,7 +154,7 @@ test("industry cards avoid unverified customer names", () => {
 test("home hero uses the ordered landing video assets", () => {
   const heroSourcesBlock = siteSource.match(/const heroVideoSources = \[[\s\S]*?\];/)?.[0] ?? "";
 
-  assert.match(siteSource, /\/assets\/industrial-ai-hero\.png/);
+  assert.match(siteSource, /\/assets\/hero-video-poster\.jpg/);
   assert.match(siteSource, /data-video-state/);
   assert.match(
     heroSourcesBlock,

@@ -41,9 +41,6 @@ type NavChild = {
 type NavGroup = {
   label: string;
   href?: string;
-  summary: string;
-  imageSrc?: string;
-  imageAlt?: string;
   children: NavChild[];
 };
 
@@ -161,7 +158,6 @@ const mobileDropdownStyle: CSSProperties = {
 export const navItems: NavGroup[] = [
   {
     label: "Product",
-    summary: "데이터 관리와 업무 자동화를 두 AI-Core 제품으로 정리합니다.",
     children: [
       {
         label: "Data-Driven AI-Core",
@@ -177,33 +173,31 @@ export const navItems: NavGroup[] = [
   },
   {
     label: "Industries",
-    summary: "산업별 업무 흐름에 맞춰 AI-Core 적용 가능성을 정리합니다.",
     children: [
       {
         label: "금융",
         href: "/industries/finance",
-        description: "심사, 문서 검토, 리포트 흐름",
+        description: "규제 준수와 반복 검토 자동화",
       },
       {
         label: "제조",
         href: "/industries/manufacturing",
-        description: "생산, 재고, 견적, 보고 업무 흐름",
+        description: "생산 데이터 연결과 반복 점검 자동화",
       },
       {
         label: "물류",
         href: "/industries/logistics",
-        description: "입출고, 검수, 운영 데이터 정리 흐름",
+        description: "지연과 예외 처리 측정 자동화",
       },
       {
         label: "건설",
         href: "/industries/construction",
-        description: "현장 문서, 안전 기록, 점검 보고 흐름",
+        description: "문서와 승인 흐름 자동화",
       },
     ],
   },
   {
     label: "Community",
-    summary: "Newsletter, Blog, Technology 콘텐츠를 통해 AI-Core 소식을 정리합니다.",
     children: [
       {
         label: "Newsletter",
@@ -213,19 +207,18 @@ export const navItems: NavGroup[] = [
       {
         label: "Blog",
         href: "/community/blog",
-        description: "AI-Core와 업무 자동화 글 준비중",
+        description: "AI-Core와 업무 자동화 글",
       },
       {
         label: "Technology",
         href: "/community/technology",
-        description: "AI-Core 기술 구성과 자동화 아키텍처 글을 준비 중입니다",
+        description: "AI-Core 기술 구성과 자동화 아키텍처 글",
       },
     ],
   },
   {
     label: "Company",
     href: "/contact",
-    summary: "AI-Core 도입 상담 문의로 바로 연결합니다.",
     children: [
       {
         label: "문의하기",
@@ -499,41 +492,9 @@ function SiteHeader() {
         </button>
         <nav className={`site-nav ${open ? "is-open" : ""}`} aria-label="주요 메뉴">
           <div className="site-nav-links">
-            {navItems.map((group) => {
-              const active =
-                (group.href && (pathname === group.href || pathname.startsWith(`${group.href}/`))) ||
-                group.children.some((child) => child.href && pathname.startsWith(child.href));
-
-              return (
-                <div className={`site-nav-group ${active ? "is-active" : ""}`} key={group.label}>
-                  {group.href ? (
-                    <Link href={group.href} onClick={closeMenu}>
-                      {group.label}
-                    </Link>
-                  ) : (
-                    <button type="button">{group.label}</button>
-                  )}
-                  <div className="site-dropdown" role="menu" style={open ? mobileDropdownStyle : undefined}>
-                    <div className="site-dropdown-media" role="presentation">
-                      <img
-                        src={group.imageSrc ?? "/assets/industrial-ai-hero.png"}
-                        alt={group.imageAlt ?? ""}
-                        loading="lazy"
-                      />
-                    </div>
-                    <p className="site-dropdown-summary">{group.summary}</p>
-                    <div className="site-dropdown-items" role="presentation">
-                      {group.children.map((child) => (
-                        <Link key={child.label} href={child.href} role="menuitem" onClick={closeMenu}>
-                          <strong>{child.label}</strong>
-                          <span className="site-sr-only">{child.description}</span>
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+            {navItems.map((group) => (
+              <SiteNavGroup group={group} key={group.label} onClose={closeMenu} open={open} pathname={pathname} />
+            ))}
           </div>
           <Link className="site-nav-cta" href="/contact" onClick={closeMenu}>
             문의하기
@@ -541,6 +502,55 @@ function SiteHeader() {
         </nav>
       </header>
     </>
+  );
+}
+
+function SiteNavGroup({
+  group,
+  onClose,
+  open,
+  pathname,
+}: {
+  group: NavGroup;
+  onClose: () => void;
+  open: boolean;
+  pathname: string;
+}) {
+  const active =
+    (group.href && (pathname === group.href || pathname.startsWith(`${group.href}/`))) ||
+    group.children.some((child) => child.href && pathname.startsWith(child.href));
+
+  return (
+    <div className={`site-nav-group ${active ? "is-active" : ""}`}>
+      {group.href ? (
+        <Link href={group.href} onClick={onClose}>
+          {group.label}
+        </Link>
+      ) : (
+        <button type="button">{group.label}</button>
+      )}
+      <div
+        className="site-dropdown"
+        data-nav-label={group.label}
+        role="menu"
+        style={open ? mobileDropdownStyle : undefined}
+      >
+        <div className="site-dropdown-overview" aria-hidden="true">
+          <strong>{group.label}</strong>
+        </div>
+        <div className="site-dropdown-items" role="presentation">
+          {group.children.map((child) => (
+            <Link className="site-dropdown-item" key={child.label} href={child.href} role="menuitem" onClick={onClose}>
+              <strong>
+                {child.label}
+                <ArrowRight size={14} strokeWidth={1.8} aria-hidden="true" />
+              </strong>
+              <span>{child.description}</span>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }
 
