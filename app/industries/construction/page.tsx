@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import type { CSSProperties } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import { IndustryScrollReveal } from "@/components/industry-scroll-reveal";
 import { SiteCtaBand, SiteShell } from "@/components/site";
 
@@ -44,23 +43,12 @@ const overviewCards = [
   },
 ] as const;
 
-const featureCards = [
-  {
-    key: "Key Feature 01",
-    title: "연결 시스템",
-    bullets: ["BIM·RFI·Submittal 업무 데이터 연결", "도면, 질의, 제출 문서, 승인 상태 통합 관리", "현장 기록과 문서 기준을 같은 구조로 정리"],
-  },
-  {
-    key: "Key Feature 02",
-    title: "자동화 범위",
-    bullets: ["규제 문서와 제출 흐름 자동 정리", "안전 점검과 품질 기록 자동 분류", "반복 보고와 담당자 알림 자동화"],
-  },
-  {
-    key: "Key Feature 03",
-    title: "운영 결과",
-    bullets: ["현장 문서와 승인 흐름 추적", "누락 문서와 확인 필요 항목 빠른 파악", "규제, 안전, 품질 대응을 위한 대시보드 구성"],
-  },
-] as const;
+const insightSection = {
+  title: '"현장 실행력은 문서가 이어질 때 높아집니다"',
+  image: "/assets/industrial-ai-hero.png",
+  imageAlt: "AI-Core가 건설 현장 문서와 운영 데이터를 연결하는 업무 구조 화면",
+} as const;
+
 
 
 export default function ConstructionPage() {
@@ -73,8 +61,17 @@ export default function ConstructionPage() {
           <div className="site-industry-hero-shade" aria-hidden="true" />
           <div className="site-industry-hero-copy">
             <h1 id="site-construction-hero-title">{construction.title}</h1>
-            <span>{construction.description}</span>
           </div>
+        </section>
+
+        <section className="site-industry-structure" aria-labelledby="site-construction-structure-title">
+          <div className="site-industry-structure-copy">
+            <h2 id="site-construction-structure-title">{insightSection.title}</h2>
+            <p>{construction.description}</p>
+          </div>
+          <figure className="site-industry-structure-visual">
+            <img src={insightSection.image} alt={insightSection.imageAlt} loading="lazy" />
+          </figure>
         </section>
 
         <section className="site-industry-overview" aria-labelledby="site-construction-overview-title">
@@ -94,42 +91,6 @@ export default function ConstructionPage() {
                 <p>{card.text}</p>
               </article>
             ))}
-          </div>
-        </section>
-
-        <section className="site-industry-features" aria-labelledby="site-construction-feature-title">
-          <div className="site-industry-feature-head">
-            <h2 id="site-construction-feature-title">
-              <strong>{construction.name}</strong> Key Feature
-            </h2>
-            <div className="site-industry-feature-nav" aria-hidden="true">
-              <span>
-                <ChevronLeft size={27} strokeWidth={2.4} />
-              </span>
-              <span>
-                <ChevronRight size={27} strokeWidth={2.4} />
-              </span>
-            </div>
-          </div>
-
-          <div className="site-industry-feature-grid">
-            {featureCards.map((card, index) => {
-              return (
-                <article
-                  className="site-industry-feature-card"
-                  key={card.key}
-                  style={{ "--site-industry-delay": `${index * 90}ms` } as CSSProperties}
-                >
-                  <span>{card.key}</span>
-                  <h3>{card.title}</h3>
-                  <ul>
-                    {card.bullets.map((bullet) => (
-                      <li key={bullet}>{bullet}</li>
-                    ))}
-                  </ul>
-                </article>
-              );
-            })}
           </div>
         </section>
 

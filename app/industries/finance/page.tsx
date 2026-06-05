@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import type { CSSProperties } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import { IndustryScrollReveal } from "@/components/industry-scroll-reveal";
 import { SiteCtaBand, SiteShell } from "@/components/site";
 
@@ -44,23 +43,12 @@ const overviewCards = [
   },
 ] as const;
 
-const featureCards = [
-  {
-    key: "Key Feature 01",
-    title: "연결 시스템",
-    bullets: ["RegTech·AML/KYC·FDS 업무 데이터 연결", "고객확인, 이상거래 탐지, 보고 업무 상태 통합 관리", "심사 문서와 처리 이력을 같은 구조로 정리"],
-  },
-  {
-    key: "Key Feature 02",
-    title: "자동화 범위",
-    bullets: ["규제 기준과 검토 항목 자동 정리", "AML/KYC 검토 항목과 FDS 이상 신호 분류", "반복 보고와 담당자 알림 자동화"],
-  },
-  {
-    key: "Key Feature 03",
-    title: "운영 결과",
-    bullets: ["검토, 탐지, 보고 흐름 추적", "확인 필요 항목과 처리 상태 빠른 파악", "금융 업무 자동화를 위한 대시보드 구성"],
-  },
-] as const;
+const insightSection = {
+  title: '"금융 업무는 검토와 보고가 이어질 때 빨라집니다"',
+  image: "/assets/industrial-ai-hero.png",
+  imageAlt: "AI-Core가 금융 검토와 보고 데이터를 연결하는 업무 구조 화면",
+} as const;
+
 
 
 export default function FinancePage() {
@@ -73,8 +61,17 @@ export default function FinancePage() {
           <div className="site-industry-hero-shade" aria-hidden="true" />
           <div className="site-industry-hero-copy">
             <h1 id="site-finance-hero-title">{finance.title}</h1>
-            <span>{finance.description}</span>
           </div>
+        </section>
+
+        <section className="site-industry-structure" aria-labelledby="site-finance-structure-title">
+          <div className="site-industry-structure-copy">
+            <h2 id="site-finance-structure-title">{insightSection.title}</h2>
+            <p>{finance.description}</p>
+          </div>
+          <figure className="site-industry-structure-visual">
+            <img src={insightSection.image} alt={insightSection.imageAlt} loading="lazy" />
+          </figure>
         </section>
 
         <section className="site-industry-overview" aria-labelledby="site-finance-overview-title">
@@ -94,42 +91,6 @@ export default function FinancePage() {
                 <p>{card.text}</p>
               </article>
             ))}
-          </div>
-        </section>
-
-        <section className="site-industry-features" aria-labelledby="site-finance-feature-title">
-          <div className="site-industry-feature-head">
-            <h2 id="site-finance-feature-title">
-              <strong>{finance.name}</strong> Key Feature
-            </h2>
-            <div className="site-industry-feature-nav" aria-hidden="true">
-              <span>
-                <ChevronLeft size={27} strokeWidth={2.4} />
-              </span>
-              <span>
-                <ChevronRight size={27} strokeWidth={2.4} />
-              </span>
-            </div>
-          </div>
-
-          <div className="site-industry-feature-grid">
-            {featureCards.map((card, index) => {
-              return (
-                <article
-                  className="site-industry-feature-card"
-                  key={card.key}
-                  style={{ "--site-industry-delay": `${index * 90}ms` } as CSSProperties}
-                >
-                  <span>{card.key}</span>
-                  <h3>{card.title}</h3>
-                  <ul>
-                    {card.bullets.map((bullet) => (
-                      <li key={bullet}>{bullet}</li>
-                    ))}
-                  </ul>
-                </article>
-              );
-            })}
           </div>
         </section>
 

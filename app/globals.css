@@ -11412,6 +11412,58 @@ html .site-header.is-transparent.is-home-route[data-site-hero-group="1"] .site-b
   word-break: keep-all;
 }
 
+.site-industry-structure {
+  width: min(100%, 1600px);
+  margin: 0 auto;
+  padding: 104px 56px 124px;
+  color: #151b24;
+  text-align: center;
+  background: #ffffff;
+}
+
+.site-industry-structure-copy {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.site-industry-structure-copy h2 {
+  margin: 0;
+  color: #151b24;
+  font-size: clamp(30px, 2.85vw, 42px);
+  font-weight: 900;
+  line-height: 1.28;
+  letter-spacing: 0;
+  white-space: nowrap;
+  word-break: keep-all;
+}
+
+.site-industry-structure-copy p {
+  max-width: 860px;
+  margin: 26px auto 0;
+  color: #2a313c;
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 1.74;
+  white-space: pre-line;
+  word-break: keep-all;
+}
+
+.site-industry-structure-visual {
+  width: min(100%, 1180px);
+  margin: 62px auto 0;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #f5f7fb;
+}
+
+.site-industry-structure-visual img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 8.8;
+  object-fit: cover;
+  object-position: center;
+}
+
 .site-industry-features {
   max-width: none;
   width: 100%;
@@ -11559,6 +11611,7 @@ html .site-header.is-transparent.is-home-route[data-site-hero-group="1"] .site-b
   }
 
   .site-industry-overview,
+  .site-industry-structure,
   .site-industry-features {
     padding-right: 28px;
     padding-left: 28px;
@@ -11639,6 +11692,7 @@ html .site-header.is-transparent.is-home-route[data-site-hero-group="1"] .site-b
   }
 
   .site-industry-overview,
+  .site-industry-structure,
   .site-industry-features {
     padding: 78px 18px;
   }
@@ -11684,6 +11738,26 @@ html .site-header.is-transparent.is-home-route[data-site-hero-group="1"] .site-b
     padding-top: 48px;
     font-size: 15px;
     line-height: 1.68;
+  }
+
+  .site-industry-structure-copy h2 {
+    font-size: 28px;
+    line-height: 1.32;
+    white-space: normal;
+  }
+
+  .site-industry-structure-copy p {
+    margin-top: 18px;
+    font-size: 15px;
+    line-height: 1.68;
+  }
+
+  .site-industry-structure-visual {
+    margin-top: 34px;
+  }
+
+  .site-industry-structure-visual img {
+    aspect-ratio: 4 / 3;
   }
 
   .site-industry-feature-head {

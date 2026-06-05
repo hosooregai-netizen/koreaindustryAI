@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import type { CSSProperties } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import { IndustryScrollReveal } from "@/components/industry-scroll-reveal";
 import { SiteCtaBand, SiteShell } from "@/components/site";
 
@@ -44,23 +43,12 @@ const overviewCards = [
   },
 ] as const;
 
-const featureCards = [
-  {
-    key: "Key Feature 01",
-    title: "연결 시스템",
-    bullets: ["WMS·TMS·LMS 운영 데이터 연결", "입출고, 배차, 창고 상태 통합 관리", "현장 기록과 시스템 데이터를 같은 기준으로 정리"],
-  },
-  {
-    key: "Key Feature 02",
-    title: "자동화 범위",
-    bullets: ["배차와 라우팅 기준 자동 정리", "창고 운영 상태와 재고 흐름 최적화", "반복 보고와 담당자 알림 자동화"],
-  },
-  {
-    key: "Key Feature 03",
-    title: "운영 결과",
-    bullets: ["입출고, 이동, 배차 흐름 추적", "예외 상황과 지연 항목 빠른 확인", "물류 운영 의사결정을 위한 대시보드 구성"],
-  },
-] as const;
+const insightSection = {
+  title: '"물류 속도는 흐름을 놓치지 않을 때 빨라집니다"',
+  image: "/assets/industrial-ai-hero.png",
+  imageAlt: "AI-Core가 물류 운영 데이터를 연결하는 업무 구조 화면",
+} as const;
+
 
 
 export default function LogisticsPage() {
@@ -73,8 +61,17 @@ export default function LogisticsPage() {
           <div className="site-industry-hero-shade" aria-hidden="true" />
           <div className="site-industry-hero-copy">
             <h1 id="site-logistics-hero-title">{logistics.title}</h1>
-            <span>{logistics.description}</span>
           </div>
+        </section>
+
+        <section className="site-industry-structure" aria-labelledby="site-logistics-structure-title">
+          <div className="site-industry-structure-copy">
+            <h2 id="site-logistics-structure-title">{insightSection.title}</h2>
+            <p>{logistics.description}</p>
+          </div>
+          <figure className="site-industry-structure-visual">
+            <img src={insightSection.image} alt={insightSection.imageAlt} loading="lazy" />
+          </figure>
         </section>
 
         <section className="site-industry-overview" aria-labelledby="site-logistics-overview-title">
@@ -94,42 +91,6 @@ export default function LogisticsPage() {
                 <p>{card.text}</p>
               </article>
             ))}
-          </div>
-        </section>
-
-        <section className="site-industry-features" aria-labelledby="site-logistics-feature-title">
-          <div className="site-industry-feature-head">
-            <h2 id="site-logistics-feature-title">
-              <strong>{logistics.name}</strong> Key Feature
-            </h2>
-            <div className="site-industry-feature-nav" aria-hidden="true">
-              <span>
-                <ChevronLeft size={27} strokeWidth={2.4} />
-              </span>
-              <span>
-                <ChevronRight size={27} strokeWidth={2.4} />
-              </span>
-            </div>
-          </div>
-
-          <div className="site-industry-feature-grid">
-            {featureCards.map((card, index) => {
-              return (
-                <article
-                  className="site-industry-feature-card"
-                  key={card.key}
-                  style={{ "--site-industry-delay": `${index * 90}ms` } as CSSProperties}
-                >
-                  <span>{card.key}</span>
-                  <h3>{card.title}</h3>
-                  <ul>
-                    {card.bullets.map((bullet) => (
-                      <li key={bullet}>{bullet}</li>
-                    ))}
-                  </ul>
-                </article>
-              );
-            })}
           </div>
         </section>
 

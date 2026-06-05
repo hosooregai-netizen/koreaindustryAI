@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import type { CSSProperties } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import { IndustryScrollReveal } from "@/components/industry-scroll-reveal";
 import { SiteCtaBand, SiteShell } from "@/components/site";
 
@@ -44,23 +43,12 @@ const overviewCards = [
   },
 ] as const;
 
-const featureCards = [
-  {
-    key: "Key Feature 01",
-    title: "연결 시스템",
-    bullets: ["ERP·MES·APS 운영 데이터 연결", "생산 계획, 작업 지시, 설비 상태 통합 관리", "현장 기록과 기준 데이터를 같은 구조로 정리"],
-  },
-  {
-    key: "Key Feature 02",
-    title: "자동화 범위",
-    bullets: ["공정 흐름과 작업 기준 자동 정리", "품질 이슈와 설비 상태 예측", "반복 점검과 생산 보고 자동화"],
-  },
-  {
-    key: "Key Feature 03",
-    title: "운영 결과",
-    bullets: ["생산 계획과 진행 상태 추적", "품질 이상과 설비 리스크 빠른 확인", "제조 운영 의사결정을 위한 대시보드 구성"],
-  },
-] as const;
+const insightSection = {
+  title: '"생산 흐름은 연결될 때 빨라집니다"',
+  image: "/assets/industrial-ai-hero.png",
+  imageAlt: "AI-Core가 제조 운영 데이터를 연결하는 업무 구조 화면",
+} as const;
+
 
 
 export default function ManufacturingPage() {
@@ -73,8 +61,17 @@ export default function ManufacturingPage() {
           <div className="site-industry-hero-shade" aria-hidden="true" />
           <div className="site-industry-hero-copy">
             <h1 id="site-manufacturing-hero-title">{manufacturing.title}</h1>
-            <span>{manufacturing.description}</span>
           </div>
+        </section>
+
+        <section className="site-industry-structure" aria-labelledby="site-manufacturing-structure-title">
+          <div className="site-industry-structure-copy">
+            <h2 id="site-manufacturing-structure-title">{insightSection.title}</h2>
+            <p>{manufacturing.description}</p>
+          </div>
+          <figure className="site-industry-structure-visual">
+            <img src={insightSection.image} alt={insightSection.imageAlt} loading="lazy" />
+          </figure>
         </section>
 
         <section className="site-industry-overview" aria-labelledby="site-manufacturing-overview-title">
@@ -94,42 +91,6 @@ export default function ManufacturingPage() {
                 <p>{card.text}</p>
               </article>
             ))}
-          </div>
-        </section>
-
-        <section className="site-industry-features" aria-labelledby="site-manufacturing-feature-title">
-          <div className="site-industry-feature-head">
-            <h2 id="site-manufacturing-feature-title">
-              <strong>{manufacturing.name}</strong> Key Feature
-            </h2>
-            <div className="site-industry-feature-nav" aria-hidden="true">
-              <span>
-                <ChevronLeft size={27} strokeWidth={2.4} />
-              </span>
-              <span>
-                <ChevronRight size={27} strokeWidth={2.4} />
-              </span>
-            </div>
-          </div>
-
-          <div className="site-industry-feature-grid">
-            {featureCards.map((card, index) => {
-              return (
-                <article
-                  className="site-industry-feature-card"
-                  key={card.key}
-                  style={{ "--site-industry-delay": `${index * 90}ms` } as CSSProperties}
-                >
-                  <span>{card.key}</span>
-                  <h3>{card.title}</h3>
-                  <ul>
-                    {card.bullets.map((bullet) => (
-                      <li key={bullet}>{bullet}</li>
-                    ))}
-                  </ul>
-                </article>
-              );
-            })}
           </div>
         </section>
 
