@@ -46,6 +46,7 @@ type HeroVisualKind = "home" | "products" | "company" | "contact" | "community";
 type WhatsNewTag = "Blog" | "Newsletter" | "Technology";
 type WhatsNewFilter = "All" | WhatsNewTag;
 type NewsletterFilter = "All" | "AI-Core" | "?? ???" | "?? ????";
+type BlogFilter = "All" | "AI-Core" | "??" | "???" | "????";
 type NewsletterSubscribeStatus = "idle" | "submitting" | "success";
 
 const heroVideoSources = [
@@ -292,6 +293,8 @@ const whatsNewFilters: WhatsNewFilter[] = ["All", "Blog", "Newsletter", "Technol
 const whatsNewPageSize = 3;
 const newsletterFilters: NewsletterFilter[] = ["All", "AI-Core", "?? ???", "?? ????"];
 const newsletterPageSize = 9;
+const blogFilters: BlogFilter[] = ["All", "AI-Core", "??", "???", "????"];
+const blogPageSize = 9;
 
 const whatsNewItems: Array<{
   title: string;
@@ -420,6 +423,40 @@ const newsletterItems: Array<{
     imageAlt: "AI-Core ERP 업무 화면",
     date: "2026.04.26.",
     meta: "Product update",
+  },
+];
+
+const blogItems: Array<{
+  title: string;
+  category: Exclude<BlogFilter, "All">;
+  imageSrc: string;
+  imageAlt: string;
+  date: string;
+  meta: string;
+}> = [
+  {
+    title: "제조 현장 데이터를 업무 화면으로 바꾸는 방법",
+    category: "AI-Core",
+    imageSrc: "/assets/industries/manufacturing-card.png",
+    imageAlt: "자동화 로봇이 배치된 제조 공정",
+    date: "2026.05.29.",
+    meta: "산업 자동화",
+  },
+  {
+    title: "물류 운영 리포트가 매일 늦어지는 이유",
+    category: "산업",
+    imageSrc: "/assets/industries/logistics-card.png",
+    imageAlt: "컨베이어와 지게차가 움직이는 물류 창고",
+    date: "2026.05.08.",
+    meta: "Operations",
+  },
+  {
+    title: "반복 업무 자동화는 어떤 업무부터 시작해야 할까",
+    category: "자동화",
+    imageSrc: "/assets/ai-core-product-bg.png",
+    imageAlt: "AI-Core 제품 배경 화면",
+    date: "2026.04.18.",
+    meta: "인사이트",
   },
 ];
 
@@ -1578,6 +1615,149 @@ export function SiteNewsletterPage() {
           </div>
         </div>
       ) : null}
+    </SiteShell>
+  );
+}
+
+export function SiteBlogPage() {
+  const [activeFilter, setActiveFilter] = useState<BlogFilter>("All");
+  const [activePage, setActivePage] = useState(1);
+  const [query, setQuery] = useState("");
+
+  const normalizedQuery = query.trim().toLowerCase();
+  const filteredItems = blogItems.filter((item) => {
+    const matchesFilter = activeFilter === "All" || item.category === activeFilter || item.meta === activeFilter;
+    const searchableText = `${item.title} ${item.category} ${item.meta}`.toLowerCase();
+    const matchesQuery = normalizedQuery.length === 0 || searchableText.includes(normalizedQuery);
+
+    return matchesFilter && matchesQuery;
+  });
+  const pageCount = Math.max(1, Math.ceil(filteredItems.length / blogPageSize));
+  const pageStartIndex = (activePage - 1) * blogPageSize;
+  const visibleItems = filteredItems.slice(pageStartIndex, pageStartIndex + blogPageSize);
+
+  const changeFilter = (filter: BlogFilter) => {
+    setActiveFilter(filter);
+    setActivePage(1);
+  };
+
+  useEffect(() => {
+    setActivePage(1);
+  }, [query]);
+
+  return (
+    <SiteShell>
+      <main className="site-blog-page">
+        <section className="site-community-hero site-blog-hero" aria-labelledby="site-blog-hero-title">
+          <img src="/assets/industries/logistics-card.png" alt="" aria-hidden="true" />
+          <span className="site-community-hero-shade" aria-hidden="true" />
+          <div className="site-community-hero-copy">
+            <h1 id="site-blog-hero-title">Blog</h1>
+            <a className="site-button site-button-primary" href="#site-blog-list">
+              블로그 이동하기
+            </a>
+          </div>
+        </section>
+
+        <section
+          id="site-blog-list"
+          className="site-whats-new-section site-community-list-section"
+          aria-labelledby="site-blog-list-title"
+        >
+          <div className="site-whats-new-wrap">
+            <h2 id="site-blog-list-title" className="site-sr-only">
+              Blog 콘텐츠 목록
+            </h2>
+            <div className="site-community-controls">
+              <div className="site-whats-new-filters site-community-filter-pills" aria-label="Blog 콘텐츠 필터">
+                {blogFilters.map((filter) => (
+                  <button
+                    className={activeFilter === filter ? "is-active" : ""}
+                    type="button"
+                    aria-pressed={activeFilter === filter}
+                    key={filter}
+                    onClick={() => changeFilter(filter)}
+                  >
+                    {filter}
+                  </button>
+                ))}
+              </div>
+              <label className="site-community-search">
+                <span className="site-sr-only">검색어</span>
+                <input
+                  type="search"
+                  value={query}
+                  placeholder="검색어를 입력하세요."
+                  onChange={(event) => setQuery(event.currentTarget.value)}
+                />
+                <button type="button" aria-label="Blog 검색 실행" onClick={() => setActivePage(1)}>
+                  <Search size={20} aria-hidden="true" />
+                </button>
+              </label>
+            </div>
+
+            {visibleItems.length > 0 ? (
+              <div className="site-whats-new-grid">
+                {visibleItems.map((item) => (
+                  <article className="site-whats-new-card site-community-card" key={item.title} tabIndex={0}>
+                    <span className="site-whats-new-image">
+                      <img src={item.imageSrc} alt={item.imageAlt} loading="lazy" />
+                      <span className="site-whats-new-image-arrow" aria-hidden="true" />
+                    </span>
+                    <span className="site-whats-new-meta">
+                      <span className="site-whats-new-tag">Blog</span>
+                      <span>{item.category}</span>
+                      <span>{item.meta}</span>
+                    </span>
+                    <strong>{item.title}</strong>
+                    <time dateTime={item.date.replaceAll(".", "-").replace(/-$/, "")}>{item.date}</time>
+                  </article>
+                ))}
+              </div>
+            ) : (
+              <div className="site-community-empty" role="status">
+                검색 결과가 없습니다.
+              </div>
+            )}
+
+            {pageCount > 1 ? (
+              <nav className="site-whats-new-pagination" aria-label="Blog 페이지">
+                <button
+                  type="button"
+                  aria-label="이전 페이지"
+                  disabled={activePage === 1}
+                  onClick={() => setActivePage((page) => Math.max(1, page - 1))}
+                >
+                  <ChevronLeft size={18} aria-hidden="true" />
+                </button>
+                {Array.from({ length: pageCount }, (_, index) => {
+                  const page = index + 1;
+                  return (
+                    <button
+                      className={activePage === page ? "is-active" : ""}
+                      type="button"
+                      aria-label={`${page}페이지`}
+                      aria-current={activePage === page ? "page" : undefined}
+                      key={page}
+                      onClick={() => setActivePage(page)}
+                    >
+                      {page}
+                    </button>
+                  );
+                })}
+                <button
+                  type="button"
+                  aria-label="다음 페이지"
+                  disabled={activePage === pageCount}
+                  onClick={() => setActivePage((page) => Math.min(pageCount, page + 1))}
+                >
+                  <ChevronRight size={18} aria-hidden="true" />
+                </button>
+              </nav>
+            ) : null}
+          </div>
+        </section>
+      </main>
     </SiteShell>
   );
 }
