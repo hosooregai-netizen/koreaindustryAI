@@ -1,42 +1,39 @@
 import type { Metadata } from "next";
-import { SiteContactForm, SiteFaqList, SiteHero, SiteSectionHeading, SiteShell } from "@/components/site";
+import { SiteContactForm, SiteShell } from "@/components/site";
 
 export const metadata: Metadata = {
   title: "고객 문의 | 대한산업AI",
-  description: "대한산업AI의 자주 묻는 질문과 AI-Core 도입 상담 문의 폼입니다.",
+  description: "대한산업AI의 AI-Core 도입 상담 문의 폼입니다.",
 };
 
 export default function ContactPage() {
   return (
     <SiteShell>
-      <main>
-        <SiteHero
-          eyebrow="Contact"
-          title="자동화하고 싶은 업무를 알려주세요."
-          description="현재 사용하는 시스템, 반복 작성 문서, 담당자가 매일 확인하는 기준을 알려주시면 5일 도입 가능 범위를 검토해드립니다."
-          primary={{ label: "문의 작성", href: "#contact-form" }}
-          secondary={{ label: "FAQ 보기", href: "#faq" }}
-          visual="contact"
-        />
-
-        <section className="site-section site-soft" id="faq">
-          <SiteSectionHeading eyebrow="FAQ" title="자주 묻는 질문" />
-          <SiteFaqList />
-        </section>
-
-        <section className="site-section site-contact-split" id="contact-form">
-          <div>
-            <p className="site-eyebrow">Contact Form</p>
-            <h2>정리되지 않은 상태여도 괜찮습니다.</h2>
-            <p>
-              사용하는 프로그램과 반복 업무만 적어주셔도 됩니다. 필요하면 방문 또는 원격 미팅으로 실제 업무 흐름을 함께 확인합니다.
-            </p>
-            <div className="site-contact-assist">
-              <span>현재 시스템</span>
-              <span>반복 문서</span>
-              <span>도입 목표</span>
-              <span>상담 방식</span>
+      <main className="site-contact-page">
+        <section className="site-contact-intake" id="contact-form" aria-labelledby="site-contact-title">
+          <div className="site-contact-copy">
+            <h1 id="site-contact-title">산업 AI 전문가에게 문의하기</h1>
+            <div className="site-contact-lede">
+              <p>
+                반복 보고, 승인 흐름, 운영 데이터처럼{" "}
+                <br />
+                매일 붙잡고 있는 업무를 남겨주세요.
+              </p>
+              <p>
+                대한산업AI가 현장 맥락을 확인하고 AI-Core로 연결할 수 있는{" "}
+                <br />
+                데이터 구조와 자동화 범위를 정리해드립니다.
+              </p>
             </div>
+            <p className="site-contact-hint">
+              상담 전 자료가 완벽하지 않아도 괜찮습니다. 현재 쓰는 문서, 시스템, 반복 업무만 편하게 적어주세요.
+            </p>
+            <ol className="site-contact-steps" aria-label="문의 진행 단계">
+              <li>문의 접수</li>
+              <li>내용 검토</li>
+              <li>상담 일정 안내</li>
+              <li>맞춤형 제안</li>
+            </ol>
           </div>
           <SiteContactForm />
         </section>
