@@ -44,7 +44,7 @@ const overviewCards = [
 ] as const;
 
 const insightSection = {
-  title: "금융 업무는 검토와 보고가 이어질 때 빨라집니다",
+  title: "금융 산업은 규제 준수와 반복 검토 자동화가 필요합니다.",
   image: "/assets/금융미래.png",
   imageAlt: "금융 심사와 데이터 분석 흐름이 연결된 미래형 운영 이미지",
 } as const;

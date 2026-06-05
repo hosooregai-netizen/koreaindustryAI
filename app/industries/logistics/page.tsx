@@ -44,7 +44,7 @@ const overviewCards = [
 ] as const;
 
 const insightSection = {
-  title: "물류 속도는 흐름을 놓치지 않을 때 빨라집니다",
+  title: "물류 산업은 지연과 예외 처리를 측정하고 자동화해야 합니다.",
   image: "/assets/물류미래.png",
   imageAlt: "물류 창고와 배송 운영 데이터가 연결된 미래형 운영 이미지",
 } as const;

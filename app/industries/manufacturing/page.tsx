@@ -44,7 +44,7 @@ const overviewCards = [
 ] as const;
 
 const insightSection = {
-  title: "생산 흐름은 연결될 때 빨라집니다",
+  title: "제조 산업은 생산 데이터 연결과 반복 점검 자동화가 필요합니다.",
   image: "/assets/제조 미래.png",
   imageAlt: "제조 공장과 AI 운영 대시보드가 연결된 미래형 운영 이미지",
 } as const;

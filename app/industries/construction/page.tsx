@@ -44,7 +44,7 @@ const overviewCards = [
 ] as const;
 
 const insightSection = {
-  title: "현장 실행력은 문서가 이어질 때 높아집니다",
+  title: "건설 산업은 문서와 승인 흐름 자동화가 필요합니다.",
   image: "/assets/건설미래형.png",
   imageAlt: "건설 현장 문서와 AI 업무 흐름이 연결된 미래형 운영 이미지",
 } as const;
