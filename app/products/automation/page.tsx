@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import type { CSSProperties } from "react";
+import { ProductScrollReveal } from "@/components/product-scroll-reveal";
 import {
   ArrowRight,
   BarChart3,
@@ -64,6 +65,7 @@ export default function AutomationPage() {
   return (
     <SiteShell>
       <main className="site-dd-page site-auto-page">
+        <ProductScrollReveal />
         <section className="site-dd-hero site-auto-hero" aria-labelledby="site-auto-hero-title">
           <div className="site-dd-hero-pattern" aria-hidden="true" />
           <div className="site-dd-hero-inner">

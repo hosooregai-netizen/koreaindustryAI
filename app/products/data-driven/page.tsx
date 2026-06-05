@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import type { CSSProperties } from "react";
+import { ProductScrollReveal } from "@/components/product-scroll-reveal";
 import {
   ArrowRight,
   BarChart3,
@@ -67,6 +68,7 @@ export default function DataDrivenPage() {
   return (
     <SiteShell>
       <main className="site-dd-page">
+        <ProductScrollReveal />
         <section className="site-dd-hero" aria-labelledby="site-dd-hero-title">
           <div className="site-dd-hero-pattern" aria-hidden="true" />
           <div className="site-dd-hero-inner">
