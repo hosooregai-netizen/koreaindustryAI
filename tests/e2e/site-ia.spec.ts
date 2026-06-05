@@ -614,9 +614,27 @@ test("home omits industry wordmarks and shows industry image cards", async ({ pa
   await expect(page.locator(".site-home-industry-card")).toHaveCount(4);
   const whatsNew = page.locator(".site-whats-new-section");
   await expect(whatsNew.locator(".site-whats-new-tag")).toHaveCount(3);
+  await expect(whatsNew.locator(".site-whats-new-card").first()).toHaveAttribute(
+    "href",
+    /\/community\/newsletter\/ai-core-workflow-update$/,
+  );
+  await expect(whatsNew.locator(".site-whats-new-card").first().locator("img")).toHaveAttribute(
+    "src",
+    /newsletter-ai-core-workflow/,
+  );
   await expect(whatsNew.getByText("Monthly letter", { exact: true })).toHaveCount(0);
   await whatsNew.getByRole("button", { name: "다음 페이지" }).click();
   await expect(whatsNew.getByText("AI insight", { exact: true })).toHaveCount(0);
+  await expectNoHorizontalOverflow(page);
+});
+
+test("home What's New card opens a community article detail", async ({ page }) => {
+  await page.goto("/");
+
+  await page.locator(".site-whats-new-card").first().click();
+  await expect(page).toHaveURL(/\/community\/newsletter\/ai-core-workflow-update$/);
+  await expect(page.getByRole("heading", { name: "현장 데이터를 하나의 업무 흐름으로 묶기" })).toBeVisible();
+  await expect(page.locator(".site-community-article-body")).toContainText("데이터보다 먼저 업무 흐름을 정리합니다");
   await expectNoHorizontalOverflow(page);
 });
 

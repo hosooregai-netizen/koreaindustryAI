@@ -25,7 +25,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { CSSProperties, ReactNode, SyntheticEvent } from "react";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { communitySectionMeta, getCommunityArticles, type CommunityArticle } from "@/lib/community-content";
+import {
+  communityArticles,
+  communitySectionMeta,
+  getCommunityArticles,
+  type CommunityArticle,
+} from "@/lib/community-content";
 
 type NavChild = {
   label: string;
@@ -285,70 +290,16 @@ const whatsNewFilters: WhatsNewFilter[] = ["All", "Blog", "Newsletter", "Technol
 const whatsNewPageSize = 3;
 const communityPageSize = 9;
 
-const whatsNewItems: Array<{
-  title: string;
-  tag: WhatsNewTag;
-  href: string;
-  imageSrc: string;
-  imageAlt: string;
-  date: string;
-  meta?: string;
-}> = [
-  {
-    title: "제조 현장 데이터를 업무 화면으로 바꾸는 방법",
-    tag: "Blog",
-    href: "/community/blog",
-    imageSrc: "/assets/industries/manufacturing-card.png",
-    imageAlt: "자동화 로봇이 배치된 제조 공정",
-    date: "2026.05.29.",
-    meta: "산업 자동화",
-  },
-  {
-    title: "이번 달 산업 AI 도입 체크리스트",
-    tag: "Newsletter",
-    href: "/community/newsletter",
-    imageSrc: "/assets/industrial-ai-hero.png",
-    imageAlt: "산업 현장과 데이터 화면이 결합된 AI-Core 이미지",
-    date: "2026.05.22.",
-    meta: "Monthly letter",
-  },
-  {
-    title: "문서, 승인, 리포트를 연결하는 AI-Core 구조",
-    tag: "Technology",
-    href: "/community/technology",
-    imageSrc: "/assets/ai-core-erp-ui.png",
-    imageAlt: "AI-Core ERP 업무 화면",
-    date: "2026.05.16.",
-    meta: "Architecture",
-  },
-  {
-    title: "물류 운영 리포트가 매일 늦어지는 이유",
-    tag: "Blog",
-    href: "/community/blog",
-    imageSrc: "/assets/industries/logistics-card.png",
-    imageAlt: "컨베이어와 지게차가 움직이는 물류 창고",
-    date: "2026.05.08.",
-    meta: "Operations",
-  },
-  {
-    title: "반복 업무 자동화에 필요한 데이터 입력 설계",
-    tag: "Technology",
-    href: "/community/technology",
-    imageSrc: "/assets/ai-core-product-bg.png",
-    imageAlt: "AI-Core 제품 배경 화면",
-    date: "2026.04.30.",
-    meta: "Workflow",
-  },
-  {
-    title: "금융 문서 검토 자동화 트렌드 노트",
-    tag: "Newsletter",
-    href: "/community/newsletter",
-    imageSrc: "/assets/industries/finance-card.png",
-    imageAlt: "도시 전망의 금융 데이터 운영실",
-    date: "2026.04.24.",
-    meta: "AI insight",
-  },
-];
+const whatsNewItems = [...communityArticles]
+  .sort((current, next) => next.date.localeCompare(current.date))
+  .map((article) => ({
+    title: article.title,
+    tag: article.sectionLabel as WhatsNewTag,
+    href: article.href,
+    imageSrc: article.imageSrc,
+    imageAlt: article.imageAlt,
+    date: article.date,
+  }));
 
 export const clientLogos = [
   {

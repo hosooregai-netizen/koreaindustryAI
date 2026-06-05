@@ -122,9 +122,9 @@
 - 제목: 좌측에 `What's New`를 크게 표시한다.
 - 필터: 제목 옆에 작은 텍스트 버튼으로 `All`, `Blog`, `Newsletter`, `Technology`를 표시한다.
 - 기본값: `All`.
-- 구성: 현재는 관련 있어 보이는 더미 콘텐츠를 사용하며, 각 카드에는 이미지, 콘텐츠 타입 태그, 제목, 날짜를 표시한다.
+- 구성: Community 글 데이터와 새 커버 이미지를 사용하며, 각 카드에는 이미지, 콘텐츠 타입 태그, 제목, 날짜를 표시한다.
 - 태그 정책: `Blog`, `Newsletter`, `Technology` 같은 콘텐츠 타입 뱃지는 유지한다. `AI insight`, `Monthly letter`, `Operations` 같은 보조 설명 문구는 카드에서 노출하지 않는다.
-- CTA: 각 카드는 해당 Community 준비중 라우트(`/community/blog`, `/community/newsletter`, `/community/technology`)로 이동한다.
+- CTA: 각 카드는 해당 Community 상세 글(`/community/[section]/[slug]`)로 이동한다.
 - 반응형: 데스크톱은 3열 카드 레이아웃, 좁은 화면에서는 2열 또는 1열로 접는다.
 - 동작: 카드 hover/focus 시 이미지가 살짝 확대되고 오른쪽에 검은 그라데이션 오버레이와 단색 선형 화살표가 나타난다.
 - 동작2: 필터 클릭 시 해당 태그 카드만 보이고, `All` 클릭 시 전체 카드가 보인다.
