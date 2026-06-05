@@ -280,7 +280,7 @@ export const industryImageCards = [
 ];
 
 const whatsNewFilters: WhatsNewFilter[] = ["All", "Blog", "Newsletter", "Technology"];
-const whatsNewPageSize = 3;
+const whatsNewPageSize = 6;
 const communityPageSize = 9;
 
 const whatsNewItems = [...communityArticles]

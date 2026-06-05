@@ -666,7 +666,7 @@ test("home omits industry wordmarks and shows industry image cards", async ({ pa
   await expect(page.locator(".site-home-industries-title")).toHaveText("INDUSTRIES");
   await expect(page.locator(".site-home-industry-card")).toHaveCount(4);
   const whatsNew = page.locator(".site-whats-new-section");
-  await expect(whatsNew.locator(".site-whats-new-tag")).toHaveCount(3);
+  await expect(whatsNew.locator(".site-whats-new-tag")).toHaveCount(6);
   await expect(whatsNew.locator(".site-whats-new-card").first()).toHaveAttribute(
     "href",
     /\/community\/newsletter\/logistics-sla-exception-note$/,
