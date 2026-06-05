@@ -596,7 +596,7 @@ export function SiteFooter() {
         <span className="site-brand-mark" aria-hidden="true">
           <span />
         </span>
-        <strong>대한산업AI 주식회사</strong>
+        <strong>주식회사 대한산업AI</strong>
         <p>AI-Core for Industrial Operations</p>
       </div>
       <nav aria-label="푸터 메뉴">
