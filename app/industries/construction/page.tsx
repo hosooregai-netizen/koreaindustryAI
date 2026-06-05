@@ -44,7 +44,7 @@ const overviewCards = [
 ] as const;
 
 const insightSection = {
-  title: '"현장 실행력은 문서가 이어질 때 높아집니다"',
+  title: "현장 실행력은 문서가 이어질 때 높아집니다",
   image: "/assets/industrial-ai-hero.png",
   imageAlt: "AI-Core가 건설 현장 문서와 운영 데이터를 연결하는 업무 구조 화면",
 } as const;

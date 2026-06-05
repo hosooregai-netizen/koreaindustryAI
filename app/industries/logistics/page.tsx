@@ -44,7 +44,7 @@ const overviewCards = [
 ] as const;
 
 const insightSection = {
-  title: '"물류 속도는 흐름을 놓치지 않을 때 빨라집니다"',
+  title: "물류 속도는 흐름을 놓치지 않을 때 빨라집니다",
   image: "/assets/industrial-ai-hero.png",
   imageAlt: "AI-Core가 물류 운영 데이터를 연결하는 업무 구조 화면",
 } as const;
