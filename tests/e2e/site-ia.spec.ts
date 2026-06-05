@@ -631,7 +631,7 @@ test("Community and Industries routes expose current pages", async ({ page }) =>
   await mainNav.getByRole("button", { name: "Industries" }).hover();
   await mainNav.getByRole("menuitem", { name: /금융/ }).click();
   await expect(page).toHaveURL(/\/industries\/finance$/);
-  await expect(page.getByRole("heading", { name: /금융 운영 자동화/ })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: /금융 .*AI-Core/ })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Overview" })).toBeVisible();
   await expectNoHorizontalOverflow(page);
 });
