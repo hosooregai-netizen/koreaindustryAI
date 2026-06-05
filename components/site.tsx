@@ -180,9 +180,9 @@ export const navItems: NavGroup[] = [
     summary: "산업별 업무 흐름에 맞춰 AI-Core 적용 가능성을 정리합니다.",
     children: [
       {
-        label: "건설",
-        href: "/industries/construction",
-        description: "현장 문서, 안전 기록, 점검 보고 흐름",
+        label: "금융",
+        href: "/industries/finance",
+        description: "심사, 문서 검토, 리포트 흐름",
       },
       {
         label: "제조",
@@ -195,9 +195,9 @@ export const navItems: NavGroup[] = [
         description: "입출고, 검수, 운영 데이터 정리 흐름",
       },
       {
-        label: "금융",
-        href: "/industries/finance",
-        description: "심사, 문서 검토, 리포트 흐름",
+        label: "건설",
+        href: "/industries/construction",
+        description: "현장 문서, 안전 기록, 점검 보고 흐름",
       },
     ],
   },
