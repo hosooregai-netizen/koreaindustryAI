@@ -11207,6 +11207,8 @@ html .site-header.is-transparent.is-home-route[data-site-hero-group="1"] .site-b
 .site-industry-overview {
   max-width: none;
   width: 100%;
+  padding-top: 236px;
+  padding-bottom: 295px;
 }
 
 .site-industry-section-head {
@@ -11415,7 +11417,7 @@ html .site-header.is-transparent.is-home-route[data-site-hero-group="1"] .site-b
 .site-industry-structure {
   width: min(100%, 1600px);
   margin: 0 auto;
-  padding: 104px 56px 124px;
+  padding: 208px 56px 248px;
   color: #151b24;
   text-align: center;
   background: #ffffff;
@@ -11617,6 +11619,16 @@ html .site-header.is-transparent.is-home-route[data-site-hero-group="1"] .site-b
     padding-left: 28px;
   }
 
+  .site-industry-overview {
+    padding-top: 188px;
+    padding-bottom: 236px;
+  }
+
+  .site-industry-structure {
+    padding-top: 168px;
+    padding-bottom: 196px;
+  }
+
   .site-industry-feature-grid {
     grid-auto-columns: minmax(400px, 520px);
     grid-template-columns: none;
@@ -11691,10 +11703,16 @@ html .site-header.is-transparent.is-home-route[data-site-hero-group="1"] .site-b
     line-height: 1.62;
   }
 
-  .site-industry-overview,
-  .site-industry-structure,
   .site-industry-features {
     padding: 78px 18px;
+  }
+
+  .site-industry-overview {
+    padding: 132px 18px 190px;
+  }
+
+  .site-industry-structure {
+    padding: 116px 18px 132px;
   }
 
   .site-industry-section-head {
