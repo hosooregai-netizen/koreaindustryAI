@@ -47,6 +47,7 @@ type WhatsNewTag = "Blog" | "Newsletter" | "Technology";
 type WhatsNewFilter = "All" | WhatsNewTag;
 type NewsletterFilter = "All" | "AI-Core" | "?? ???" | "?? ????";
 type BlogFilter = "All" | "AI-Core" | "??" | "???" | "????";
+type TechnologyFilter = "All" | "AI-Core" | "Architecture" | "Automation";
 type NewsletterSubscribeStatus = "idle" | "submitting" | "success";
 
 const heroVideoSources = [
@@ -295,6 +296,8 @@ const newsletterFilters: NewsletterFilter[] = ["All", "AI-Core", "?? ???", "?? ?
 const newsletterPageSize = 9;
 const blogFilters: BlogFilter[] = ["All", "AI-Core", "??", "???", "????"];
 const blogPageSize = 9;
+const technologyFilters: TechnologyFilter[] = ["All", "AI-Core", "Architecture", "Automation"];
+const technologyPageSize = 9;
 
 const whatsNewItems: Array<{
   title: string;
@@ -457,6 +460,40 @@ const blogItems: Array<{
     imageAlt: "AI-Core 제품 배경 화면",
     date: "2026.04.18.",
     meta: "인사이트",
+  },
+];
+
+const technologyItems: Array<{
+  title: string;
+  category: Exclude<TechnologyFilter, "All">;
+  imageSrc: string;
+  imageAlt: string;
+  date: string;
+  meta: string;
+}> = [
+  {
+    title: "문서, 승인, 리포트를 연결하는 AI-Core 구조",
+    category: "Architecture",
+    imageSrc: "/assets/ai-core-erp-ui.png",
+    imageAlt: "AI-Core ERP 업무 화면",
+    date: "2026.05.16.",
+    meta: "AI-Core",
+  },
+  {
+    title: "반복 업무 자동화에 필요한 데이터 입력 설계",
+    category: "Automation",
+    imageSrc: "/assets/ai-core-product-bg.png",
+    imageAlt: "AI-Core 제품 배경 화면",
+    date: "2026.04.30.",
+    meta: "Workflow",
+  },
+  {
+    title: "업무 화면과 알림을 조립하는 AI-Core 운영 레이어",
+    category: "AI-Core",
+    imageSrc: "/assets/industrial-ai-hero.png",
+    imageAlt: "산업 현장과 데이터 화면이 결합된 AI-Core 이미지",
+    date: "2026.04.12.",
+    meta: "Architecture",
   },
 ];
 
@@ -1722,6 +1759,145 @@ export function SiteBlogPage() {
 
             {pageCount > 1 ? (
               <nav className="site-whats-new-pagination" aria-label="Blog 페이지">
+                <button
+                  type="button"
+                  aria-label="이전 페이지"
+                  disabled={activePage === 1}
+                  onClick={() => setActivePage((page) => Math.max(1, page - 1))}
+                >
+                  <ChevronLeft size={18} aria-hidden="true" />
+                </button>
+                {Array.from({ length: pageCount }, (_, index) => {
+                  const page = index + 1;
+                  return (
+                    <button
+                      className={activePage === page ? "is-active" : ""}
+                      type="button"
+                      aria-label={`${page}페이지`}
+                      aria-current={activePage === page ? "page" : undefined}
+                      key={page}
+                      onClick={() => setActivePage(page)}
+                    >
+                      {page}
+                    </button>
+                  );
+                })}
+                <button
+                  type="button"
+                  aria-label="다음 페이지"
+                  disabled={activePage === pageCount}
+                  onClick={() => setActivePage((page) => Math.min(pageCount, page + 1))}
+                >
+                  <ChevronRight size={18} aria-hidden="true" />
+                </button>
+              </nav>
+            ) : null}
+          </div>
+        </section>
+      </main>
+    </SiteShell>
+  );
+}
+
+export function SiteTechnologyPage() {
+  const [activeFilter, setActiveFilter] = useState<TechnologyFilter>("All");
+  const [activePage, setActivePage] = useState(1);
+  const [query, setQuery] = useState("");
+
+  const normalizedQuery = query.trim().toLowerCase();
+  const filteredItems = technologyItems.filter((item) => {
+    const matchesFilter = activeFilter === "All" || item.category === activeFilter || item.meta === activeFilter;
+    const searchableText = `${item.title} ${item.category} ${item.meta}`.toLowerCase();
+    const matchesQuery = normalizedQuery.length === 0 || searchableText.includes(normalizedQuery);
+
+    return matchesFilter && matchesQuery;
+  });
+  const pageCount = Math.max(1, Math.ceil(filteredItems.length / technologyPageSize));
+  const pageStartIndex = (activePage - 1) * technologyPageSize;
+  const visibleItems = filteredItems.slice(pageStartIndex, pageStartIndex + technologyPageSize);
+
+  const changeFilter = (filter: TechnologyFilter) => {
+    setActiveFilter(filter);
+    setActivePage(1);
+  };
+
+  useEffect(() => {
+    setActivePage(1);
+  }, [query]);
+
+  return (
+    <SiteShell>
+      <main className="site-technology-page">
+        <section className="site-community-hero site-technology-hero" aria-labelledby="site-technology-hero-title">
+          <img src="/assets/ai-core-erp-ui.png" alt="" aria-hidden="true" />
+          <span className="site-community-hero-shade" aria-hidden="true" />
+          <div className="site-community-hero-copy">
+            <h1 id="site-technology-hero-title">Technology</h1>
+          </div>
+        </section>
+
+        <section
+          className="site-whats-new-section site-community-list-section"
+          aria-labelledby="site-technology-list-title"
+        >
+          <div className="site-whats-new-wrap">
+            <h2 id="site-technology-list-title" className="site-sr-only">
+              Technology 콘텐츠 목록
+            </h2>
+            <div className="site-community-controls">
+              <div className="site-whats-new-filters site-community-filter-pills" aria-label="Technology 콘텐츠 필터">
+                {technologyFilters.map((filter) => (
+                  <button
+                    className={activeFilter === filter ? "is-active" : ""}
+                    type="button"
+                    aria-pressed={activeFilter === filter}
+                    key={filter}
+                    onClick={() => changeFilter(filter)}
+                  >
+                    {filter}
+                  </button>
+                ))}
+              </div>
+              <label className="site-community-search">
+                <span className="site-sr-only">검색어</span>
+                <input
+                  type="search"
+                  value={query}
+                  placeholder="검색어를 입력하세요."
+                  onChange={(event) => setQuery(event.currentTarget.value)}
+                />
+                <button type="button" aria-label="Technology 검색 실행" onClick={() => setActivePage(1)}>
+                  <Search size={20} aria-hidden="true" />
+                </button>
+              </label>
+            </div>
+
+            {visibleItems.length > 0 ? (
+              <div className="site-whats-new-grid">
+                {visibleItems.map((item) => (
+                  <article className="site-whats-new-card site-community-card" key={item.title} tabIndex={0}>
+                    <span className="site-whats-new-image">
+                      <img src={item.imageSrc} alt={item.imageAlt} loading="lazy" />
+                      <span className="site-whats-new-image-arrow" aria-hidden="true" />
+                    </span>
+                    <span className="site-whats-new-meta">
+                      <span className="site-whats-new-tag">Technology</span>
+                      <span>{item.category}</span>
+                      <span>{item.meta}</span>
+                    </span>
+                    <strong>{item.title}</strong>
+                    <time dateTime={item.date.replaceAll(".", "-").replace(/-$/, "")}>{item.date}</time>
+                  </article>
+                ))}
+              </div>
+            ) : (
+              <div className="site-community-empty" role="status">
+                검색 결과가 없습니다.
+              </div>
+            )}
+
+            {pageCount > 1 ? (
+              <nav className="site-whats-new-pagination" aria-label="Technology 페이지">
                 <button
                   type="button"
                   aria-label="이전 페이지"
