@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import type { CSSProperties } from "react";
+import { IndustryOverviewScroll } from "@/components/industry-overview-scroll";
 import { IndustryScrollReveal } from "@/components/industry-scroll-reveal";
 import { SiteCtaBand, SiteShell } from "@/components/site";
 
@@ -24,27 +24,27 @@ const overviewCards = [
   {
     number: "01",
     title: "업무 시스템 연결",
-    text: `${construction.systems}과 현장 문서, 승인 데이터를 하나의 업무 흐름으로 정리합니다.`,
+    text: `${construction.systems}과 현장 문서, 승인 요청을 한곳에서 확인할 수 있게 정리합니다.`,
   },
   {
     number: "02",
     title: "문서 흐름 설계",
-    text: "도면 기준, RFI 흐름, 제출 문서, 안전 점검, 품질 기록을 현장 업무 방식에 맞춰 설계합니다.",
+    text: "도면 기준, RFI 답변, 제출 문서, 안전·품질 점검 기준을 실제 승인 순서에 맞춥니다.",
   },
   {
     number: "03",
     title: "문서 자동화",
-    text: `${construction.automation}를 업무 화면, 대시보드, 알림, 보고 흐름으로 자동화합니다.`,
+    text: "누락 확인, 문서 초안, 승인 알림, 보고서 작성처럼 반복되는 문서 업무를 자동화합니다.",
   },
   {
     number: "04",
     title: "문서 이력 관리",
-    text: `${construction.result} 누락 문서와 승인 이력을 기준으로 개선 지점을 확인합니다.`,
+    text: "누가 요청하고 검토했는지, 어떤 문서가 지연됐는지 남겨 다음 현장 기준을 개선합니다.",
   },
 ] as const;
 
 const insightSection = {
-  title: "건설 산업은 문서와 승인 흐름 자동화가 필요합니다.",
+  title: "건설 산업의 생산성은 문서 생성과 검토 자동화에서 시작됩니다.",
   image: "/assets/건설미래형.png",
   imageAlt: "건설 현장 문서와 AI 업무 흐름이 연결된 미래형 운영 이미지",
 } as const;
@@ -74,25 +74,10 @@ export default function ConstructionPage() {
           </figure>
         </section>
 
-        <section className="site-industry-overview" aria-labelledby="site-construction-overview-title">
-          <div className="site-industry-section-head">
-            <h2 id="site-construction-overview-title">Overview</h2>
-            <p>산업별 운영 데이터를 AI-Core 구조로 정리해 반복 업무와 의사결정 흐름을 연결합니다.</p>
-          </div>
-          <div className="site-industry-overview-grid">
-            {overviewCards.map((card, index) => (
-              <article
-                className="site-industry-overview-card"
-                key={card.number}
-                style={{ "--site-industry-delay": `${index * 90}ms` } as CSSProperties}
-              >
-                <small>{card.number}</small>
-                <h3>{card.title}</h3>
-                <p>{card.text}</p>
-              </article>
-            ))}
-          </div>
-        </section>
+        <IndustryOverviewScroll
+          titleId="site-construction-overview-title"
+          items={overviewCards}
+        />
 
         <SiteCtaBand
           title="건설 문서 업무, AI-Core로 연결하세요."

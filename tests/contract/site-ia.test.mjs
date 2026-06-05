@@ -132,14 +132,23 @@ test("dropdowns use text-only mega menu columns, not image previews or modal fla
 
 test("community mock articles expose generated covers and detail slugs", () => {
   for (const asset of [
+    "newsletter-ai-cost-metering.png",
+    "newsletter-compute-capacity-check.png",
+    "newsletter-security-verification.png",
     "newsletter-ai-core-workflow.png",
     "newsletter-logistics-sla-exceptions.png",
     "newsletter-report-checklist.png",
     "newsletter-approval-flow.png",
+    "blog-manufacturing-digital-thread.png",
+    "blog-enterprise-ai-control.png",
+    "blog-data-platform-small-start.png",
     "blog-finance-review-trail.png",
     "blog-manufacturing-dashboard.png",
     "blog-logistics-report.png",
     "blog-automation-priority.png",
+    "technology-ai-cost-observability.png",
+    "technology-compute-routing.png",
+    "technology-api-access-policy.png",
     "technology-document-data-pipeline.png",
     "technology-ai-core-architecture.png",
     "technology-data-inputs.png",
@@ -150,6 +159,15 @@ test("community mock articles expose generated covers and detail slugs", () => {
   }
 
   assert.match(communitySource, /href: `\/community\/\$\{article\.section\}\/\$\{article\.slug\}`/);
+  assert.match(communitySource, /slug: "ai-cost-metering-note"/);
+  assert.match(communitySource, /slug: "compute-capacity-check-note"/);
+  assert.match(communitySource, /slug: "security-verification-note"/);
+  assert.match(communitySource, /slug: "manufacturing-pilot-line-digital-thread"/);
+  assert.match(communitySource, /slug: "enterprise-ai-rollout-control"/);
+  assert.match(communitySource, /slug: "operations-data-platform-small-start"/);
+  assert.match(communitySource, /slug: "ai-cost-observability"/);
+  assert.match(communitySource, /slug: "compute-routing-architecture"/);
+  assert.match(communitySource, /slug: "api-access-policy-layer"/);
   assert.match(communitySource, /slug: "logistics-sla-exception-note"/);
   assert.match(communitySource, /slug: "finance-review-trail-automation"/);
   assert.match(communitySource, /slug: "document-data-pipeline-design"/);

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import type { CSSProperties } from "react";
+import { IndustryOverviewScroll } from "@/components/industry-overview-scroll";
 import { IndustryScrollReveal } from "@/components/industry-scroll-reveal";
 import { SiteCtaBand, SiteShell } from "@/components/site";
 
@@ -24,27 +24,27 @@ const overviewCards = [
   {
     number: "01",
     title: "업무 시스템 연결",
-    text: `${manufacturing.systems}와 현장 문서, 생산 데이터를 하나의 업무 흐름으로 정리합니다.`,
+    text: `${manufacturing.systems}와 생산 계획, 품질 기록, 설비 데이터를 같은 기준으로 정리합니다.`,
   },
   {
     number: "02",
     title: "제조 운영 설계",
-    text: "생산 기준, 품질 조건, 설비 상태, 알림, 보고 화면을 제조 현장 방식에 맞춰 설계합니다.",
+    text: "생산 기준, 품질 조건, 설비 상태, 알림 조건을 현장 점검 순서에 맞춥니다.",
   },
   {
     number: "03",
     title: "예측 자동화",
-    text: `${manufacturing.automation}을 업무 화면, 대시보드, 알림, 보고 흐름으로 자동화합니다.`,
+    text: "이상 징후 확인, 품질 점검, 설비 알림, 보고서 작성 업무를 자동화합니다.",
   },
   {
     number: "04",
     title: "성과 추적",
-    text: `${manufacturing.result} 품질, 설비, 생산 지표를 기준으로 개선 지점을 확인합니다.`,
+    text: "품질·설비·생산 이력을 누적해 반복 점검 기준과 개선 과제를 찾습니다.",
   },
 ] as const;
 
 const insightSection = {
-  title: "제조 산업은 생산 데이터 연결과 반복 점검 자동화가 필요합니다.",
+  title: "제조 산업의 생산성은 데이터 연결과 점검 자동화에서 시작됩니다.",
   image: "/assets/제조 미래.png",
   imageAlt: "제조 공장과 AI 운영 대시보드가 연결된 미래형 운영 이미지",
 } as const;
@@ -74,25 +74,10 @@ export default function ManufacturingPage() {
           </figure>
         </section>
 
-        <section className="site-industry-overview" aria-labelledby="site-manufacturing-overview-title">
-          <div className="site-industry-section-head">
-            <h2 id="site-manufacturing-overview-title">Overview</h2>
-            <p>산업별 운영 데이터를 AI-Core 구조로 정리해 반복 업무와 의사결정 흐름을 연결합니다.</p>
-          </div>
-          <div className="site-industry-overview-grid">
-            {overviewCards.map((card, index) => (
-              <article
-                className="site-industry-overview-card"
-                key={card.number}
-                style={{ "--site-industry-delay": `${index * 90}ms` } as CSSProperties}
-              >
-                <small>{card.number}</small>
-                <h3>{card.title}</h3>
-                <p>{card.text}</p>
-              </article>
-            ))}
-          </div>
-        </section>
+        <IndustryOverviewScroll
+          titleId="site-manufacturing-overview-title"
+          items={overviewCards}
+        />
 
         <SiteCtaBand
           title="제조 운영, AI-Core로 연결하세요."

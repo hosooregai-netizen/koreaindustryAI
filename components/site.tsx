@@ -1911,10 +1911,6 @@ export function SiteContactForm() {
         }
       }}
     >
-      <div className="site-contact-form-intro">
-        <p>지금 문의를 남겨주세요.</p>
-        <p>업무 맥락을 확인한 뒤 적합한 AI-Core 구성과 상담 일정을 안내드리겠습니다.</p>
-      </div>
       <label className="site-contact-honeypot" aria-hidden="true">
         웹사이트
         <input name="website" tabIndex={-1} autoComplete="off" />

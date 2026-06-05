@@ -669,11 +669,11 @@ test("home omits industry wordmarks and shows industry image cards", async ({ pa
   await expect(whatsNew.locator(".site-whats-new-tag")).toHaveCount(6);
   await expect(whatsNew.locator(".site-whats-new-card").first()).toHaveAttribute(
     "href",
-    /\/community\/newsletter\/logistics-sla-exception-note$/,
+    /\/community\/newsletter\/ai-cost-metering-note$/,
   );
   await expect(whatsNew.locator(".site-whats-new-card").first().locator("img")).toHaveAttribute(
     "src",
-    /newsletter-logistics-sla-exceptions/,
+    /newsletter-ai-cost-metering/,
   );
   await expect(whatsNew.getByText("Monthly letter", { exact: true })).toHaveCount(0);
   await whatsNew.getByRole("button", { name: "다음 페이지" }).click();
@@ -685,9 +685,9 @@ test("home What's New card opens a community article detail", async ({ page }) =
   await page.goto("/");
 
   await page.locator(".site-whats-new-card").first().click();
-  await expect(page).toHaveURL(/\/community\/newsletter\/logistics-sla-exception-note$/);
-  await expect(page.getByRole("heading", { name: "물류 예외를 SLA 지표로 정리하는 운영 노트" })).toBeVisible();
-  await expect(page.locator(".site-community-article-body")).toContainText("AI-Core로 정리할 수 있는 방식");
+  await expect(page).toHaveURL(/\/community\/newsletter\/ai-cost-metering-note$/);
+  await expect(page.getByRole("heading", { name: "AI 비용을 업무 단위로 계량하는 운영 노트" })).toBeVisible();
+  await expect(page.locator(".site-community-article-body")).toContainText("AI 비용 관리는 덜 쓰게 만드는 규칙");
   await expectNoHorizontalOverflow(page);
 });
 
@@ -705,14 +705,14 @@ test("Community and Industries routes expose current pages", async ({ page }) =>
   await expect(page.getByRole("heading", { name: "Technology", exact: true })).toBeVisible();
   await expect(page.locator(".site-community-hero")).toHaveCount(0);
   await expect(page.locator(".site-community-featured-card")).toHaveCount(1);
-  await expect(page.locator(".site-community-card")).toHaveCount(3);
+  await expect(page.locator(".site-community-card")).toHaveCount(6);
 
   await page.goto("/");
   await mainNav.getByRole("button", { name: "Industries" }).hover();
   await mainNav.getByRole("menuitem", { name: /금융/ }).click();
   await expect(page).toHaveURL(/\/industries\/finance$/);
   await expect(page.getByRole("heading", { level: 1, name: /금융 .*AI-Core/ })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Overview" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "AI-Core 적용 흐름" })).toBeVisible();
   await expectNoHorizontalOverflow(page);
 });
 
@@ -757,7 +757,7 @@ test("newsletter route shows featured story and card grid", async ({ page }) => 
   await expect(page.getByRole("dialog")).toHaveCount(0);
   await expect(page.locator(".site-community-tags")).toHaveCount(0);
   await expect(page.locator(".site-community-featured-card")).toHaveCount(1);
-  await expect(page.locator(".site-community-card")).toHaveCount(3);
+  await expect(page.locator(".site-community-card")).toHaveCount(6);
   await expectNoHorizontalOverflow(page);
 });
 
@@ -769,12 +769,15 @@ test("blog route shows featured story without filters or CTA", async ({ page }) 
   await expect(page.getByRole("button", { name: "AI-Core" })).toHaveCount(0);
   await expect(page.locator(".site-community-tags")).toHaveCount(0);
   await expect(page.locator(".site-community-featured-card")).toHaveCount(1);
-  await expect(page.locator(".site-community-card")).toHaveCount(3);
+  await expect(page.locator(".site-community-card")).toHaveCount(6);
   await page.locator(".site-community-featured-card").click();
-  await expect(page).toHaveURL(/\/community\/blog\/finance-review-trail-automation$/);
-  await expect(page.getByRole("heading", { name: "금융 업무 자동화는 검토 이력부터 설계해야 합니다" })).toBeVisible();
-  await expect(page.locator(".site-community-article-cover img")).toHaveAttribute("src", /blog-finance-review-trail/);
-  await expect(page.locator(".site-community-article-body")).toContainText("검토 이력 구조를 설계합니다");
+  await expect(page).toHaveURL(/\/community\/blog\/manufacturing-pilot-line-digital-thread$/);
+  await expect(page.getByRole("heading", { name: "제조 파일럿 라인을 디지털 스레드로 묶는 방법" })).toBeVisible();
+  await expect(page.locator(".site-community-article-cover img")).toHaveAttribute(
+    "src",
+    /blog-manufacturing-digital-thread/,
+  );
+  await expect(page.locator(".site-community-article-body")).toContainText("파일럿 라인의 학습이 느려지는 원인");
   await expect(page.getByRole("link", { name: "목록으로 돌아가기" })).toBeVisible();
   await expectNoHorizontalOverflow(page);
 });
@@ -789,13 +792,13 @@ test("technology route shows featured story without filters or hero CTA", async 
   await expect(page.getByRole("button", { name: "Automation" })).toHaveCount(0);
   await expect(page.locator(".site-community-tags")).toHaveCount(0);
   await expect(page.locator(".site-community-featured-card")).toHaveCount(1);
-  await expect(page.locator(".site-community-card")).toHaveCount(3);
+  await expect(page.locator(".site-community-card")).toHaveCount(6);
   await page.locator(".site-community-featured-card").click();
-  await expect(page).toHaveURL(/\/community\/technology\/document-data-pipeline-design$/);
-  await expect(page.getByRole("heading", { name: "문서와 운영 데이터를 연결하는 파이프라인 설계" })).toBeVisible();
+  await expect(page).toHaveURL(/\/community\/technology\/ai-cost-observability$/);
+  await expect(page.getByRole("heading", { name: "AI 비용 관측성을 업무 레이어에 붙이는 설계" })).toBeVisible();
   await expect(page.locator(".site-community-article-cover img")).toHaveAttribute(
     "src",
-    /technology-document-data-pipeline/,
+    /technology-ai-cost-observability/,
   );
   await expectNoHorizontalOverflow(page);
 });

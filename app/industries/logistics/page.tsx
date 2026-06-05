@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import type { CSSProperties } from "react";
+import { IndustryOverviewScroll } from "@/components/industry-overview-scroll";
 import { IndustryScrollReveal } from "@/components/industry-scroll-reveal";
 import { SiteCtaBand, SiteShell } from "@/components/site";
 
@@ -24,27 +24,27 @@ const overviewCards = [
   {
     number: "01",
     title: "업무 시스템 연결",
-    text: `${logistics.systems}와 현장 문서, 운영 데이터를 하나의 업무 흐름으로 정리합니다.`,
+    text: `${logistics.systems}와 입출고, 재고, 배차 데이터를 운영 단위로 정리합니다.`,
   },
   {
     number: "02",
     title: "물류 운영 설계",
-    text: "배차 기준, 우선순위, 예외 알림, 보고 화면을 물류 업무 방식에 맞춰 설계합니다.",
+    text: "납기, 우선순위, 재고 기준, 예외 알림 조건을 현장 운영 방식에 맞춥니다.",
   },
   {
     number: "03",
     title: "최적화 자동화",
-    text: `${logistics.automation}를 업무 화면, 대시보드, 알림, 보고 흐름으로 자동화합니다.`,
+    text: "지연 감지, 재고 확인, 배차 조정, 보고서 작성처럼 반복 확인 업무를 자동화합니다.",
   },
   {
     number: "04",
     title: "성과 추적",
-    text: `${logistics.result} 예외 데이터와 성과 지표를 기준으로 개선 지점을 확인합니다.`,
+    text: "지연 사유와 처리 결과를 누적해 SLA, 재고, 배차 기준을 계속 조정합니다.",
   },
 ] as const;
 
 const insightSection = {
-  title: "물류 산업은 지연과 예외 처리를 측정하고 자동화해야 합니다.",
+  title: "물류 산업의 운영 개선은 지연과 재고 관리 자동화에서 시작됩니다.",
   image: "/assets/물류미래.png",
   imageAlt: "물류 창고와 배송 운영 데이터가 연결된 미래형 운영 이미지",
 } as const;
@@ -74,25 +74,10 @@ export default function LogisticsPage() {
           </figure>
         </section>
 
-        <section className="site-industry-overview" aria-labelledby="site-logistics-overview-title">
-          <div className="site-industry-section-head">
-            <h2 id="site-logistics-overview-title">Overview</h2>
-            <p>산업별 운영 데이터를 AI-Core 구조로 정리해 반복 업무와 의사결정 흐름을 연결합니다.</p>
-          </div>
-          <div className="site-industry-overview-grid">
-            {overviewCards.map((card, index) => (
-              <article
-                className="site-industry-overview-card"
-                key={card.number}
-                style={{ "--site-industry-delay": `${index * 90}ms` } as CSSProperties}
-              >
-                <small>{card.number}</small>
-                <h3>{card.title}</h3>
-                <p>{card.text}</p>
-              </article>
-            ))}
-          </div>
-        </section>
+        <IndustryOverviewScroll
+          titleId="site-logistics-overview-title"
+          items={overviewCards}
+        />
 
         <SiteCtaBand
           title="물류 운영, AI-Core로 연결하세요."
