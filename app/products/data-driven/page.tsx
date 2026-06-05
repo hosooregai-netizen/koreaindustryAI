@@ -54,7 +54,7 @@ const detailRows = [
     text: "권한, 입력 항목, 승인 조건, 보고 기준을 고객사의 실제 처리 방식에 맞춰 구성합니다.",
     visual: "layers",
     reverse: true,
-    terms: ["업무 화면", "규칙", "AI 처리", "데이터 저장소"],
+    terms: ["업무 기준", "권한", "승인 흐름", "보고 기준"],
   },
   {
     title: "부서별 데이터도 하나의 기준으로 활용합니다",
@@ -272,26 +272,51 @@ function DetailVisual({ kind, index }: { kind: (typeof detailRows)[number]["visu
         style={{ "--site-dd-delay": `${index * 90}ms` } as CSSProperties}
         aria-hidden="true"
       >
-        <div className="site-dd-layer-stack">
-          <div>
-            <span>업무 화면</span>
+        <div className="site-dd-config-panel">
+          <div className="site-dd-config-header">
+            <span>업무 기준</span>
+            <strong>처리 방식 설정</strong>
           </div>
-          <div>
-            <span>규칙</span>
-          </div>
-          <div>
-            <span>AI 처리</span>
-          </div>
-          <div>
-            <span>데이터 저장소</span>
+          <div className="site-dd-config-grid">
+            <div className="site-dd-config-list">
+              <div className="site-dd-config-row">
+                <ShieldCheck size={20} />
+                <span>권한</span>
+                <strong>부서별 승인</strong>
+              </div>
+              <div className="site-dd-config-row">
+                <ClipboardCheck size={20} />
+                <span>입력 항목</span>
+                <strong>필수값 8개</strong>
+              </div>
+              <div className="site-dd-config-row">
+                <Workflow size={20} />
+                <span>승인 조건</span>
+                <strong>금액 기준 분기</strong>
+              </div>
+              <div className="site-dd-config-row">
+                <FileText size={20} />
+                <span>보고 기준</span>
+                <strong>월간 집계</strong>
+              </div>
+            </div>
+            <div className="site-dd-config-preview">
+              <div className="site-dd-preview-head">
+                <span>현장 보고</span>
+                <strong>자동 정리됨</strong>
+              </div>
+              <div className="site-dd-preview-lines">
+                <span />
+                <span />
+                <span />
+              </div>
+              <div className="site-dd-preview-route">
+                <Database size={18} />
+                <span>AI-Core 기준 적용</span>
+              </div>
+            </div>
           </div>
         </div>
-        <ul>
-          <li>입력 항목</li>
-          <li>승인 조건</li>
-          <li>보고 기준</li>
-          <li>권한 범위</li>
-        </ul>
       </div>
     );
   }

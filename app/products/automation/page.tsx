@@ -49,7 +49,7 @@ const detailRows = [
     text: "자동화가 처리할 수 있는 항목과 담당자가 확인해야 하는 항목을 분리해, 승인과 반려 기준이 흐려지지 않게 합니다.",
     visual: "layers",
     reverse: true,
-    terms: ["자동 처리", "예외 조건", "담당자 확인", "실행 이력"],
+    terms: ["자동 처리", "확인 필요", "승인/반려", "이력 기록"],
   },
   {
     title: "실행 결과와 이력을 한 화면에서 확인합니다",
@@ -260,26 +260,39 @@ function AutomationDetailVisual({ kind, index }: { kind: (typeof detailRows)[num
         style={{ "--site-dd-delay": `${index * 90}ms` } as CSSProperties}
         aria-hidden="true"
       >
-        <div className="site-dd-layer-stack">
-          <div>
-            <span>자동 처리</span>
+        <div className="site-auto-decision-panel">
+          <div className="site-auto-decision-head">
+            <strong>예외 확인 기준</strong>
+            <span>사람 판단 유지</span>
           </div>
-          <div>
-            <span>예외 조건</span>
+          <div className="site-auto-decision-main">
+            <div className="site-auto-decision-card is-auto">
+              <CheckCircle2 size={23} />
+              <span>처리 가능</span>
+              <strong>자동 처리</strong>
+              <small>조건 일치</small>
+            </div>
+            <div className="site-auto-decision-divider">
+              <Workflow size={22} />
+            </div>
+            <div className="site-auto-decision-card is-review">
+              <Users size={23} />
+              <span>확인 필요</span>
+              <strong>담당자 확인</strong>
+              <small>예외 조건 감지</small>
+            </div>
           </div>
-          <div>
-            <span>담당자 확인</span>
-          </div>
-          <div>
-            <span>실행 이력</span>
+          <div className="site-auto-decision-log">
+            <span>
+              <ShieldCheck size={17} />
+              승인 요청
+            </span>
+            <span>
+              <FileText size={17} />
+              실행 이력 기록
+            </span>
           </div>
         </div>
-        <ul>
-          <li>처리 가능</li>
-          <li>확인 필요</li>
-          <li>승인 요청</li>
-          <li>이력 기록</li>
-        </ul>
       </div>
     );
   }
