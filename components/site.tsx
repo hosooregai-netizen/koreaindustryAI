@@ -25,6 +25,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { CSSProperties, ReactNode, SyntheticEvent } from "react";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { communitySectionMeta, getCommunityArticles, type CommunityArticle } from "@/lib/community-content";
 
 type NavChild = {
   label: string;
@@ -44,14 +45,6 @@ type NavGroup = {
 type HeroVisualKind = "home" | "products" | "company" | "contact" | "community";
 type WhatsNewTag = "Blog" | "Newsletter" | "Technology";
 type WhatsNewFilter = "All" | WhatsNewTag;
-
-type CommunityContentItem = {
-  title: string;
-  imageSrc: string;
-  imageAlt: string;
-  date: string;
-  summary: string;
-};
 
 const heroVideoSources = [
   "/assets/hero-landing-intro.mp4",
@@ -396,77 +389,9 @@ export const clientLogos = [
   },
 ];
 
-const newsletterItems: CommunityContentItem[] = [
-  {
-    title: "이번 달 산업 AI 도입 체크리스트",
-    imageSrc: "/assets/industrial-ai-hero.png",
-    imageAlt: "산업 현장과 데이터 화면이 결합된 AI-Core 이미지",
-    date: "2026.05.22.",
-    summary: "AI-Core 도입 전 확인해야 할 업무 데이터, 반복 업무, 담당자 흐름을 한 번에 점검합니다.",
-  },
-  {
-    title: "반복 업무 자동화를 시작하기 전 확인할 질문",
-    imageSrc: "/assets/industries/manufacturing-card.png",
-    imageAlt: "자동화 로봇이 배치된 제조 공정",
-    date: "2026.05.10.",
-    summary: "자동화 대상을 고르기 전에 업무 기준, 입력 데이터, 예외 처리를 어떻게 정리할지 살펴봅니다.",
-  },
-  {
-    title: "문서와 승인 흐름을 연결하는 AI-Core 업데이트",
-    imageSrc: "/assets/ai-core-erp-ui.png",
-    imageAlt: "AI-Core ERP 업무 화면",
-    date: "2026.04.26.",
-    summary: "문서 검토와 승인 이력을 하나의 업무 화면으로 연결하는 AI-Core 업데이트 방향을 정리합니다.",
-  },
-];
-
-const blogItems: CommunityContentItem[] = [
-  {
-    title: "제조 현장 데이터를 업무 화면으로 바꾸는 방법",
-    imageSrc: "/assets/industries/manufacturing-card.png",
-    imageAlt: "자동화 로봇이 배치된 제조 공정",
-    date: "2026.05.29.",
-    summary: "제조 현장에서 흩어진 공정 데이터를 입력, 확인, 보고가 가능한 업무 화면으로 전환하는 방식을 소개합니다.",
-  },
-  {
-    title: "물류 운영 리포트가 매일 늦어지는 이유",
-    imageSrc: "/assets/industries/logistics-card.png",
-    imageAlt: "컨베이어와 지게차가 움직이는 물류 창고",
-    date: "2026.05.08.",
-    summary: "입출고와 배차 데이터가 늦게 모일 때 운영 리포트가 어떻게 지연되는지 업무 흐름 기준으로 봅니다.",
-  },
-  {
-    title: "반복 업무 자동화는 어떤 업무부터 시작해야 할까",
-    imageSrc: "/assets/ai-core-product-bg.png",
-    imageAlt: "AI-Core 제품 배경 화면",
-    date: "2026.04.18.",
-    summary: "작게 시작해도 효과가 보이는 자동화 업무를 고르는 기준과 우선순위를 정리합니다.",
-  },
-];
-
-const technologyItems: CommunityContentItem[] = [
-  {
-    title: "문서, 승인, 리포트를 연결하는 AI-Core 구조",
-    imageSrc: "/assets/ai-core-erp-ui.png",
-    imageAlt: "AI-Core ERP 업무 화면",
-    date: "2026.05.16.",
-    summary: "문서 입력, 승인 기준, 리포트 생성을 하나의 흐름으로 묶는 AI-Core의 기본 구조를 설명합니다.",
-  },
-  {
-    title: "반복 업무 자동화에 필요한 데이터 입력 설계",
-    imageSrc: "/assets/ai-core-product-bg.png",
-    imageAlt: "AI-Core 제품 배경 화면",
-    date: "2026.04.30.",
-    summary: "자동화가 안정적으로 동작하려면 어떤 입력 항목과 예외 기준을 먼저 정해야 하는지 정리합니다.",
-  },
-  {
-    title: "업무 화면과 알림을 조립하는 AI-Core 운영 레이어",
-    imageSrc: "/assets/industrial-ai-hero.png",
-    imageAlt: "산업 현장과 데이터 화면이 결합된 AI-Core 이미지",
-    date: "2026.04.12.",
-    summary: "현장 데이터가 업무 화면, 알림, 보고로 이어지는 운영 레이어의 역할을 살펴봅니다.",
-  },
-];
+const newsletterItems = getCommunityArticles("newsletter");
+const blogItems = getCommunityArticles("blog");
+const technologyItems = getCommunityArticles("technology");
 
 export const aiCoreFeatures = [
   {
@@ -1371,7 +1296,7 @@ function SiteCommunityContentPage({
   pageClassName: string;
   title: string;
   description: string;
-  items: CommunityContentItem[];
+  items: CommunityArticle[];
 }) {
   const [activePage, setActivePage] = useState(1);
   const pageCount = Math.max(1, Math.ceil(items.length / communityPageSize));
@@ -1399,7 +1324,7 @@ function SiteCommunityContentPage({
             </h2>
 
             {featuredItem ? (
-              <article className="site-community-featured-card" tabIndex={0}>
+              <Link className="site-community-featured-card" href={featuredItem.href}>
                 <span className="site-community-featured-image">
                   <img src={featuredItem.imageSrc} alt={featuredItem.imageAlt} />
                 </span>
@@ -1408,7 +1333,7 @@ function SiteCommunityContentPage({
                   <p>{featuredItem.summary}</p>
                   <time dateTime={formatCommunityDateTime(featuredItem.date)}>{featuredItem.date}</time>
                 </div>
-              </article>
+              </Link>
             ) : (
               <div className="site-community-empty" role="status">
                 준비된 콘텐츠가 없습니다.
@@ -1418,13 +1343,13 @@ function SiteCommunityContentPage({
             {cardItems.length > 0 ? (
               <div className="site-community-grid">
                 {cardItems.map((item) => (
-                  <article className="site-community-card" key={item.title} tabIndex={0}>
+                  <Link className="site-community-card" href={item.href} key={item.slug}>
                     <span className="site-community-card-image">
                       <img src={item.imageSrc} alt={item.imageAlt} loading="lazy" />
                     </span>
                     <h3>{item.title}</h3>
                     <time dateTime={formatCommunityDateTime(item.date)}>{item.date}</time>
-                  </article>
+                  </Link>
                 ))}
               </div>
             ) : null}
@@ -1472,33 +1397,39 @@ function SiteCommunityContentPage({
 }
 
 export function SiteNewsletterPage() {
+  const sectionMeta = communitySectionMeta.newsletter;
+
   return (
     <SiteCommunityContentPage
       pageClassName="site-newsletter-page"
-      title="Newsletter"
-      description="AI-Core 업데이트와 산업 자동화 인사이트"
+      title={sectionMeta.title}
+      description={sectionMeta.description}
       items={newsletterItems}
     />
   );
 }
 
 export function SiteBlogPage() {
+  const sectionMeta = communitySectionMeta.blog;
+
   return (
     <SiteCommunityContentPage
       pageClassName="site-blog-page"
-      title="Blog"
-      description="산업 AI와 업무 자동화 기록"
+      title={sectionMeta.title}
+      description={sectionMeta.description}
       items={blogItems}
     />
   );
 }
 
 export function SiteTechnologyPage() {
+  const sectionMeta = communitySectionMeta.technology;
+
   return (
     <SiteCommunityContentPage
       pageClassName="site-technology-page"
-      title="Technology"
-      description="AI-Core 구조와 자동화 아키텍처"
+      title={sectionMeta.title}
+      description={sectionMeta.description}
       items={technologyItems}
     />
   );

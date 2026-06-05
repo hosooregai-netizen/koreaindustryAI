@@ -6,6 +6,7 @@ import { test } from "node:test";
 const root = process.cwd();
 const siteSource = readFileSync(join(root, "components/site.tsx"), "utf8");
 const siteHome = readFileSync(join(root, "app/page.tsx"), "utf8");
+const communitySource = readFileSync(join(root, "lib/community-content.ts"), "utf8");
 
 const plannedRoutes = [
   "app/page.tsx",
@@ -18,6 +19,7 @@ const plannedRoutes = [
   "app/community/newsletter/page.tsx",
   "app/community/blog/page.tsx",
   "app/community/technology/page.tsx",
+  "app/community/[section]/[slug]/page.tsx",
   "app/company/page.tsx",
   "app/contact/page.tsx",
 ];
@@ -100,6 +102,26 @@ test("dropdowns include shared image and group summary, not modal flags", () => 
   assert.match(siteSource, /\/assets\/industrial-ai-hero\.png/);
   assert.doesNotMatch(siteSource, /modal: true/);
   assert.doesNotMatch(siteSource, /SiteComingSoonModal/);
+});
+
+test("community mock articles expose generated covers and detail slugs", () => {
+  for (const asset of [
+    "newsletter-ai-core-workflow.png",
+    "newsletter-report-checklist.png",
+    "newsletter-approval-flow.png",
+    "blog-manufacturing-dashboard.png",
+    "blog-logistics-report.png",
+    "blog-automation-priority.png",
+    "technology-ai-core-architecture.png",
+    "technology-data-inputs.png",
+    "technology-operations-layer.png",
+  ]) {
+    assert.equal(existsSync(join(root, "public/assets/community", asset)), true, `${asset} should exist`);
+    assert.match(communitySource, new RegExp(`/assets/community/${asset}`));
+  }
+
+  assert.match(communitySource, /href: `\/community\/\$\{article\.section\}\/\$\{article\.slug\}`/);
+  assert.match(communitySource, /slug: "manufacturing-dashboard"/);
 });
 
 test("industry cards avoid unverified customer names", () => {

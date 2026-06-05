@@ -543,6 +543,7 @@
 - Newsletter: `/community/newsletter`
 - Blog: `/community/blog`
 - Technology: `/community/technology`
+- 상세: `/community/[newsletter|blog|technology]/[slug]`
 - 제외: `/community/news`
 
 ## 공통 페이지 구조
@@ -552,6 +553,14 @@
 3. 콘텐츠 그리드
 4. Pagination
 5. Footer
+
+## 상세 글
+
+- 참고: Toss tech article처럼 큰 커버 이미지, 넓은 제목 영역, 좁은 본문 컬럼을 사용한다.
+- 구성: 목록으로 돌아가기 링크, 제목, 설명, 작성자/날짜/읽기 시간, 16:9 커버 이미지, 본문.
+- 본문: paragraph, heading, quote, list 정도만 사용한다. 태그/뱃지는 노출하지 않는다.
+- 본문 폭: 데스크톱 기준 약 720px로 제한해 긴 글이 읽히게 한다.
+- 이미지: 임시 목업 글도 새로 생성한 커뮤니티 전용 커버 이미지를 사용한다.
 
 ## 페이지 인트로
 
@@ -611,7 +620,7 @@
 ### 페이지 인트로
 
 - 제목: `Newsletter`
-- 설명: `AI-Core 업데이트와 산업 자동화 인사이트`
+- 설명: `AI-Core 업데이트와 산업 자동화 노트`
 
 ### 콘텐츠
 
@@ -635,7 +644,7 @@
 ### 페이지 인트로
 
 - 제목: `Blog`
-- 설명: `산업 AI와 업무 자동화 기록`
+- 설명: `산업 AI와 현장 자동화 이야기`
 
 ### 콘텐츠
 
@@ -659,7 +668,7 @@
 ### 페이지 인트로
 
 - 제목: `Technology`
-- 설명: `AI-Core 구조와 자동화 아키텍처`
+- 설명: `AI-Core 구조와 자동화 설계`
 
 ### 콘텐츠
 

@@ -658,7 +658,7 @@ test("desktop contact CTA routes to contact page", async ({ page }) => {
 test("newsletter route shows featured story and card grid", async ({ page }) => {
   await page.goto("/community/newsletter");
   await expect(page.getByRole("heading", { name: "Newsletter", exact: true })).toBeVisible();
-  await expect(page.getByText("AI-Core 업데이트와 산업 자동화 인사이트")).toBeVisible();
+  await expect(page.getByText("AI-Core 업데이트와 산업 자동화 노트")).toBeVisible();
   await expect(page.getByRole("button", { name: "소식받기" })).toHaveCount(0);
   await expect(page.getByRole("dialog")).toHaveCount(0);
   await expect(page.locator(".site-community-tags")).toHaveCount(0);
@@ -670,18 +670,25 @@ test("newsletter route shows featured story and card grid", async ({ page }) => 
 test("blog route shows featured story without filters or CTA", async ({ page }) => {
   await page.goto("/community/blog");
   await expect(page.getByRole("heading", { name: "Blog", exact: true })).toBeVisible();
-  await expect(page.getByText("산업 AI와 업무 자동화 기록")).toBeVisible();
+  await expect(page.getByText("산업 AI와 현장 자동화 이야기")).toBeVisible();
   await expect(page.getByRole("link", { name: "블로그 이동하기" })).toHaveCount(0);
   await expect(page.getByRole("button", { name: "AI-Core" })).toHaveCount(0);
   await expect(page.locator(".site-community-tags")).toHaveCount(0);
   await expect(page.locator(".site-community-featured-card")).toHaveCount(1);
   await expect(page.locator(".site-community-card")).toHaveCount(2);
+  await page.locator(".site-community-featured-card").click();
+  await expect(page).toHaveURL(/\/community\/blog\/manufacturing-dashboard$/);
+  await expect(page.getByRole("heading", { name: "제조 현장 데이터를 업무 화면으로 바꾸는 방법" })).toBeVisible();
+  await expect(page.locator(".site-community-article-cover img")).toHaveAttribute("src", /blog-manufacturing-dashboard/);
+  await expect(page.locator(".site-community-article-body")).toContainText("업무 화면은 데이터의 번역본입니다");
+  await expect(page.getByRole("link", { name: "목록으로 돌아가기" })).toBeVisible();
   await expectNoHorizontalOverflow(page);
 });
 
 test("technology route shows featured story without filters or hero CTA", async ({ page }) => {
   await page.goto("/community/technology");
   await expect(page.getByRole("heading", { name: "Technology", exact: true })).toBeVisible();
+  await expect(page.getByText("AI-Core 구조와 자동화 설계")).toBeVisible();
   await expect(page.getByRole("button", { name: "소식받기" })).toHaveCount(0);
   await expect(page.getByRole("link", { name: "블로그 이동하기" })).toHaveCount(0);
   await expect(page.getByRole("button", { name: "Architecture" })).toHaveCount(0);
