@@ -564,7 +564,7 @@ export function SiteFooter() {
       <div className="site-footer-info">
         <span>기업 데이터 관리 ERP</span>
         <span>반복 업무 자동화 범위 검토</span>
-        <span>contact@koreaindustry.ai</span>
+        <span>koreaindustryai@gmail.com</span>
       </div>
     </footer>
   );
