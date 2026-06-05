@@ -45,8 +45,8 @@ const overviewCards = [
 
 const insightSection = {
   title: "금융 업무는 검토와 보고가 이어질 때 빨라집니다",
-  image: "/assets/industrial-ai-hero.png",
-  imageAlt: "AI-Core가 금융 검토와 보고 데이터를 연결하는 업무 구조 화면",
+  image: "/assets/금융미래.png",
+  imageAlt: "금융 심사와 데이터 분석 흐름이 연결된 미래형 운영 이미지",
 } as const;
 
 

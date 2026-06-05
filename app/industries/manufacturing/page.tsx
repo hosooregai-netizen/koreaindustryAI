@@ -45,8 +45,8 @@ const overviewCards = [
 
 const insightSection = {
   title: "생산 흐름은 연결될 때 빨라집니다",
-  image: "/assets/industrial-ai-hero.png",
-  imageAlt: "AI-Core가 제조 운영 데이터를 연결하는 업무 구조 화면",
+  image: "/assets/제조 미래.png",
+  imageAlt: "제조 공장과 AI 운영 대시보드가 연결된 미래형 운영 이미지",
 } as const;
 
 

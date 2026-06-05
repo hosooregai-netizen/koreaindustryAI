@@ -11961,16 +11961,16 @@ html .site-header.is-transparent.is-home-route[data-site-hero-group="1"] .site-b
 .site-industry-structure-visual {
   width: min(100%, 1180px);
   margin: 62px auto 0;
-  overflow: hidden;
-  border-radius: 8px;
-  background: #f5f7fb;
+  overflow: visible;
+  border-radius: 0;
+  background: transparent;
 }
 
 .site-industry-structure-visual img {
   display: block;
   width: 100%;
-  aspect-ratio: 16 / 8.8;
-  object-fit: cover;
+  height: auto;
+  object-fit: contain;
   object-position: center;
 }
 
@@ -12283,7 +12283,7 @@ html .site-header.is-transparent.is-home-route[data-site-hero-group="1"] .site-b
   }
 
   .site-industry-structure-visual img {
-    aspect-ratio: 4 / 3;
+    aspect-ratio: auto;
   }
 
   .site-industry-feature-head {
