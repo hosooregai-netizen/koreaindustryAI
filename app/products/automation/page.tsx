@@ -195,7 +195,7 @@ export default function AutomationPage() {
 function AutomationHeroSample() {
   return (
     <figure className="site-product-sample-frame site-product-sample-frame--auto">
-      <img src="/assets/ai-core-erp-ui.png" alt="AI-Core 업무 대시보드 샘플 화면" />
+      <img src="/assets/automative.png" alt="AI-Core 업무 대시보드 샘플 화면" />
     </figure>
   );
 }

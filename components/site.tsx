@@ -1645,7 +1645,7 @@ export function SiteProductShowcase() {
       lead: "현장의 데이터를 기업 맞춤으로 전환하는 AI 솔루션",
       description:
         "문서, 승인 흐름, 운영 데이터를 기업 맞춤 ERP 구조로 연결해 업무 데이터를 관리하고 활용할 수 있게 합니다.",
-      imageSrc: "/assets/ai-core-erp-ui.png",
+      imageSrc: "/assets/datadriven.png",
       ctaLabel: "Data-Driven",
       visualFirst: false,
     },
@@ -1656,7 +1656,7 @@ export function SiteProductShowcase() {
       lead: "반복 업무를 자동으로 처리하는 기업 자동화 솔루션",
       description:
         "확인, 분류, 정리, 보고처럼 매일 반복되는 업무를 작은 자동화 흐름으로 시작해 기업 업무 시스템으로 확장합니다.",
-      imageSrc: "/assets/ai-core-erp-ui.png",
+      imageSrc: "/assets/automative.png",
       ctaLabel: "Automation",
       visualFirst: true,
     },

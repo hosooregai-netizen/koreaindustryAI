@@ -196,7 +196,7 @@ export default function DataDrivenPage() {
 function DataDrivenHeroSample() {
   return (
     <figure className="site-product-sample-frame site-product-sample-frame--data">
-      <img src="/assets/ai-core-erp-ui.png" alt="AI-Core 업무 대시보드 샘플 화면" />
+      <img src="/assets/datadriven.png" alt="AI-Core 업무 대시보드 샘플 화면" />
     </figure>
   );
 }
