@@ -13265,12 +13265,6 @@ html .site-header.is-transparent.is-home-route[data-site-hero-group="1"] .site-b
   .site-industry-overview-scroll-copy-inner {
     animation: none;
   }
-
-  .site-overview-doc-scan,
-  .site-overview-doc-orbit,
-  .site-overview-doc-card {
-    animation: none;
-  }
 }
 
 /* Contact page inquiry layout */
