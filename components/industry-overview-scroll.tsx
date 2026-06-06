@@ -62,13 +62,13 @@ export function IndustryOverviewScroll({ titleId, items }: IndustryOverviewScrol
 
   return (
     <section className="site-industry-overview site-industry-overview-scroll" aria-labelledby={titleId}>
-      <div className="site-industry-overview-scroll-head">
-        <h2 id={titleId}>AI-Core 적용 흐름</h2>
-        <p>{overviewDescription}</p>
-      </div>
-
       <div className="site-industry-overview-scroll-track" ref={trackRef}>
         <div className="site-industry-overview-scroll-sticky">
+          <div className="site-industry-overview-scroll-head">
+            <h2 id={titleId}>AI-Core 적용 흐름</h2>
+            <p>{overviewDescription}</p>
+          </div>
+
           <div className="site-industry-overview-scroll-body">
             <ol className="site-industry-overview-scroll-nav" aria-label="AI-Core 적용 단계">
               {items.map((item, index) => (
@@ -94,16 +94,16 @@ export function IndustryOverviewScroll({ titleId, items }: IndustryOverviewScrol
             </div>
           </div>
         </div>
-      </div>
 
-      <div className="site-industry-overview-mobile-list" aria-label="AI-Core 적용 단계">
-        {items.map((item) => (
-          <article key={item.number}>
-            <small>{item.number}</small>
-            <h3>{item.title}</h3>
-            <p>{item.text}</p>
-          </article>
-        ))}
+        <div className="site-industry-overview-mobile-list" aria-label="AI-Core 적용 단계">
+          {items.map((item) => (
+            <article key={item.number}>
+              <small>{item.number}</small>
+              <h3>{item.title}</h3>
+              <p>{item.text}</p>
+            </article>
+          ))}
+        </div>
       </div>
     </section>
   );
