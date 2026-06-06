@@ -151,6 +151,36 @@ async function getMobileMenuColors(page: import("@playwright/test").Page) {
   });
 }
 
+async function getMobileTopbarLayout(page: import("@playwright/test").Page) {
+  return page.evaluate(() => {
+    const header = document.querySelector<HTMLElement>(".site-header");
+    const brand = document.querySelector<HTMLElement>(".site-brand");
+    const brandMark = document.querySelector<HTMLElement>(".site-header .site-brand-mark");
+    const menuButton = document.querySelector<HTMLElement>(".site-menu-button");
+
+    if (!header || !brand || !brandMark || !menuButton) {
+      throw new Error("Could not find mobile topbar layout elements");
+    }
+
+    const rect = (element: HTMLElement) => {
+      const box = element.getBoundingClientRect();
+      return {
+        top: Math.round(box.top * 100) / 100,
+        left: Math.round(box.left * 100) / 100,
+        width: Math.round(box.width * 100) / 100,
+        height: Math.round(box.height * 100) / 100,
+      };
+    };
+
+    return {
+      header: rect(header),
+      brand: rect(brand),
+      brandMark: rect(brandMark),
+      menuButton: rect(menuButton),
+    };
+  });
+}
+
 async function getHeroCopyMotion(page: import("@playwright/test").Page) {
   return page.evaluate(() => {
     const copy = document.querySelector<HTMLElement>(".site-hero-copy.is-active, .site-hero-copy");
@@ -640,9 +670,11 @@ test("mobile menu exposes Data-Driven AI-Core and routes without horizontal over
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/");
 
+  const closedTopbarLayout = await getMobileTopbarLayout(page);
   await page.getByRole("button", { name: "메뉴 열기" }).click();
   const mainNav = page.getByLabel("주요 메뉴");
   await expect(mainNav).toBeVisible();
+  await expect.poll(() => getMobileTopbarLayout(page)).toEqual(closedTopbarLayout);
   const mobileMenuColors = await getMobileMenuColors(page);
   expect(mobileMenuColors.navBackground).toBe("rgb(255, 255, 255)");
   expect(mobileMenuColors.navControls.every((color) => color === "rgb(5, 5, 5)")).toBe(true);
