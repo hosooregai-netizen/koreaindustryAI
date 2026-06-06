@@ -7218,8 +7218,12 @@ html[data-site-hero-group="1"] .site-header.is-transparent.is-home-route .site-b
     padding: 30px 24px 34px;
   }
 
+  .site-work-overview-card small {
+    display: none;
+  }
+
   .site-work-overview-card strong {
-    margin-top: 28px;
+    margin-top: 0;
     font-size: 28px;
     line-height: 1.34;
   }
