@@ -9564,6 +9564,12 @@ html .site-header.is-transparent.is-home-route[data-site-hero-group="1"] .site-b
     align-items: center !important;
   }
 
+  .site-header.is-open .site-brand-mark,
+  .site-header.is-open.is-transparent .site-brand-mark {
+    --site-brand-logo-src: url("/assets/brand/koreaindustry-wordmark-white.png");
+    background-image: var(--site-brand-logo-src) !important;
+  }
+
   .site-header.is-transparent.is-home-route:not(.is-open) .site-menu-button {
     color: var(--site-home-topbar-color) !important;
     border-color: currentColor !important;
@@ -9642,10 +9648,19 @@ html .site-header.is-transparent.is-home-route[data-site-hero-group="1"] .site-b
   }
 
   .site-nav.is-open .site-dropdown-item,
-  .site-nav.is-open a.site-dropdown-item {
+  .site-nav.is-open a.site-dropdown-item,
+  .site-header .site-nav.is-open .site-dropdown .site-dropdown-item,
+  .site-header .site-nav.is-open .site-dropdown a.site-dropdown-item,
+  .site-header:not(.is-home-route) .site-nav.is-open .site-dropdown .site-dropdown-item,
+  .site-header:not(.is-home-route) .site-nav.is-open .site-dropdown a.site-dropdown-item {
     min-height: 40px;
     gap: 0;
-    padding: 10px 12px;
+    padding: 10px 12px !important;
+  }
+
+  .site-header.is-open .site-nav.is-open .site-nav-group.is-active > a,
+  .site-header.is-open .site-nav.is-open .site-nav-group.is-active > button {
+    background: transparent !important;
   }
 
   .site-nav.is-open .site-dropdown-item span {

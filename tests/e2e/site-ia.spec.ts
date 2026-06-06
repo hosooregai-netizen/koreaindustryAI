@@ -693,6 +693,44 @@ test("mobile menu exposes Data-Driven AI-Core and routes without horizontal over
   await expectNoHorizontalOverflow(page);
 });
 
+test("subpage mobile menu matches the home mobile menu treatment", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/industries/finance");
+
+  const closedTopbarLayout = await getMobileTopbarLayout(page);
+  await page.getByRole("button", { name: "메뉴 열기" }).click();
+  const mainNav = page.getByLabel("주요 메뉴");
+  await expect(mainNav).toBeVisible();
+  await expect.poll(() => getMobileTopbarLayout(page)).toEqual(closedTopbarLayout);
+
+  const mobileMenuLayout = await page.evaluate(() => {
+    const brandMark = document.querySelector<HTMLElement>(".site-header .site-brand-mark");
+    const activeControl = document.querySelector<HTMLElement>(
+      ".site-nav.is-open .site-nav-group.is-active > a, .site-nav.is-open .site-nav-group.is-active > button",
+    );
+    const firstDropdownItem = document.querySelector<HTMLElement>(".site-nav.is-open .site-dropdown-item");
+
+    if (!brandMark || !activeControl || !firstDropdownItem) {
+      throw new Error("Could not find subpage mobile menu layout elements");
+    }
+
+    return {
+      activeBackground: getComputedStyle(activeControl).backgroundColor,
+      brandMarkBackgroundImage: getComputedStyle(brandMark).backgroundImage,
+      firstDropdownItemMinHeight: getComputedStyle(firstDropdownItem).minHeight,
+      firstDropdownItemPadding: getComputedStyle(firstDropdownItem).padding,
+    };
+  });
+
+  expect(mobileMenuLayout.brandMarkBackgroundImage).toContain("koreaindustry-wordmark-white.png");
+  expect(mobileMenuLayout.activeBackground).toBe("rgba(0, 0, 0, 0)");
+  expect(mobileMenuLayout.firstDropdownItemMinHeight).toBe("40px");
+  expect(mobileMenuLayout.firstDropdownItemPadding).toBe("10px 12px");
+  await expect(mainNav.locator('.site-dropdown[data-nav-label="Company"]')).toBeHidden();
+  await expect(mainNav.locator(".site-nav-cta")).toBeVisible();
+  await expectNoHorizontalOverflow(page);
+});
+
 test("home omits industry wordmarks and shows industry image cards", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/");
