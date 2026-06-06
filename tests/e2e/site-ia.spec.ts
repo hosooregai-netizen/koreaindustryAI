@@ -181,6 +181,30 @@ async function getMobileTopbarLayout(page: import("@playwright/test").Page) {
   });
 }
 
+async function getMobileTopbarVisuals(page: import("@playwright/test").Page) {
+  return page.evaluate(() => {
+    const header = document.querySelector<HTMLElement>(".site-header");
+    const brandMark = document.querySelector<HTMLElement>(".site-header .site-brand-mark");
+    const menuButton = document.querySelector<HTMLElement>(".site-menu-button");
+
+    if (!header || !brandMark || !menuButton) {
+      throw new Error("Could not find mobile topbar visual elements");
+    }
+
+    const headerStyle = getComputedStyle(header);
+    const brandMarkStyle = getComputedStyle(brandMark);
+    const menuButtonStyle = getComputedStyle(menuButton);
+
+    return {
+      brandMarkBackgroundImage: brandMarkStyle.backgroundImage,
+      headerBackground: headerStyle.backgroundColor,
+      menuButtonBackground: menuButtonStyle.backgroundColor,
+      menuButtonBorder: menuButtonStyle.borderColor,
+      menuButtonColor: menuButtonStyle.color,
+    };
+  });
+}
+
 async function getHeroCopyMotion(page: import("@playwright/test").Page) {
   return page.evaluate(() => {
     const copy = document.querySelector<HTMLElement>(".site-hero-copy.is-active, .site-hero-copy");
@@ -671,10 +695,12 @@ test("mobile menu exposes Data-Driven AI-Core and routes without horizontal over
   await page.goto("/");
 
   const closedTopbarLayout = await getMobileTopbarLayout(page);
+  const closedTopbarVisuals = await getMobileTopbarVisuals(page);
   await page.getByRole("button", { name: "메뉴 열기" }).click();
   const mainNav = page.getByLabel("주요 메뉴");
   await expect(mainNav).toBeVisible();
   await expect.poll(() => getMobileTopbarLayout(page)).toEqual(closedTopbarLayout);
+  await expect.poll(() => getMobileTopbarVisuals(page)).toEqual(closedTopbarVisuals);
   const mobileMenuColors = await getMobileMenuColors(page);
   expect(mobileMenuColors.navBackground).toBe("rgb(255, 255, 255)");
   expect(mobileMenuColors.navControls.every((color) => color === "rgb(5, 5, 5)")).toBe(true);
@@ -693,15 +719,17 @@ test("mobile menu exposes Data-Driven AI-Core and routes without horizontal over
   await expectNoHorizontalOverflow(page);
 });
 
-test("subpage mobile menu matches the home mobile menu treatment", async ({ page }) => {
+test("subpage mobile menu keeps the closed topbar treatment", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/industries/finance");
 
   const closedTopbarLayout = await getMobileTopbarLayout(page);
+  const closedTopbarVisuals = await getMobileTopbarVisuals(page);
   await page.getByRole("button", { name: "메뉴 열기" }).click();
   const mainNav = page.getByLabel("주요 메뉴");
   await expect(mainNav).toBeVisible();
   await expect.poll(() => getMobileTopbarLayout(page)).toEqual(closedTopbarLayout);
+  await expect.poll(() => getMobileTopbarVisuals(page)).toEqual(closedTopbarVisuals);
 
   const mobileMenuLayout = await page.evaluate(() => {
     const brandMark = document.querySelector<HTMLElement>(".site-header .site-brand-mark");
@@ -722,7 +750,7 @@ test("subpage mobile menu matches the home mobile menu treatment", async ({ page
     };
   });
 
-  expect(mobileMenuLayout.brandMarkBackgroundImage).toContain("koreaindustry-wordmark-white.png");
+  expect(mobileMenuLayout.brandMarkBackgroundImage).toContain("koreaindustry-wordmark-color.png");
   expect(mobileMenuLayout.activeBackground).toBe("rgba(0, 0, 0, 0)");
   expect(mobileMenuLayout.firstDropdownItemMinHeight).toBe("40px");
   expect(mobileMenuLayout.firstDropdownItemPadding).toBe("10px 12px");

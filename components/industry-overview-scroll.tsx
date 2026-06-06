@@ -98,7 +98,6 @@ export function IndustryOverviewScroll({ titleId, items }: IndustryOverviewScrol
         <div className="site-industry-overview-mobile-list" aria-label="AI-Core 적용 단계">
           {items.map((item) => (
             <article key={item.number}>
-              <small>{item.number}</small>
               <h3>{item.title}</h3>
               <p>{item.text}</p>
             </article>

@@ -6144,6 +6144,12 @@ textarea {
   filter: brightness(0) invert(32%);
 }
 
+.site-trust-strip .site-client-logo img[src$="/페어스퀘어랩.jpg"] {
+  width: 230px;
+  max-width: 230px;
+  max-height: 72px;
+}
+
 @keyframes site-client-logo-marquee {
   from {
     transform: translateX(0);
@@ -6180,6 +6186,12 @@ textarea {
   .site-trust-strip .site-client-logo img {
     max-width: 164px;
     max-height: 46px;
+  }
+
+  .site-trust-strip .site-client-logo img[src$="/페어스퀘어랩.jpg"] {
+    width: 205px;
+    max-width: 205px;
+    max-height: 64px;
   }
 }
 
@@ -9564,9 +9576,31 @@ html .site-header.is-transparent.is-home-route[data-site-hero-group="1"] .site-b
     align-items: center !important;
   }
 
-  .site-header.is-open .site-brand-mark,
-  .site-header.is-open.is-transparent .site-brand-mark {
+  .site-header.is-open.is-transparent.is-home-route {
+    background: transparent !important;
+  }
+
+  .site-header.is-open:not(.is-home-route),
+  .site-header.is-open.is-scrolled {
+    color: var(--site-black) !important;
+    background: #ffffff !important;
+  }
+
+  .site-header.is-open:not(.is-home-route) .site-brand-mark,
+  .site-header.is-open.is-scrolled .site-brand-mark {
+    --site-brand-logo-src: url("/assets/brand/koreaindustry-wordmark-color.png");
+    background-image: var(--site-brand-logo-src) !important;
+  }
+
+  html[data-site-hero-group="0"] .site-header.is-open.is-transparent.is-home-route .site-brand-mark,
+  html .site-header.is-open.is-transparent.is-home-route[data-site-hero-group="0"] .site-brand-mark {
     --site-brand-logo-src: url("/assets/brand/koreaindustry-wordmark-white.png");
+    background-image: var(--site-brand-logo-src) !important;
+  }
+
+  html[data-site-hero-group="1"] .site-header.is-open.is-transparent.is-home-route .site-brand-mark,
+  html .site-header.is-open.is-transparent.is-home-route[data-site-hero-group="1"] .site-brand-mark {
+    --site-brand-logo-src: url("/assets/brand/koreaindustry-wordmark-black.png");
     background-image: var(--site-brand-logo-src) !important;
   }
 
@@ -9593,31 +9627,34 @@ html .site-header.is-transparent.is-home-route[data-site-hero-group="1"] .site-b
     border-color: rgba(0, 0, 0, 0.72) !important;
   }
 
-  .site-header.is-open.is-transparent.is-home-route .site-menu-button,
-  .site-header.is-open .site-menu-button,
-  .site-header.is-scrolled .site-menu-button {
-    color: var(--site-black) !important;
-    border-color: rgba(16, 24, 39, 0.14) !important;
-    background: #ffffff !important;
+  .site-header.is-open.is-transparent.is-home-route .site-menu-button {
+    color: var(--site-home-topbar-color) !important;
+    border-color: currentColor !important;
+    background: transparent !important;
   }
 
-  html[data-site-hero-group] .site-header.is-open.is-transparent.is-home-route .site-menu-button,
-  html .site-header.is-open.is-transparent.is-home-route[data-site-hero-group] .site-menu-button {
+  html[data-site-hero-group="0"] .site-header.is-open.is-transparent.is-home-route .site-menu-button,
+  html .site-header.is-open.is-transparent.is-home-route[data-site-hero-group="0"] .site-menu-button {
+    color: #ffffff !important;
+    border-color: rgba(255, 255, 255, 0.86) !important;
+  }
+
+  html[data-site-hero-group="1"] .site-header.is-open.is-transparent.is-home-route .site-menu-button,
+  html .site-header.is-open.is-transparent.is-home-route[data-site-hero-group="1"] .site-menu-button {
+    color: #000000 !important;
+    border-color: rgba(0, 0, 0, 0.72) !important;
+  }
+
+  .site-header.is-open:not(.is-home-route) .site-menu-button,
+  .site-header.is-open.is-scrolled .site-menu-button {
     color: var(--site-black) !important;
-    border-color: rgba(16, 24, 39, 0.14) !important;
+    border-color: #e5e8ee !important;
     background: #ffffff !important;
   }
 
   .site-header.is-open.is-transparent.is-home-route .site-menu-button svg,
-  .site-header.is-open .site-menu-button svg,
-  .site-header.is-scrolled .site-menu-button svg {
-    color: var(--site-black) !important;
-    stroke: currentColor !important;
-  }
-
-  html[data-site-hero-group] .site-header.is-open.is-transparent.is-home-route .site-menu-button svg,
-  html .site-header.is-open.is-transparent.is-home-route[data-site-hero-group] .site-menu-button svg {
-    color: var(--site-black) !important;
+  .site-header.is-open .site-menu-button svg {
+    color: currentColor !important;
     stroke: currentColor !important;
   }
 
@@ -13267,21 +13304,8 @@ html .site-header.is-transparent.is-home-route[data-site-hero-group="1"] .site-b
     background: #ffffff;
   }
 
-  .site-industry-overview-mobile-list small {
-    display: inline-grid;
-    width: 42px;
-    height: 42px;
-    place-items: center;
-    color: #2f6bff;
-    border: 1px solid rgba(47, 107, 255, 0.22);
-    border-radius: 999px;
-    background: #f2f6ff;
-    font-size: 14px;
-    font-weight: 500;
-  }
-
   .site-industry-overview-mobile-list h3 {
-    margin: 22px 0 0;
+    margin: 0;
     color: #050505;
     font-size: 25px;
     font-weight: 700;
