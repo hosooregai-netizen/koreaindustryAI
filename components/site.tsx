@@ -331,6 +331,10 @@ export const clientLogos = [
     name: "마켓컬리",
     src: "/assets/logos/market-kurly.png",
   },
+  {
+    name: "페어스퀘어랩",
+    src: "/assets/페어스퀘어랩.jpg",
+  },
 ];
 
 const newsletterItems = getCommunityArticles("newsletter");
@@ -572,8 +576,11 @@ export function SiteFooter() {
         <Link href="/contact">문의하기</Link>
       </nav>
       <div className="site-footer-info">
-        <span>기업 데이터 관리 ERP</span>
-        <span>반복 업무 자동화 범위 검토</span>
+        <span>제조 | ERP·MES·APS · 공정/품질/설비 예측</span>
+        <span>물류 | WMS·TMS·LMS · 배차/라우팅/창고 최적화</span>
+        <span>유통 | SCM·OMS·3PL · 수요예측/자동발주/재고배분</span>
+        <span>건설 | BIM·RFI·Submittal · 규제/안전/품질 문서 자동화</span>
+        <span>금융 | RegTech·AML/KYC·FDS · 내부통제/증권 시스템</span>
         <span>koreaindustryai@gmail.com</span>
       </div>
     </footer>
@@ -860,18 +867,18 @@ export function SiteHero({
               <button
                 className="site-hero-progress-button site-hero-progress-prev"
                 type="button"
-                aria-label="이전 AI-Core Scene 보기"
+                aria-label="이전 AI-Core 보기"
                 disabled={!isActiveCopy || bufferingVideoLayer !== null || heroGroupTransition}
                 onClick={() => handleHeroVideoProgressNavigation(-1)}
                 tabIndex={isActiveCopy ? undefined : -1}
               >
                 <ChevronLeft size={21} strokeWidth={2.25} />
               </button>
-              <span>AI-Core Scene {String(copyGroup + 1).padStart(2, "0")}</span>
+              <span>AI-Core</span>
               <button
                 className="site-hero-progress-button site-hero-progress-next"
                 type="button"
-                aria-label="다음 AI-Core Scene 보기"
+                aria-label="다음 AI-Core 보기"
                 disabled={!isActiveCopy || bufferingVideoLayer !== null || heroGroupTransition}
                 onClick={() => handleHeroVideoProgressNavigation(1)}
                 tabIndex={isActiveCopy ? undefined : -1}
@@ -1938,45 +1945,6 @@ export function SiteContactForm() {
           휴대폰번호 <span aria-hidden="true">*</span>
         </span>
         <input name="phone" type="tel" autoComplete="tel" maxLength={40} required />
-      </label>
-      <label>
-        대한산업AI를 어떻게 알게 되셨나요?
-        <select name="source" defaultValue="">
-          <option value="" disabled>
-            선택해 주세요.
-          </option>
-          <option>검색</option>
-          <option>소개</option>
-          <option>뉴스레터</option>
-          <option>행사 또는 세미나</option>
-          <option>기타</option>
-        </select>
-      </label>
-      <label>
-        도입 검토 상황을 알려주세요.
-        <select name="adoptionStage" defaultValue="">
-          <option value="" disabled>
-            선택해 주세요.
-          </option>
-          <option>검토 전입니다</option>
-          <option>내부 검토 중입니다</option>
-          <option>비교 검토 중입니다</option>
-          <option>도입 범위를 확정하고 있습니다</option>
-        </select>
-      </label>
-      <label>
-        <span className="site-contact-field-label">
-          어떤 솔루션에 관심이 있으신가요? <span aria-hidden="true">*</span>
-        </span>
-        <select name="interest" defaultValue="" required>
-          <option value="" disabled>
-            선택해 주세요.
-          </option>
-          <option>Data-Driven AI-Core</option>
-          <option>Automation AI-Core</option>
-          <option>산업별 적용</option>
-          <option>아직 모르겠습니다</option>
-        </select>
       </label>
       <label className="is-wide">
         <span className="site-contact-field-label">

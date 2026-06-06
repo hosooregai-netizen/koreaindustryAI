@@ -440,7 +440,7 @@ test("desktop Product navigation exposes Data-Driven AI-Core and routes correctl
   await expect(page.locator(".site-hero")).toHaveClass(/has-video/);
   expect(await getHeroBackgroundImage(page)).not.toContain("hero-video-poster");
   const initialHeroProgress = await getHeroProgressState(page);
-  expect(initialHeroProgress.labels).toEqual(["AI-Core Scene 01"]);
+  expect(initialHeroProgress.labels).toEqual(["AI-Core"]);
   expect(initialHeroProgress.percent).toBeGreaterThan(0);
   expect(await getHoverBackground(page, ".site-hero-copy.is-active .site-hero-progress-prev")).toBe("rgba(0, 0, 0, 0)");
   expect(await getHoverBackground(page, ".site-hero-copy.is-active .site-hero-progress-next")).toBe("rgba(0, 0, 0, 0)");
@@ -470,7 +470,7 @@ test("desktop Product navigation exposes Data-Driven AI-Core and routes correctl
     })
     .toBeGreaterThan(0);
   const groupTwoHeroProgress = await getHeroProgressState(page);
-  expect(groupTwoHeroProgress.labels).toEqual(["AI-Core Scene 02"]);
+  expect(groupTwoHeroProgress.labels).toEqual(["AI-Core"]);
   await expect(page.locator(".site-hero-overlay.is-retiring")).toHaveCount(0);
   await expect(page.locator(".site-hero-copy.is-retiring")).toHaveCount(0);
   expect((await getActiveHeroOverlayMotion(page)).group).toBe("1");
@@ -520,7 +520,7 @@ test("desktop Product navigation exposes Data-Driven AI-Core and routes correctl
   await expectHomeHeroCopySingleLine(page);
   expect(await getHeroBackgroundImage(page)).not.toContain("hero-video-poster");
   const loopedHeroProgress = await getHeroProgressState(page);
-  expect(loopedHeroProgress.labels).toEqual(["AI-Core Scene 01"]);
+  expect(loopedHeroProgress.labels).toEqual(["AI-Core"]);
   await expect(page.locator(".site-hero-overlay.is-retiring")).toHaveCount(0);
   await expect(page.locator(".site-hero-copy.is-retiring")).toHaveCount(0);
   expect((await getActiveHeroOverlayMotion(page)).group).toBe("0");
@@ -531,13 +531,14 @@ test("desktop Product navigation exposes Data-Driven AI-Core and routes correctl
     if (waitMs > 0) await page.waitForTimeout(waitMs);
     expectHeroVideoBoxToStayStable(await getActiveHeroVideoMotion(page), initialHeroVideoMotion);
   }
-  await expect(page.locator(".site-client-logo img")).toHaveCount(18);
+  await expect(page.locator(".site-client-logo img")).toHaveCount(20);
   await expect(page.locator('.site-client-logo img[alt="한국종합안전(주)"]')).toHaveCount(1);
   await expect(page.locator('.site-client-logo img[alt="금융결제원"]')).toHaveCount(1);
   await expect(page.locator('.site-client-logo img[alt="다우데이타"]')).toHaveCount(1);
   await expect(page.locator('.site-client-logo img[alt="대신자산운용"]')).toHaveCount(1);
   await expect(page.locator('.site-client-logo img[alt="NH투자증권"]')).toHaveCount(1);
   await expect(page.locator('.site-client-logo img[alt="LINE FRIENDS"]')).toHaveCount(1);
+  await expect(page.locator('.site-client-logo img[alt="페어스퀘어랩"]')).toHaveCount(1);
   await expect(page.locator('.site-client-logo img[alt="뽀득"]')).toHaveCount(0);
   await expect(page.locator('.site-client-logo img[alt="Ownist"]')).toHaveCount(0);
   await expect(page.locator('.site-client-logo img[alt="INSIDERS"]')).toHaveCount(0);
@@ -646,9 +647,11 @@ test("mobile menu exposes Data-Driven AI-Core and routes without horizontal over
   expect(mobileMenuColors.navBackground).toBe("rgb(255, 255, 255)");
   expect(mobileMenuColors.navControls.every((color) => color === "rgb(5, 5, 5)")).toBe(true);
   expect(mobileMenuColors.dropdownItems.every((color) => color === "rgb(5, 5, 5)")).toBe(true);
-  expect(mobileMenuColors.cta).toBe("rgb(5, 5, 5)");
+  expect(mobileMenuColors.cta).toBe("rgb(255, 255, 255)");
   expect(mobileMenuColors.ctaBorder).toBe("rgb(5, 5, 5)");
-  expect(mobileMenuColors.ctaBackground).toBe("rgba(0, 0, 0, 0)");
+  expect(mobileMenuColors.ctaBackground).toBe("rgb(5, 5, 5)");
+  await expect(mainNav.locator('.site-dropdown[data-nav-label="Company"]')).toBeHidden();
+  await expect(mainNav.locator(".site-nav-cta")).toBeVisible();
   const aiCoreMenuItem = mainNav.getByRole("menuitem", { name: /Data-Driven AI-Core/ });
   await expect(aiCoreMenuItem).toBeVisible();
   await aiCoreMenuItem.click();
@@ -804,7 +807,10 @@ test("technology route shows featured story without filters or hero CTA", async 
 });
 
 test("contact form shows a success state", async ({ page }) => {
+  let submittedPayload: Record<string, unknown> | null = null;
+
   await page.route("**/api/contact", async (route) => {
+    submittedPayload = route.request().postDataJSON() as Record<string, unknown>;
     await route.fulfill({
       contentType: "application/json",
       body: JSON.stringify({ ok: true }),
@@ -815,9 +821,18 @@ test("contact form shows a success state", async ({ page }) => {
   await page.getByLabel(/회사명/).fill("대한테스트");
   await page.getByLabel(/업무용 이메일주소/).fill("test@example.com");
   await page.getByLabel(/휴대폰번호/).fill("010-1234-5678");
-  await page.getByLabel(/어떤 솔루션에 관심이 있으신가요/).selectOption("Data-Driven AI-Core");
   await page.getByLabel(/문의내용/).fill("반복 보고 업무 자동화 상담을 요청합니다.");
   await page.getByRole("button", { name: /문의 접수하기/ }).click();
   await expect(page.getByText("문의가 접수되었습니다. 담당자가 확인 후 연락드리겠습니다.")).toBeVisible();
+  expect(submittedPayload).toMatchObject({
+    name: "테스터",
+    company: "대한테스트",
+    email: "test@example.com",
+    phone: "010-1234-5678",
+    message: "반복 보고 업무 자동화 상담을 요청합니다.",
+  });
+  expect(submittedPayload).not.toHaveProperty("source");
+  expect(submittedPayload).not.toHaveProperty("adoptionStage");
+  expect(submittedPayload).not.toHaveProperty("interest");
   await expectNoHorizontalOverflow(page);
 });

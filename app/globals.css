@@ -9556,6 +9556,101 @@ html .site-header.is-transparent.is-home-route[data-site-hero-group="1"] .site-b
   opacity: 0.72;
 }
 
+/* Mobile header final state fixes */
+@media (max-width: 760px) {
+  .site-header.is-transparent.is-home-route:not(.is-open) .site-menu-button {
+    color: var(--site-home-topbar-color) !important;
+    border-color: currentColor !important;
+    background: transparent !important;
+  }
+
+  .site-header.is-transparent.is-home-route:not(.is-open) .site-menu-button svg {
+    color: currentColor !important;
+    stroke: currentColor !important;
+  }
+
+  html[data-site-hero-group="0"] .site-header.is-transparent.is-home-route:not(.is-open) .site-menu-button,
+  html .site-header.is-transparent.is-home-route[data-site-hero-group="0"]:not(.is-open) .site-menu-button {
+    color: #ffffff !important;
+    border-color: rgba(255, 255, 255, 0.86) !important;
+  }
+
+  html[data-site-hero-group="1"] .site-header.is-transparent.is-home-route:not(.is-open) .site-menu-button,
+  html .site-header.is-transparent.is-home-route[data-site-hero-group="1"]:not(.is-open) .site-menu-button {
+    color: #000000 !important;
+    border-color: rgba(0, 0, 0, 0.72) !important;
+  }
+
+  .site-header.is-open.is-transparent.is-home-route .site-menu-button,
+  .site-header.is-open .site-menu-button,
+  .site-header.is-scrolled .site-menu-button {
+    color: var(--site-black) !important;
+    border-color: rgba(16, 24, 39, 0.14) !important;
+    background: #ffffff !important;
+  }
+
+  html[data-site-hero-group] .site-header.is-open.is-transparent.is-home-route .site-menu-button,
+  html .site-header.is-open.is-transparent.is-home-route[data-site-hero-group] .site-menu-button {
+    color: var(--site-black) !important;
+    border-color: rgba(16, 24, 39, 0.14) !important;
+    background: #ffffff !important;
+  }
+
+  .site-header.is-open.is-transparent.is-home-route .site-menu-button svg,
+  .site-header.is-open .site-menu-button svg,
+  .site-header.is-scrolled .site-menu-button svg {
+    color: var(--site-black) !important;
+    stroke: currentColor !important;
+  }
+
+  html[data-site-hero-group] .site-header.is-open.is-transparent.is-home-route .site-menu-button svg,
+  html .site-header.is-open.is-transparent.is-home-route[data-site-hero-group] .site-menu-button svg {
+    color: var(--site-black) !important;
+    stroke: currentColor !important;
+  }
+
+  .site-header.is-open.is-transparent.is-home-route .site-nav.is-open,
+  .site-header.is-open.is-transparent.is-home-route .site-nav.is-open .site-nav-group > a,
+  .site-header.is-open.is-transparent.is-home-route .site-nav.is-open .site-nav-group > button,
+  .site-header.is-open.is-transparent.is-home-route .site-nav.is-open .site-dropdown a,
+  .site-header.is-open.is-transparent.is-home-route .site-nav.is-open .site-dropdown button {
+    color: var(--site-black) !important;
+  }
+
+  .site-header.is-open .site-nav .site-nav-cta,
+  .site-header.is-open.is-transparent.is-home-route .site-nav.is-open .site-nav-cta,
+  .site-header.is-scrolled .site-nav .site-nav-cta {
+    color: #ffffff !important;
+    border-color: var(--site-black) !important;
+    background: var(--site-black) !important;
+  }
+
+  .site-header.is-open .site-nav .site-nav-cta:hover,
+  .site-header.is-open .site-nav .site-nav-cta:focus-visible,
+  .site-header.is-open.is-transparent.is-home-route .site-nav.is-open .site-nav-cta:hover,
+  .site-header.is-open.is-transparent.is-home-route .site-nav.is-open .site-nav-cta:focus-visible,
+  .site-header.is-scrolled .site-nav .site-nav-cta:hover,
+  .site-header.is-scrolled .site-nav .site-nav-cta:focus-visible {
+    color: var(--site-black) !important;
+    background: #ffffff !important;
+  }
+
+  .site-nav.is-open .site-dropdown-item,
+  .site-nav.is-open a.site-dropdown-item {
+    min-height: 40px;
+    gap: 0;
+    padding: 10px 12px;
+  }
+
+  .site-nav.is-open .site-dropdown-item span {
+    display: none !important;
+  }
+
+  .site-nav.is-open .site-dropdown[data-nav-label="Company"] {
+    display: none !important;
+  }
+}
+
 /* Data-Driven AI-Core page */
 .site-dd-page {
   --site-dd-ink: #09111f;

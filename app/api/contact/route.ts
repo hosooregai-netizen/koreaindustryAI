@@ -5,13 +5,10 @@ type ContactSubmission = {
   company: string;
   email: string;
   phone: string;
-  source: string;
-  adoptionStage: string;
-  interest: string;
   message: string;
 };
 
-const requiredFields = ["name", "company", "email", "phone", "interest", "message"] as const;
+const requiredFields = ["name", "company", "email", "phone", "message"] as const;
 const maxRequestBodyBytes = 12_000;
 const rateLimitWindowMs = 10 * 60 * 1000;
 const maxSubmissionsPerWindow = 5;
@@ -21,9 +18,6 @@ const fieldLabels: Record<keyof ContactSubmission, string> = {
   company: "회사명",
   email: "이메일",
   phone: "휴대폰번호",
-  source: "유입 경로",
-  adoptionStage: "도입 검토 상황",
-  interest: "관심 솔루션",
   message: "문의내용",
 };
 
@@ -32,9 +26,6 @@ const maxFieldLengths: Record<keyof ContactSubmission, number> = {
   company: 120,
   email: 160,
   phone: 40,
-  source: 80,
-  adoptionStage: 80,
-  interest: 80,
   message: 1800,
 };
 
@@ -86,11 +77,7 @@ const buildSlackMessage = (submission: ContactSubmission) => {
       },
       {
         type: "section",
-        fields: [field("company"), field("name"), field("email"), field("phone"), field("interest"), field("source")],
-      },
-      {
-        type: "section",
-        fields: [field("adoptionStage")],
+        fields: [field("company"), field("name"), field("email"), field("phone")],
       },
       {
         type: "section",
@@ -134,9 +121,6 @@ export async function POST(request: Request) {
     company: readField(payload, "company"),
     email: readField(payload, "email"),
     phone: readField(payload, "phone"),
-    source: readField(payload, "source"),
-    adoptionStage: readField(payload, "adoptionStage"),
-    interest: readField(payload, "interest"),
     message: readField(payload, "message"),
   };
 

@@ -20,7 +20,6 @@ export function IndustryOverviewScroll({ titleId, items }: IndustryOverviewScrol
   const trackRef = useRef<HTMLDivElement | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const activeItem = items[activeIndex] ?? items[0];
-  const activeStep = activeIndex + 1;
 
   useEffect(() => {
     const track = trackRef.current;
@@ -63,17 +62,21 @@ export function IndustryOverviewScroll({ titleId, items }: IndustryOverviewScrol
 
   return (
     <section className="site-industry-overview site-industry-overview-scroll" aria-labelledby={titleId}>
+      <div className="site-industry-overview-scroll-head">
+        <h2 id={titleId}>AI-Core 적용 흐름</h2>
+        <p>{overviewDescription}</p>
+      </div>
+
       <div className="site-industry-overview-scroll-track" ref={trackRef}>
         <div className="site-industry-overview-scroll-sticky">
-          <div className="site-industry-overview-scroll-head">
-            <h2 id={titleId}>AI-Core 적용 흐름</h2>
-            <p>{overviewDescription}</p>
-          </div>
-
           <div className="site-industry-overview-scroll-body">
             <ol className="site-industry-overview-scroll-nav" aria-label="AI-Core 적용 단계">
               {items.map((item, index) => (
-                <li className={index === activeIndex ? "is-active" : ""} key={item.number}>
+                <li
+                  aria-current={index === activeIndex ? "step" : undefined}
+                  className={index === activeIndex ? "is-active" : ""}
+                  key={item.number}
+                >
                   <span>
                     {Number.parseInt(item.number, 10)}. {item.title}
                   </span>
@@ -82,67 +85,8 @@ export function IndustryOverviewScroll({ titleId, items }: IndustryOverviewScrol
               ))}
             </ol>
 
-            <figure className="site-industry-overview-scroll-visual" data-active-step={activeStep} aria-hidden="true">
-              <div className="site-overview-doc-motion">
-                <span className="site-overview-doc-wash" />
-                <span className="site-overview-doc-scan" />
-                <span className="site-overview-doc-orbit site-overview-doc-orbit-a" />
-                <span className="site-overview-doc-orbit site-overview-doc-orbit-b" />
-
-                <div className="site-overview-doc-stack">
-                  <article className="site-overview-doc-card site-overview-doc-card-main">
-                    <header>
-                      <span>업무 접수</span>
-                      <i />
-                    </header>
-                    <div className="site-overview-doc-lines">
-                      <span />
-                      <span />
-                      <span />
-                    </div>
-                    <div className="site-overview-doc-fields">
-                      <b>문서</b>
-                      <b>기준</b>
-                      <b>이력</b>
-                    </div>
-                  </article>
-
-                  <article className="site-overview-doc-card site-overview-doc-card-review">
-                    <header>
-                      <span>검토 기준</span>
-                      <i />
-                    </header>
-                    <div className="site-overview-doc-checks">
-                      <span />
-                      <span />
-                      <span />
-                    </div>
-                  </article>
-
-                  <article className="site-overview-doc-card site-overview-doc-card-report">
-                    <header>
-                      <span>처리 이력</span>
-                      <i />
-                    </header>
-                    <div className="site-overview-doc-bars">
-                      <span />
-                      <span />
-                      <span />
-                    </div>
-                  </article>
-                </div>
-
-                <div className="site-overview-doc-log">
-                  <span className="site-overview-doc-log-row site-overview-doc-log-row-a">데이터 접수</span>
-                  <span className="site-overview-doc-log-row site-overview-doc-log-row-b">기준 확인</span>
-                  <span className="site-overview-doc-log-row site-overview-doc-log-row-c">업무 자동화</span>
-                  <span className="site-overview-doc-log-row site-overview-doc-log-row-d">이력 남김</span>
-                </div>
-              </div>
-            </figure>
-
             <div className="site-industry-overview-scroll-copy">
-              <div className="site-industry-overview-scroll-copy-inner" key={activeItem.number}>
+              <div className="site-industry-overview-scroll-copy-inner" data-step={activeItem.number} key={activeItem.number}>
                 <span>{activeItem.number}</span>
                 <h3>{activeItem.title}</h3>
                 <p>{activeItem.text}</p>
